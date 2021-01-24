@@ -1,2 +1,2 @@
-# NNoiSE
-Network-aware Noise Simulator of gene Expression
+# scNNoiSE
+Single-cell Network-aware Noise Simulator for gene Expression

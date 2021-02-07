@@ -11,11 +11,28 @@ class LangevinOneGene:
 
     Attributes
     ----------
-    number_variables : int
+    number_species : int
         Number of distinct molecular species to simulate
     params : dict of str: float
         A dictionary containing all the parameters for the gene expression model
-    meanVarFuncs : function(dict of str: float, array_like)
+    meanVarFunc : function(dict of str: float, float, ndarray)
+        A function to calculate mean and variance for the chemical langevin equation
+    time_step : float
+        Time step to progress Euler-Maruyama iterations
+    degradation_names : list of str
+        List containing names of degradation parameters for the chemical species in the system
+    replication_time : float
+        Time at which replication happens
+    division_time : float
+        Time at which cell division happens
+    dosage_compensation_factor : float
+        Factor by which burst frequency decreases at replication
+    dosageCompensationFunc : function(cls, bool)
+        A function to update parameters at replication
+    params_stochastic : list of bool
+        List which states whether parameters are stochastic or not
+    params_stochastic_strength : ndarray
+        1D array giving noise strength for the system parameters if these are stochastic
 
     Notes
     -----

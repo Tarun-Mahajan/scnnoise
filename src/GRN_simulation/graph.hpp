@@ -8,11 +8,6 @@ struct Edge{
 };
 
 class Graph{
-  // Number of nodes in the Graph.
-  int num_nodes;
-
-  // A vector or vectors to represent adjacency list.
-  std::vector<std::vector<int>> adj_list;
 
   // Recursive DFS function for checking graph connectedness.
   void is_connected_DFS(int vert, bool visited[]);
@@ -29,6 +24,12 @@ class Graph{
 
 
 public:
+  // Number of nodes in the Graph.
+  int num_nodes;
+
+  // A vector or vectors to represent adjacency list.
+  std::vector<std::vector<int>> adj_list;
+
   // Graph constructor.
   Graph(int N);
 

@@ -16,10 +16,13 @@ private:
   // Vector of current molecule counts for all species.
   std::vector<int> molecule_count_cur;
 
+  // Whether to save time series count data.
+  bool save_timeseries;
+
   // Number of previous time points for which molecular counts are stored.
   int num_timepoints_save;
 
-  // Vector of vectors for running molecule counts for all species for last 'num_timepoints_save' time points.
+  // Vector of vectors to store running molecule counts for all species for last 'num_timepoints_save' time points.
   std::vector<std::vector<int>> molecule_count_history;
 
   // Vector for time points along the simulation path.
@@ -55,7 +58,7 @@ public:
   void add_rxn_stoi_output (int rxn_id, int mol_id, int stoi);
 
   // Update molecule count.
-  void update_molecule_count();
+  void update_molecule_count ();
 
   // Update rxn propensity.
   void update_propensity (int rxn_id);
@@ -64,13 +67,22 @@ public:
   double sample_time_step ();
 
   // Sample next reaction id.
-  int sample_next_rxn();
+  int sample_next_rxn ();
 
   // Simulate.
-  void simulate();
+  void simulate ();
 
   // Update reaction frequencies.
-  void update_rxn_freq(int next_rxn);
+  void update_rxn_freq (int next_rxn);
+
+  // Set time period for simulation run.
+  void set_time (double time);
+
+  // Initialize molecule counts.
+  void initialize_molecule_count (int species_id, int count);
+
+  // Set number of previous history counts to store.
+  void set_num_history (bool save_timeseries, int num_timepoints_save);
 };
 
 #endif

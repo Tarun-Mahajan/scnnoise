@@ -34,6 +34,9 @@ private:
   // Vector of rxn propensities.
   std::vector<double> rxn_propensity;
 
+  // Vector for reaction firing frequency.
+  std::vector<int> rxn_freq;
+
 public:
   /* Member functions */
   // Constructor
@@ -58,13 +61,16 @@ public:
   void update_propensity (int rxn_id);
 
   // Sample next time step.
-  void sample_time_step ();
+  double sample_time_step ();
 
   // Sample next reaction id.
-  void sample_next_rxn();
+  int sample_next_rxn();
 
   // Simulate.
   void simulate();
+
+  // Update reaction frequencies.
+  void update_rxn_freq(int next_rxn);
 };
 
 #endif

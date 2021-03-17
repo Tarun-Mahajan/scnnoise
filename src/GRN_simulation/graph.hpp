@@ -44,11 +44,11 @@ public:
   // Function to check whether graph is connected or not.
   bool is_connected ();
 
-  // Function to check whether graph is DAG or not
+  // Function to check whether graph is DAG or not.
   bool is_DAG ();
 
-  // Function to return children nodes of a given node
-  void find_child ()
+  // Function to return children nodes of a given node.
+  void find_children (int vert, std::vector<int> &children);
 };
 
 #endif

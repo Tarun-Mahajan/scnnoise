@@ -19,7 +19,8 @@ __version__ = "0.0.1"
 
 ext_modules = [
     Pybind11Extension("scNNoiSE",
-        sorted(glob("src/*.cpp")),
+        # sorted(glob("src/*.cpp")),
+        sorted(glob(os.path.join('src', '*.cpp'))),
         # Example: passing in the version to the compiled code
         define_macros = [('VERSION_INFO', __version__)],
         ),
@@ -30,12 +31,14 @@ setup(
     version=__version__,
     author="Tarun Mahajan",
     author_email="tarunm3@illinois.edu",
-    url="https://github.com/pybind/python_example",
+    url="https://github.com/Tarun-Mahajan/scNNoiSE",
     description="Single cell Network-aware Noise Simulator for gene Expression",
     long_description="A simulator for generating single-cell RNA sequencing data \
     using the two-state model of gene expression. Further, the simulator also \
     takes account of gene expression noise propagation over gene regulatory \
     network while generating the simulated data.",
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     ext_modules=ext_modules,
     extras_require={"test": "pytest"},
     # Currently, build_ext only provides an optional "highest supported C++

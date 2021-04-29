@@ -56,7 +56,7 @@ protected:
    type GRN, which is a class for gene regulatory
    networks.
    ***********************************************/
-  std::vector<GRN> network;
+  std::vector<graph> network;
 
   /********************************************//**
    \brief Vector for node type in the GRN

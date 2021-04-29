@@ -1,22 +1,62 @@
 // Optimized gillespie header file
 #ifndef ODM_H
 #define ODM_H
+/********************************************//**
+ \brief A class for Gillespie's stochastic simulation algorithm.
+
+ The Gillespie class creates an object to perform
+ exact stochastic simulation for any given chemical
+ reaction network.
+ ***********************************************/ 
+
 class Gillespie: public Graph {
 private:
   /* data */
-  // Number of reaction channels.
+  /********************************************//**
+  \brief Number of chemical reaction channels.
+
+  This is the total number of unique chemical
+  raction channels that are present in the  user
+  provided chemical reaction network.
+   ***********************************************/
   int num_rxns;
 
-  // Number of molecular species.
+  /********************************************//**
+  \brief Number of molecular species.
+
+  This is the total number of unique molecular
+  species that are present in the user provided
+  chemical reaction network.
+   ***********************************************/
   int num_species;
 
-  // Time period for simulation run.
+  /********************************************//**
+  \brief Time period for simulation run.
+
+  The total time period for which the chemical
+  reaction network should be simulated.
+   ***********************************************/
   double time;
 
   // Vector of current molecule counts for all species.
+  /********************************************//**
+   \brief Vector of current molecule counts for all species.
+
+   This stores the current molecule counts for all
+   species in the chemical reaction network along
+   the simulation trajectory.
+   ***********************************************/
   std::vector<int> molecule_count_cur;
 
-  // Whether to save time series count data.
+  /********************************************//**
+   \brief Save time series count data.
+
+   This boolean variable decides whether time series
+   count data should be stored or not. Default value
+   is false, when only steady state count values are
+   reported.
+   ***********************************************/
+
   bool save_timeseries;
 
   // Number of previous time points for which molecular counts are stored.
@@ -29,15 +69,15 @@ private:
   std::vector<double> time_history;
 
   // Vector of reaction rates for all rxn channels.
-  std::vector<int> rxn_rates;
+  std::vector<double> rxn_rates;
 
   // Data structure to store stoichiometry info. for all rxn channels.
-  std::vector<map<int, map<int, std::vector<double>>>> rxn_stoi;
+  std::vector<map<int, map<int, std::vector<int>>>> rxn_stoi;
 
-  // Vector of rxn propensities.
+  // Vector of rxn propensities for all reaction channels.
   std::vector<double> rxn_propensity;
 
-  // Vector for reaction firing frequency.
+  // Vector for reaction firing frequency for all reaction channels.
   std::vector<int> rxn_freq;
 
 public:

@@ -78,10 +78,10 @@ void Graph::is_connected_DFS (int vert, bool visited[]) {
 
 // Function to check whether graph is connected or not.
 bool Graph::is_connected () {
-  bool* visited = new bool[num_nodes];
+  std::vector<bool> visited(num_nodes);
   std::vector<Edge> edges;
-  for(int i = 0; i < num_nodes; ++i ){
-    visited[i] = false;
+  for (auto &vert: visited) {
+    vert = false;
   }
   make_undirected(edges);
   is_connected_DFS(0, visited);
@@ -93,7 +93,6 @@ bool Graph::is_connected () {
       count += 1;
     }
   }
-  delete [] visited;
   if(count == num_nodes){
     return true;
   }else{
@@ -123,24 +122,21 @@ bool Graph::is_DAG_util (int vert, bool visited[], bool active[]) {
 
 // Function to check whether graph is DAG or not.
 bool Graph::is_DAG () {
-  bool* visited = new bool[num_nodes];
-  bool* active = new bool[num_nodes];
-  for(int i = 0; i < num_nodes; ++i){
-    visited[i] = false;
-    active[i] = false;
+  std::vector<bool> visited(num_nodes);
+  std::vector<bool> active(num_nodes);
+  for (auto &vert: visited) {
+    vert = false;
   }
-
+  for (auto &vert: active) {
+    vert = false;
+  }
   for(int v = 0; v < num_nodes; ++v){
     if(!visited[v]){
       if(!is_DAG_util(v, visited, active)){
-        delete [] visited;
-        delete [] active;
         return false;
       }
     }
   }
-  delete [] visited;
-  delete [] active;
   return true;
 }
 

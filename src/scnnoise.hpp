@@ -8,7 +8,7 @@ protected:
   \brief Number of chemical reaction channels.
 
   This is the total number of unique chemical
-  raction channels that are present in the  user
+  reaction channels that are present in the  user
   provided chemical reaction network.
    ***********************************************/
   int num_rxns;
@@ -21,6 +21,15 @@ protected:
   chemical reaction network.
    ***********************************************/
   int num_species;
+
+  /********************************************//**
+  \brief Number of nodes in GRN.
+
+  This is the total number of unique chemical
+  species that are present in the user
+  provided GRN.
+   ***********************************************/
+  int num_nodes_GRN;
 
   /********************************************//**
    \brief Vector of current molecule counts for all species.
@@ -136,7 +145,7 @@ public:
    \param[in] num_species number of molecular species
               in the system.
    ***********************************************/
-  scNNoiSE (int num_rxns, int num_species);
+  scNNoiSE (int num_rxns, int num_species, int num_nodes_GRN);
 
   /********************************************//**
    \brief Destructor for scNNoiSE.

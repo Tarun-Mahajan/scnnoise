@@ -6,8 +6,10 @@
 
 // Constructor
 Graph::Graph (int N) {
+  const int sz = 1000
+  adj_list.reserve(sz);
   num_nodes = N;
-  adj_list.resize(N);
+  // adj_list.resize(N);
 }
 
 // Function to add edge

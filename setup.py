@@ -1,8 +1,11 @@
 from setuptools import setup
 
 # Available at setup time due to pyproject.toml
-from pybind11.setup_helpers import Pybind11Extension, build_ext
-from pybind11 import get_cmake_dir
+from pybind11.setup_helpers import Pybind11Extension, build_ext, ParallelCompile
+# from pybind11 import get_cmake_dir
+
+# Optional multithreaded build
+# ParallelCompile("NPY_NUM_BUILD_JOBS").install()
 
 import sys
 
@@ -31,7 +34,7 @@ setup(
     version=__version__,
     author="Tarun Mahajan",
     author_email="tarunm3@illinois.edu",
-    url="https://github.com/Tarun-Mahajan/scNNoiSE",
+    url="https://github.com/Tarun-Mahajan/scnnoise",
     description="Single cell Network-aware Noise Simulator for gene Expression",
     long_description="A simulator for generating single-cell RNA sequencing data \
     using the two-state model of gene expression. Further, the simulator also \
@@ -45,4 +48,5 @@ setup(
     # level" feature, but in the future it may provide more features.
     cmdclass={"build_ext": build_ext},
     zip_safe=False,
+    options={"bdist_wheel": {"universal": True}}
 )

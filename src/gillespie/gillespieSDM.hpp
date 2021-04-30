@@ -1,13 +1,13 @@
 // Optimized gillespie header file
-#ifndef ODM_H
-#define ODM_H
+#ifndef SDM_H
+#define SDM_H
 /********************************************//**
  \brief A class for Gillespie's stochastic simulation algorithm.
 
  The Gillespie class creates an object to perform
  exact stochastic simulation for any given chemical
  reaction network.
- ***********************************************/ 
+ ***********************************************/
 
 class Gillespie: public Graph {
 private:

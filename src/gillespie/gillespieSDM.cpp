@@ -23,23 +23,3 @@ Gillespie::Gillespie (int num_rxns, int num_species):: Graph (num_rxns){
 Gillespie::~Gillespie () {
 
 }
-
-// Add reaction rates
-/********************************************//**
- \brief Function to set reaction rate for one reaction.
-
-
- ***********************************************/
-
-void Gillespie::add_rxn_rate (int rxn_id, double rate) {
-  rxn_rates[rxn_id].push_back(rate);
-}
-
-// Add rxn input stoichiometric information.
-/********************************************//**
-\brief 
- ***********************************************/
-
-void Gillespie::add_rxn_stoi_input (int rxn_id, int mol_id, int stoi) {
-  rxn_stoi[rxn_id][0]
-}

@@ -1,8 +1,9 @@
+from glob import glob
 from setuptools import setup
 
 # Available at setup time due to pyproject.toml
 from pybind11.setup_helpers import Pybind11Extension, build_ext, ParallelCompile
-# from pybind11 import get_cmake_dir
+from pybind11 import get_cmake_dir
 
 # Optional multithreaded build
 # ParallelCompile("NPY_NUM_BUILD_JOBS").install()
@@ -21,7 +22,7 @@ __version__ = "0.0.1"
 #   reproducible builds (https://github.com/pybind/python_example/pull/53)
 
 ext_modules = [
-    Pybind11Extension("scNNoiSE",
+    Pybind11Extension("scnnoise",
         # sorted(glob("src/*.cpp")),
         sorted(glob(os.path.join('src', '*.cpp'))),
         # Example: passing in the version to the compiled code
@@ -30,7 +31,7 @@ ext_modules = [
 ]
 
 setup(
-    name="scNNoiSE",
+    name="scnnoise",
     version=__version__,
     author="Tarun Mahajan",
     author_email="tarunm3@illinois.edu",

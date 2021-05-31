@@ -51,6 +51,8 @@ class LangevinOneGene:
     of Langevin simulation for gene burst production." Scientific reports 7.1
     (2017): 1-16.
     """
+
+    
     def __init__(self, number_species, params, meanVarFunc, time_step, degradation_names, \
                  cell_cycle_simulate = 0, replication_time = None, division_time = None,\
                  dosage_compensation_factor = None, dosageCompensationFunc = None,\

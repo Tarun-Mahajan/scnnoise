@@ -190,11 +190,11 @@ namespace ScnnoiseInterface {
     std::vector<int> GRN_species_OUT;
     std::vector<int> rxn_type;
     std::vector<rxn_struct> rxns;
-    std::vector<int> molecule_count_cur;
+    std::map<int, int> molecule_count_cur;
   };
 
   struct molecule_history_struct {
-    std::vector<std::vector<int>> molecule_count;
+    std::map<int, std::vector<int>> molecule_count;
   }
 
   class scNNoiSE {
@@ -418,7 +418,7 @@ namespace ScnnoiseInterface {
      num_timepoints_save > 1, This reduces the number of times data has to be
      written to the output file.
      ***********************************************/
-    std::vector<molecule_history_struct> molecule_count_history;
+    std::map<int, molecule_history_struct> molecule_count_history;
 
     /********************************************//**
      \brief Vector to store time points along the simulation path.

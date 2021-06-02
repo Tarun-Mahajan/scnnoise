@@ -1,107 +1,112 @@
 // Optimized gillespie header file
 #ifndef SDM_H
 #define SDM_H
-/********************************************//**
- \brief A class for Gillespie's stochastic simulation algorithm.
 
- The Gillespie class creates an object to perform
- exact stochastic simulation for any given chemical
- reaction network.
- ***********************************************/
+namespace ScnnoiseInterface {
+  namespace SimulatorGillespieSDM {
+    /********************************************//**
+     \brief A class for Gillespie's stochastic simulation algorithm.
 
-class GillespieSDM: public scnnoise {
-private:
-  /* data */
+     The Gillespie class creates an object to perform
+     exact stochastic simulation for any given chemical
+     reaction network.
+     ***********************************************/
 
-  /********************************************//**
-  \brief Time period for simulation run.
+    class GillespieSDM: public scnnoise {
+    private:
+      /* data */
 
-  The total time period for which the chemical
-  reaction network should be simulated.
-   ***********************************************/
-  double time;
+      /********************************************//**
+      \brief Time period for simulation run.
 
-  /********************************************//**
-   \brief Save time series count data.
+      The total time period for which the chemical
+      reaction network should be simulated.
+       ***********************************************/
+      double time;
 
-   This boolean variable decides whether time series
-   count data should be stored or not. Default value
-   is false, when only steady state count values are
-   reported.
-   ***********************************************/
-  bool save_timeseries;
+      /********************************************//**
+       \brief Save time series count data.
 
-  /********************************************//**
-   \brief Number of previous time points for which molecular counts are stored in
-          a vector of vectors..
+       This boolean variable decides whether time series
+       count data should be stored or not. Default value
+       is false, when only steady state count values are
+       reported.
+       ***********************************************/
+      bool save_timeseries;
 
-   If save_timeseries is set to True, num_timepoints_save gives the number of
-   past values of molecular counts to store in an 2D array
-   (vector of vectors) of size . Once num_timepoints_save past values have been
-   stored for each moleulcar species, the contents of the array are
-   appened to an output file, and the array is emptied. After this,
-   array starts storing the futures values of molecular counts until
-   num_timepoints_save are stored, when the values are again appened to the
-   output file. This process continues until the simulation terminates.
-   At termination, the array again appends its values to the output file.
-   ***********************************************/
-  int num_timepoints_save;
+      /********************************************//**
+       \brief Number of previous time points for which molecular counts are stored in
+              a vector of vectors..
 
-  /********************************************//**
-   \brief Vector of vectors to store running molecule counts for all species
-          for last 'num_timepoints_save' time points.
+       If save_timeseries is set to True, num_timepoints_save gives the number of
+       past values of molecular counts to store in an 2D array
+       (vector of vectors) of size . Once num_timepoints_save past values have been
+       stored for each moleulcar species, the contents of the array are
+       appened to an output file, and the array is emptied. After this,
+       array starts storing the futures values of molecular counts until
+       num_timepoints_save are stored, when the values are again appened to the
+       output file. This process continues until the simulation terminates.
+       At termination, the array again appends its values to the output file.
+       ***********************************************/
+      int num_timepoints_save;
 
-   A 2D array stored as a vector of vectors to store running molecular counts
-   for all the molecular specis in the system. This array ensures that the
-   molecular counts are written to an output file at a fixed interval. If
-   num_timepoints_save > 1, This reduces the number of times data has to be
-   written to the output file.
-   ***********************************************/
-  std::vector<std::vector<int>> molecule_count_history;
+      /********************************************//**
+       \brief Vector of vectors to store running molecule counts for all species
+              for last 'num_timepoints_save' time points.
 
-  /********************************************//**
-   \brief Vector to store time points along the simulation path.
-   ***********************************************/
-  std::vector<double> time_history;
+       A 2D array stored as a vector of vectors to store running molecular counts
+       for all the molecular specis in the system. This array ensures that the
+       molecular counts are written to an output file at a fixed interval. If
+       num_timepoints_save > 1, This reduces the number of times data has to be
+       written to the output file.
+       ***********************************************/
+      std::vector<std::vector<int>> molecule_count_history;
 
-  int num_threads;
+      /********************************************//**
+       \brief Vector to store time points along the simulation path.
+       ***********************************************/
+      std::vector<double> time_history;
 
-  /********************************************//**
-   \brief Vector to store reaction propensities.
+      int num_threads;
 
-   If \f$k\f$ is the reaction rate for a chemical reaction, then propensity,
-   \f$P = kN\f$, where \f$N\f$ is the number of different ways reactant species
-   can interact. \f$N\f$ is a function of the stoichiometric coefficients of the
-   reactants.
-   ***********************************************/
-  std::vector<double> rxn_propensity;
+      /********************************************//**
+       \brief Vector to store reaction propensities.
 
-public:
-  typedef std::mt19937 RNG;
-  /* Member functions */
-  // Constructor
-  GillespieSDM (int num_rxns, int num_species, int num_nodes_GRN, double time,
-    bool save_timeseries, int num_timepoints_save
-    std::vector<std::vector<int>> molecule_count_history,
-    std::vector<double> time_history, std::vector<double> rxn_propensity);
+       If \f$k\f$ is the reaction rate for a chemical reaction, then propensity,
+       \f$P = kN\f$, where \f$N\f$ is the number of different ways reactant species
+       can interact. \f$N\f$ is a function of the stoichiometric coefficients of the
+       reactants.
+       ***********************************************/
+      std::vector<double> rxn_propensity;
 
-  // Virtual destructor
-  virtual ~GillespieSDM ();
+    public:
+      typedef std::mt19937 RNG;
+      /* Member functions */
+      // Constructor
+      GillespieSDM (int num_rxns, int num_species, int num_nodes_GRN, double time,
+        bool save_timeseries, int num_timepoints_save
+        std::vector<std::vector<int>> molecule_count_history,
+        std::vector<double> time_history, std::vector<double> rxn_propensity);
 
-  // Sample next time step.
-  double sample_time_step ();
+      // Virtual destructor
+      virtual ~GillespieSDM ();
 
-  // Sample next reaction id.
-  int sample_next_rxn ();
+      // Sample next time step.
+      double sample_time_step ();
 
-  // Update molecule counts by firing the selected reaction
-  void update_fired_Reaction (int rxn_selected, bool &GRN_out_changed);
+      // Sample next reaction id.
+      int sample_next_rxn ();
 
-  // Update propensity for reactions dependent via the GRN
-  void update_dependent_count_propensity (int rxn_selected, bool &GRN_out_changed);
+      // Update molecule counts by firing the selected reaction
+      void update_fired_Reaction (int rxn_selected, bool &GRN_out_changed);
 
-  // Simulate.
-  void simulate ();
-};
+      // Update propensity for reactions dependent via the GRN
+      void update_dependent_count_propensity (int rxn_selected, bool &GRN_out_changed);
+
+      // Simulate.
+      void simulate ();
+    };
+  }
+}
 
 #endif

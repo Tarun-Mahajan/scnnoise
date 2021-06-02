@@ -106,7 +106,7 @@ namespace ScnnoiseInterface {
       // Simulate.
       void simulate ();
 
-      void sort_reaction (int rxn_selected) = 0;
+      virtual void sort_reaction (int &rxn_selected) = 0;
     };
   }
 }

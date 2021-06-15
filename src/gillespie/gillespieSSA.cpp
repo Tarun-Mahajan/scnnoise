@@ -33,7 +33,7 @@ namespace ScnnoiseInterface {
     inline double GillespieSSA::sample_time_step (RNG &generator) {
       thread_local std::uniform_real_distribution<double> distribution(0.0, 1.0);
       double rand_num = distribution(generator);
-      return -log(1 - rand_num)/total_propensity;
+      return -log(double(1.0) - rand_num)/total_propensity;
     }
 
     int GillespieSSA::sample_next_rxn (RNG &generator) {
@@ -42,7 +42,7 @@ namespace ScnnoiseInterface {
       double selector = total_propensity * (double(1.0) - rand_num);
       int rxn_selected = -1;
 
-      for ( int i = 0; i < num_rxns; ++i) {
+      for (int i = 0; i < num_rxns; ++i) {
         selector -= rxn_order[i].propensity_val;
         if (selector <= 0) {
           rxn_selected = i;
@@ -57,8 +57,7 @@ namespace ScnnoiseInterface {
       return rxn_selected;
     }
 
-    void GillespieSSA::update_fired_Reaction (int rxn_selected,
-      std::vector<bool> &GRN_out_changed) {
+    std::vector<bool> GillespieSSA::update_fired_Reaction (int rxn_selected) {
       /*
       Find the gene and reaction type for the selected reaction channel. Extract the reactants,
       products and their stoichiometric coefficients for the selected reaction channel.
@@ -79,6 +78,8 @@ namespace ScnnoiseInterface {
       std::vector<int> rxn_selected_products_stoichio =
         reactions[gene_selected].rxns[rxn_index].products_stoichio;
 
+
+      std::vector<bool> GRN_out_changed(rxn_selected_products.size(), false);
       /*
       Subtract current reaction propensity from total reaction propensity for
       computing updated total propensity later.
@@ -90,7 +91,7 @@ namespace ScnnoiseInterface {
       reaction channel.
       */
       int count_not_changed_reactants = 0;
-      vector<bool> flag_changed_product_count(rxn_selected_products.size(), false);
+      std::vector<bool> flag_changed_product_count(rxn_selected_products.size(), false);
       for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
         int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
         std::vector<int>::iterator it =
@@ -161,7 +162,7 @@ namespace ScnnoiseInterface {
         reactions[gene_selected].GRN_rxn_IN.end(),
         rxn_index);
         if (it1 != reactions[gene_selected].GRN_rxn_IN.end()) {
-          new_propensity *= regulation_function(gene_selected, *it1);
+          new_propensity *= regulation_function(gene_selected, rxn_index);
         }
 
 
@@ -173,6 +174,7 @@ namespace ScnnoiseInterface {
 
       }
       total_propensity += reactions[gene_selected].rxns[rxn_index].propensity_val;
+      return GRN_out_changed;
     }
 
     void GillespieSSA::update_dependent_count_propensity (int rxn_selected,

@@ -429,48 +429,10 @@ namespace ScnnoiseInterface {
                 the number of chemical reactions for each
                 gene type.
      ***********************************************/
-    scNNoiSE (int num_rxns, int num_species, int num_nodes_GRN,
-      const std::vector<int> &num_species_gene_type,
-      const std::vector<int> &num_rxns_gene_type);
-
-    /********************************************//**
-     \brief Initialize counts for molecular species.
-
-     Function to initialize counts for a single molecular
-     species.
-     \param[in] molecule_id Integer id for the molecular species
-                to initialize.
-     \param[in] molecule_count Integer count for the molecular
-                species to initialize.
-     ***********************************************/
-    void init_molecular_count (int molecule_id, int molecule_count);
-
-    /********************************************//**
-     \brief Add node-type for a species in the GRN.
-
-     Nodes in the GRN are genes or miRNA. Node-type
-     is a label which identifies whether a node is a
-     gene or an miRNA. Further, it also identifies
-     whether the gene is producing only mRNA or both
-     nascent and mature mRNA. Any node is labeled by
-     a string. The potential labels are as follows:
-     'GMP' : gene transcribes mRNA which translates into
-     protein. 4 nodes in the chemical reaction network.
-     'GNMP' : gene transcribes nascent mRNA which processes
-     into mature mRNA. Mature mRNA is translated into
-     protein. 5 nodes in the chemical reaction network.
-     'Mi' : gene transcribes nascent miRNA, which is processed
-     into mature miRNA.  4 nodes in the chemical reaction network.
-     'GNMP-Mihost' : gene transcribes nascent mRNA which processes
-     into mature mRNA and nascent miRNA. Mature mRNA is translated into
-     protein. Nascent miRNA is processed into mature miRNA.
-      7 nodes in the chemical reaction network.
-     \param[in] node_id Integer id for the molecular species
-                in the GRN.
-     \param[in] str_type String identifying the node-type for the
-                molecular species identified by node_id.
-     ***********************************************/
-    void add_GRNnode_type (int node_id, std::string str_type);
+    scNNoiSE (int num_rxns, int num_genes,
+      const std::vector<int> num_species_gene_type,
+      const std::vector<int> num_rxns_gene_type, double max_time,
+      bool save_timeseries, int num_timepoints_save);
 
     /********************************************//**
      \brief Add state for a gene.
@@ -484,113 +446,11 @@ namespace ScnnoiseInterface {
      \param[in] num_splice_variants number of AS variants for the gene identified by
                 gene_id.
      ***********************************************/
-    void add_gene_state (int gene_id, int gene_type, int gene_copy_number,
-      int num_splice_variants);
-
-    /********************************************//**
-     \brief Add reactant stoichiometry for a reaction.
-
-     Function to add reactant stoichiometry for a reaction
-     in the chemical system.
-     \param[in] rxn_id Integer id for the reaction in the list
-                of chemical reaction channels.
-     \param[in] rxn_reactants vector of integer molecular species ids
-                which are reactants for reaction rxn_id .
-     \param[in] reactants_stoichio vector of integer
-                stoichoimetry coefficients for reactants in
-                rxn_reactants.
-     \param[in] gene_id Integer id for the gene whose expression is
-                represented by the reaction.
-     \param[in] rxn_type Integer key for reaction type.
-                Following types are possible along with their integer keys:
-                0 : 'promoter activation'-- promoter switches from the off to the on
-                                        state
-                1 : 'promoter inactivation' -- promoter switches from the on to the off
-                                           state
-                2 : 'transcription-mRNA' -- transcription of mRNA
-                3 : 'transcription-nascent mRNA' -- transcription of nascent mRNA
-                4 : 'nascent mRNA maturation' -- maturation of nascent mRNA
-                5 : 'translation-mRNA' -- translation from mRNA
-                6 : 'translation-mature mRNA' -- translation from mature mRNA
-                7 : 'transcription-nascent miRNA' -- transcription of nascent miRNA
-                8 : 'nascent miRNA maturation' -- maturation of nascent miRNA
-                9 : 'transcription-nascent miRNA host' -- transcription of nascent
-                                                      miRNA from host gene
-                10 : 'miRNA host maturation' -- maturation of nascent miRNA from host gene
-     ***********************************************/
-
-    void add_reaction (int gene_id, int gene_type, int rxn_type,
-      std::vector<int> &rxn_reactants,
-      std::vector<int> &reactants_stoichio,
-      std::vector<int> &rxn_products,
-      std::vector<int> &products_stoichio);
-
-    void add_rxn_reactants (int rxn_id, std::vector<int> rxn_reactants,
-      std::vector<int> reactants_stoichio, int gene_id, int rxn_type);
-    // void add_rxn_reactants (int gene_id, int rxn_type,
-    //   std::vector<int> rxn_reactants, std::vector<int> reactants_stoichio);
-
-    /********************************************//**
-     \brief Add product stoichiometry for a reaction.
-
-     Function to add product stoichiometry for a reaction
-     in the chemical system.
-     \param[in] rxn_id Integer id for the reaction in the list
-                of chemical reaction channels.
-     \param[in] rxn_products vector of integer molecular species ids
-                which are products for reaction rxn_id .
-     \param[in] products_stoichio vector of integer
-                stoichoimetry coefficients for products in
-                rxn_products.
-     \param[in] gene_id Integer id for the gene whose expression is
-                represented by the reaction.
-     \param[in] rxn_type Integer key for reaction type.
-               Following types are possible along with their integer keys:
-               0 : 'promoter activation'-- promoter switches from the off to the on
-                                       state
-               1 : 'promoter inactivation' -- promoter switches from the on to the off
-                                          state
-               2 : 'transcription-mRNA' -- transcription of mRNA
-               3 : 'transcription-nascent mRNA' -- transcription of nascent mRNA
-               4 : 'nascent mRNA maturation' -- maturation of nascent mRNA
-               5 : 'translation-mRNA' -- translation from mRNA
-               6 : 'translation-mature mRNA' -- translation from mature mRNA
-               7 : 'transcription-nascent miRNA' -- transcription of nascent miRNA
-               8 : 'nascent miRNA maturation' -- maturation of nascent miRNA
-               9 : 'transcription-nascent miRNA host' -- transcription of nascent
-                                                     miRNA from host gene
-               10 : 'miRNA host maturation' -- maturation of nascent miRNA from
-               host gene
-     ***********************************************/
-    void add_rxn_products (int rxn_id, std::vector<int> rxn_products,
-      std::vector<int> products_stoichio, int gene_id, int rxn_type);
-
-    /********************************************//**
-     \brief Add reaction rate for a reaction in the
-            list of chemical reaction channels.
-
-     Function to add reaction rate for a reaction
-     in the list of chemical reaction channels.
-     \param[in] rxn_id Integer id for the reaction in the list
-                of chemical reaction channels.
-     \param[in] rxn_rate reaction rate for the reaction
-                rxn_id.
-     ***********************************************/
-    void add_rxn_rates (int rxn_id, double rxn_rate);
-
-    /********************************************//**
-     \brief Add species order in GRN.
-
-     Function to add order in which a molecular species
-     occurs in the node list of GRN.
-     \param[in] molecule_id Integer id for the molecular
-                species.
-     \param[in] GRN_order of molecule species
-                molecule_id in the GRN. If the molecular
-                species is not present in the GRN, it is
-                assigned a value of -1.
-     ***********************************************/
-    void add_species_order_GRN (int molecule_id, int GRN_order);
+    void add_gene_state (int gene_id, int gene_type, std::vector<int> GRN_rxn_IN,
+      std::vector<int> GRN_species_OUT, std::vector<int> molecule_count_cur,
+      std::vector<std::vector<int>> reactants, std::vector<std::vector<int>> products,
+      std::vector<std::vector<int>> reactants_stoichio, std::vector<std::vector<int>> products_stoichio,
+      std::vector<double> rxn_rate, std::vector<double> propensity_val);
 
     /********************************************//**
      \brief Add GRN edge.
@@ -598,7 +458,8 @@ namespace ScnnoiseInterface {
      \param[in] src source gene for the edge.
      \param[in] dest destination gene for the edge.
      ***********************************************/
-    void add_GRN_edge (int src, int dest);
+    void add_GRN_edge (int src, int dest, double prob_contr,
+      double hill_coeff, double half_maximal, int rxn_IN, int species_OUT);
 
     /********************************************//**
      \brief Add dependency edge.

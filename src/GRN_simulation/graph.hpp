@@ -80,8 +80,7 @@ public:
    \param[in] src source vertex for the edge.
    \param[in] dest destination vertex for the edge.
    ***********************************************/
-  virtual void add_edge (int src, int dest, double max_expr, double hill_coeff,
-    double half_maximal) = 0;
+  virtual void add_edge (int src, int dest) = 0;
 
   /********************************************//**
    \brief Function to delete edge from the graph.

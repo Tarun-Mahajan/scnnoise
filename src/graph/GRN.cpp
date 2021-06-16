@@ -30,4 +30,4 @@ void GRN::find_children_edge_info (int vert,
         children_edge_info.push_back(v);
       }
     }
-  }
+}

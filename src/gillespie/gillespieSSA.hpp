@@ -12,7 +12,7 @@ namespace ScnnoiseInterface {
      reaction network.
      ***********************************************/
 
-    class GillespieSSA: public scnnoise {
+    class GillespieSSA: public scNNoiSE {
     private:
       /* data */
 

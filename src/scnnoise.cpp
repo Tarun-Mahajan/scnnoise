@@ -54,6 +54,8 @@ namespace ScnnoiseInterface {
       }
       molecule_count_history.push_back(count_gene);
     }
+
+    time_history.push_back(0);
   }
 
 

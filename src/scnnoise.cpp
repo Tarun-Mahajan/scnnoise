@@ -26,7 +26,9 @@ namespace ScnnoiseInterface {
     //
     // num_rxn_gene_type.resize(num_gene_types);
     // num_rxn_gene_type.assign({6, 7, 5, 9});
-
+    this->max_time = max_time;
+    this->save_timeseries = save_timeseries;
+    this->num_timepoints_save = num_timepoints_save;
     this->num_species_gene_type.reserve(num_species_gene_type.size());
     this->num_species_gene_type = num_species_gene_type;
     this->num_rxns_gene_type.reserve(num_rxns_gene_type.size());

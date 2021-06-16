@@ -9,11 +9,10 @@
 
 namespace ScnnoiseInterface {
   // Constructor
-  scNNoiSE::scNNoiSE (int num_rxns, int num_species, int num_genes,
+  scNNoiSE::scNNoiSE (int num_rxns, int num_genes,
     const std::vector<int> num_species_gene_type,
     const std::vector<int> num_rxns_gene_type) {
     this->num_rxns = num_rxns;
-    this->num_species = num_species;
     this->num_genes = num_genes;
     rxn_order.reserve(num_rxns);
     network.reserve(1);

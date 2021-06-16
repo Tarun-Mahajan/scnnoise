@@ -4,13 +4,13 @@
 
 #include <vector>
 #include <map>
+#include "../GRN_simulation/graph.hpp"
+#include "../GRN_simulation/GRN.hpp"
 
 namespace ScnnoiseInterface {
   /********************************************//**
    \brief Struct to store information for each reaction in
           the reaction order list.
-
-  \param[in]
    ***********************************************/
   struct rxn_order_struct {
     int gene_id;
@@ -185,16 +185,15 @@ namespace ScnnoiseInterface {
    ***********************************************/
   struct gene_rxn_channel_struct {
     int gene_type;
-    int num_splice_variants;
     std::vector<int> GRN_rxn_IN;
     std::vector<int> GRN_species_OUT;
     std::vector<int> rxn_type;
     std::vector<rxn_struct> rxns;
-    std::map<int, int> molecule_count_cur;
+    std::vector<int> molecule_count_cur;
   };
 
   struct molecule_history_struct {
-    std::map<int, std::vector<int>> molecule_count;
+    std::vector<std::vector<int>> molecule_count;
   }
 
   class scNNoiSE {
@@ -208,15 +207,6 @@ namespace ScnnoiseInterface {
     provided chemical reaction network.
      ***********************************************/
     int num_rxns;
-
-    /********************************************//**
-    \brief Number of molecular species.
-
-    This is the total number of unique molecular
-    species that are present in the user provided
-    chemical reaction network.
-     ***********************************************/
-    int num_species;
 
     /********************************************//**
     \brief Number of nodes in GRN.
@@ -265,7 +255,7 @@ namespace ScnnoiseInterface {
      type graph, which is a class for gene regulatory
      networks.
      ***********************************************/
-    std::vector<graph> network;
+    std::vector<GRN> network;
 
     /********************************************//**
      \brief Map to store all the reaction channels
@@ -418,7 +408,7 @@ namespace ScnnoiseInterface {
      num_timepoints_save > 1, This reduces the number of times data has to be
      written to the output file.
      ***********************************************/
-    std::map<int, molecule_history_struct> molecule_count_history;
+    std::vector<std::vector<std::vector<int>>> molecule_count_history;
 
     /********************************************//**
      \brief Vector to store time points along the simulation path.

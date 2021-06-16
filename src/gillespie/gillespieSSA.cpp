@@ -300,18 +300,20 @@ namespace ScnnoiseInterface {
       }else{
         num_history = 0;
         num_save_loop += 1;
-        std::ofstream outfile;
-        outfile.open(count_save_file, std::ios_base::app);
-        for (int id_time = 0; id_time < num_timepoints_save; ++id_time) {
-          outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
-          for (int gene = 0; gene < num_genes; ++gene) {
-            for (int species = 0; species < num_species_gene_type[gene]; ++species) {
-              outfile << molecule_count_history[gene][species][id_time] << ',';
+        if (save_timeseries) {
+          std::ofstream outfile;
+          outfile.open(count_save_file, std::ios_base::app);
+          for (int id_time = 0; id_time < num_timepoints_save; ++id_time) {
+            outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
+            for (int gene = 0; gene < num_genes; ++gene) {
+              for (int species = 0; species < num_species_gene_type[gene]; ++species) {
+                outfile << molecule_count_history[gene][species][id_time] << ',';
+              }
             }
+            outfile << '\n';
           }
-          outfile << '\n';
+          outfile.close();
         }
-        outfile.close();
       }
       for (int gene; gene < num_genes; ++gene) {
         for (int species; species < num_species_gene_type[gene]; ++species) {

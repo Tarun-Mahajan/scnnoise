@@ -19,6 +19,7 @@ namespace ScnnoiseInterface {
     network.reserve(1);
     network[0] = GRN(num_genes);
     reactions.reserve(num_genes);
+    total_propensity = 0;
 
     // num_species_gene_type.resize(num_gene_types);
     // num_species_gene_type.assign({4, 5, 4, 7});

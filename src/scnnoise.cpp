@@ -91,7 +91,7 @@ namespace ScnnoiseInterface {
   }
 
   void scNNoiSE::add_dependency_edge (int gene_type, int src, int dest) {
-    gene_rxn_dependency[gene_type][0].add_edge(src, dest);
+    gene_rxn_dependency[gene_type].add_edge(src, dest);
   }
 
   int scNNoiSE::factorial (int num) {

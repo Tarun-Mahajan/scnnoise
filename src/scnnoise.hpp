@@ -223,7 +223,7 @@ namespace ScnnoiseInterface {
             different combinations of gene types and num
             of alternatively spliced mRNA.
      ***********************************************/
-    std::vector<graph> gene_rxn_dependency;
+    std::vector<GraphDependency> gene_rxn_dependency;
 
     /********************************************//**
      \brief Number of chemical species for each

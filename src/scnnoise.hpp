@@ -394,8 +394,6 @@ namespace ScnnoiseInterface {
      ***********************************************/
     int num_timepoints_save;
 
-    int nrepeat;
-
     double total_propensity;
 
     /********************************************//**

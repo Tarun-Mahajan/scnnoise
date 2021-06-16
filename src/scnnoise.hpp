@@ -413,6 +413,8 @@ namespace ScnnoiseInterface {
      ***********************************************/
     std::vector<double> time_history;
 
+    // file to save molecule count history
+    std::string count_save_file;
 
   public:
     /********************************************//**

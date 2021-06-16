@@ -79,7 +79,7 @@ namespace ScnnoiseInterface {
         reactions[gene_selected].rxns[rxn_index].products_stoichio;
 
 
-      std::vector<bool> GRN_out_changed(rxn_selected_products.size(), false);
+      std::vector<bool> GRN_out_changed(reactions[gene_selected].GRN_rxn_OUT.size(), false);
       /*
       Subtract current reaction propensity from total reaction propensity for
       computing updated total propensity later.
@@ -109,7 +109,8 @@ namespace ScnnoiseInterface {
             reactions[gene_selected].GRN_rxn_OUT.end(),
             *r);
             if (it1 != reactions[gene_selected].GRN_rxn_OUT.end()) {
-              GRN_out_changed[*it1] = true;
+              int out_index = std::distance(reactions[gene_selected].GRN_rxn_OUT.begin(), it1);
+              GRN_out_changed[out_index] = true;
             }
             // if (*r == reactions[gene_selected].GRN_rxn_OUT) {
             //   GRN_out_changed = true;
@@ -120,6 +121,14 @@ namespace ScnnoiseInterface {
         }else{
           reactions[gene_selected].molecule_count_cur[*r] -=
             rxn_selected_reactants_stoichio[reactant_index];
+          std::vector<int>::iterator it1 =
+          std::find(reactions[gene_selected].GRN_rxn_OUT.begin(),
+          reactions[gene_selected].GRN_rxn_OUT.end(),
+          *r);
+          if (it1 != reactions[gene_selected].GRN_rxn_OUT.end()) {
+            int out_index = std::distance(reactions[gene_selected].GRN_rxn_OUT.begin(), it1);
+            GRN_out_changed[out_index] = true;
+          }
         }
       }
 
@@ -141,7 +150,8 @@ namespace ScnnoiseInterface {
             reactions[gene_selected].GRN_rxn_OUT.end(),
             *r);
             if (it1 != reactions[gene_selected].GRN_rxn_OUT.end()) {
-              GRN_out_changed[*it1] = true;
+              int out_index = std::distance(reactions[gene_selected].GRN_rxn_OUT.begin(), it1);
+              GRN_out_changed[out_index] = true;
             }
         }
       }
@@ -216,7 +226,7 @@ namespace ScnnoiseInterface {
           if (it1 != reactions[gene_selected].GRN_rxn_IN.end()) {
             // int rxn_index =
             // std::distance(reactions[gene_selected].GRN_rxn_IN.begin(), *it1);
-            new_propensity *= regulation_function(gene_selected, *it1);
+            new_propensity *= regulation_function(gene_selected, rxn);
           }
 
           // if (rxn == reactions[gene_selected].GRN_rxn_IN) {
@@ -238,38 +248,44 @@ namespace ScnnoiseInterface {
         Update propensity for dependent reactions belonging to genes
         downstream of the gene related to the reaction selected for firing
         */
-        if (GRN_out_changed) {
-          std::vector<int> gene_children;
-          std::vector<std::vector<int>> gene_children_rxn;
-          network[0].find_children(gene_selected, gene_children);
-          network[0].find_children_rxn(gene_selected, gene_children_rxn);
-          // for (auto &g : gene_children) {
-          for (int g = 0; g < gene_children.size(); ++g) {
+        for (int g_index = 0; g_index < GRN_out_changed.size(); ++g_index) {
+          if (GRN_out_changed[g_index]) {
+            std::vector<int> gene_children;
+            std::vector<edge_rxn_struct> gene_children_edge_info;
+            network[0].find_children(gene_selected, gene_children);
+            network[0].find_children_edge_info(gene_selected, gene_children_edge_info);
+            // for (auto &g : gene_children) {
+            for (int g = 0; g < gene_children.size(); ++g) {
 
-            // int rxn = reactions[gene_selected[g]].GRN_rxn_IN;
-            int rxn = gene_children_rxn[gene_selected[g]];
-            total_propensity -= reactions[gene_selected[g]].rxns[rxn].propensity_val;
-            rxn_selected_reactants =
-              reactions[gene_selected[g]].rxns[rxn].reactants;
-            rxn_selected_reactants_stoichio =
-              reactions[gene_selected[g]].rxns[rxn].reactants_stoichio;
+              // int rxn = reactions[gene_selected[g]].GRN_rxn_IN;
+              int rxn = gene_children_edge_info[g].rxn_IN;
+              int out_species = gene_children_edge_info[g].species_OUT;
+              if (out_species == reactions[gene_selected].GRN_rxn_OUT[g_index]) {
+                total_propensity -= reactions[gene_children[g]].rxns[rxn].propensity_val;
+                rxn_selected_reactants =
+                  reactions[gene_selected[g]].rxns[rxn].reactants;
+                rxn_selected_reactants_stoichio =
+                  reactions[gene_selected[g]].rxns[rxn].reactants_stoichio;
 
-            double new_propensity = reactions[g].rxns[rxn].rxn_rate;
-            for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
-              int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
-              int reactant_stoichio = rxn_selected_reactants_stoichio[reactant_index];
-              new_propensity *= (factorial(reactions[gene_selected[g]].molecule_count_cur[*r])/
-                factorial(reactions[gene_selected[g]].molecule_count_cur[*r] - reactant_stoichio));
-            }
-            new_propensity *= regulation_function(g, rxn);
-            reactions[g].rxns[rxn].propensity_val = new_propensity;
-            for (auto &r : rxn_order) {
-              if ((r.gene_id == g) && (r.rxn_type == rxn)) {
-                r.propensity_val = new_propensity;
-                break;
+                double new_propensity = reactions[gene_children[g]].rxns[rxn].rxn_rate;
+                for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
+                  int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
+                  int reactant_stoichio = rxn_selected_reactants_stoichio[reactant_index];
+                  new_propensity *= (factorial(reactions[gene_selected[g]].molecule_count_cur[*r])/
+                    factorial(reactions[gene_selected[g]].molecule_count_cur[*r] - reactant_stoichio));
+                }
+                new_propensity *= regulation_function(gene_children[g], rxn);
+                reactions[gene_children[g]].rxns[rxn].propensity_val = new_propensity;
+                for (auto &r : rxn_order) {
+                  if ((r.gene_id == gene_children[g]) && (r.rxn_type == rxn)) {
+                    r.propensity_val = new_propensity;
+                    break;
+                  }
+                }
+                total_propensity += reactions[gene_children[g]].rxns[rxn].propensity_val;
               }
+
             }
-            total_propensity += reactions[g].rxns[rxn].propensity_val;
           }
         }
     }

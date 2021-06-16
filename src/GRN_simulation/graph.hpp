@@ -9,12 +9,6 @@ struct Edge {
   int dest;
 };
 
-struct edge_struct {
-  double max_expr;
-  double hill_coeff;
-  double half_maximal;
-}
-
 class Graph {
   /* Data */
   /********************************************//**
@@ -86,8 +80,8 @@ public:
    \param[in] src source vertex for the edge.
    \param[in] dest destination vertex for the edge.
    ***********************************************/
-  void add_edge (int src, int dest, double max_expr, double hill_coeff,
-    double half_maximal);
+  virtual void add_edge (int src, int dest, double max_expr, double hill_coeff,
+    double half_maximal) = 0;
 
   /********************************************//**
    \brief Function to delete edge from the graph.

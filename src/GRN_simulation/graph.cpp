@@ -6,26 +6,26 @@
 
 // Constructor
 Graph::Graph (int N) {
-  const int sz = 1000
-  adj_list.reserve(sz);
-  parent_list.reserve(sz);
+  // const int sz = 1000
+  adj_list.reserve(N);
+  parent_list.reserve(N);
   num_nodes = N;
   // adj_list.resize(N);
 }
 
-int get_size () {
+int Graph::get_size () {
   return num_nodes;
 }
 
-// Function to add edge
-inline void Graph::add_edge (int src, int dest, double max_expr, double hill_coeff,
-  double half_maximal) {
-  adj_list[src].push_back(dest);
-  parent_list[dest].push_back(src);
-  edge_kinetic_params[src][dest].max_expr = max_expr;
-  edge_kinetic_params[src][dest].hill_coeff = hill_coeff;
-  edge_kinetic_params[src][dest].half_maximal = half_maximal;
-}
+// // Function to add edge
+// inline void Graph::add_edge (int src, int dest, double max_expr, double hill_coeff,
+//   double half_maximal) {
+//   adj_list[src].push_back(dest);
+//   parent_list[dest].push_back(src);
+//   edge_kinetic_params[src][dest].max_expr = max_expr;
+//   edge_kinetic_params[src][dest].hill_coeff = hill_coeff;
+//   edge_kinetic_params[src][dest].half_maximal = half_maximal;
+// }
 
 // Function to delete edge
 void Graph::del_edge (int src, int dest) {

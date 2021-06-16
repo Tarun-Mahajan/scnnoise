@@ -44,6 +44,17 @@ namespace ScnnoiseInterface {
       void simulate ();
 
       virtual void sort_reaction (int &rxn_selected) = 0;
+
+      // Update molecule count for reactants belonging to the fired reaction
+      // channel
+      void update_fired_reaction_reactants(int gene_selected,
+        int rxn_index, int &count_not_changed_reactants,
+        std::vector<bool> &flag_changed_product_count,
+        std::vector<bool> &GRN_out_changed,
+        std::vector<int> &rxn_selected_reactants,
+        std::vector<int> &rxn_selected_products,
+        std::vector<int> &rxn_selected_reactants_stoichio,
+        std::vector<int> &rxn_selected_products_stoichio);
     };
   }
 }

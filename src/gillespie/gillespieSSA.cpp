@@ -48,6 +48,55 @@ namespace ScnnoiseInterface {
       return rxn_selected;
     }
 
+    void GillespieSSA::update_fired_reaction_reactants(int gene_selected,
+      int rxn_index, int &count_not_changed_reactants,
+      std::vector<bool> &flag_changed_product_count,
+      std::vector<bool> &GRN_out_changed,
+      std::vector<int> &rxn_selected_reactants,
+      std::vector<int> &rxn_selected_products,
+      std::vector<int> &rxn_selected_reactants_stoichio,
+      std::vector<int> &rxn_selected_products_stoichio) {
+        for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
+          int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
+          std::vector<int>::iterator it =
+          std::find(rxn_selected_products.begin(), rxn_selected_products.end(),
+          *r);
+          if (it != rxn_selected_products.end()) {
+            int product_index = std::distance(rxn_selected_products.begin(), it);
+            flag_changed_product_count[product_index] = true;
+            int count_change = rxn_selected_products_stoichio[product_index] -
+              rxn_selected_reactants_stoichio[reactant_index]
+            if (count_change) {
+              reactions[gene_selected].molecule_count_cur[*r] += count_change;
+              std::vector<int>::iterator it1 =
+              std::find(reactions[gene_selected].GRN_rxn_OUT.begin(),
+              reactions[gene_selected].GRN_rxn_OUT.end(),
+              *r);
+              if (it1 != reactions[gene_selected].GRN_rxn_OUT.end()) {
+                int out_index = std::distance(reactions[gene_selected].GRN_rxn_OUT.begin(), it1);
+                GRN_out_changed[out_index] = true;
+              }
+              // if (*r == reactions[gene_selected].GRN_rxn_OUT) {
+              //   GRN_out_changed = true;
+              // }
+            }else{
+              count_not_changed_reactants += 1;
+            }
+          }else{
+            reactions[gene_selected].molecule_count_cur[*r] -=
+              rxn_selected_reactants_stoichio[reactant_index];
+            std::vector<int>::iterator it1 =
+            std::find(reactions[gene_selected].GRN_rxn_OUT.begin(),
+            reactions[gene_selected].GRN_rxn_OUT.end(),
+            *r);
+            if (it1 != reactions[gene_selected].GRN_rxn_OUT.end()) {
+              int out_index = std::distance(reactions[gene_selected].GRN_rxn_OUT.begin(), it1);
+              GRN_out_changed[out_index] = true;
+            }
+          }
+        }
+      }
+
     std::vector<bool> GillespieSSA::update_fired_Reaction (int rxn_selected) {
       /*
       Find the gene and reaction type for the selected reaction channel. Extract the reactants,
@@ -83,45 +132,10 @@ namespace ScnnoiseInterface {
       */
       int count_not_changed_reactants = 0;
       std::vector<bool> flag_changed_product_count(rxn_selected_products.size(), false);
-      for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
-        int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
-        std::vector<int>::iterator it =
-        std::find(rxn_selected_products.begin(), rxn_selected_products.end(),
-        *r);
-        if (it != rxn_selected_products.end()) {
-          int product_index = std::distance(rxn_selected_products.begin(), it);
-          flag_changed_product_count[product_index] = true;
-          int count_change = rxn_selected_products_stoichio[product_index] -
-            rxn_selected_reactants_stoichio[reactant_index]
-          if (count_change) {
-            reactions[gene_selected].molecule_count_cur[*r] += count_change;
-            std::vector<int>::iterator it1 =
-            std::find(reactions[gene_selected].GRN_rxn_OUT.begin(),
-            reactions[gene_selected].GRN_rxn_OUT.end(),
-            *r);
-            if (it1 != reactions[gene_selected].GRN_rxn_OUT.end()) {
-              int out_index = std::distance(reactions[gene_selected].GRN_rxn_OUT.begin(), it1);
-              GRN_out_changed[out_index] = true;
-            }
-            // if (*r == reactions[gene_selected].GRN_rxn_OUT) {
-            //   GRN_out_changed = true;
-            // }
-          }else{
-            count_not_changed_reactants += 1;
-          }
-        }else{
-          reactions[gene_selected].molecule_count_cur[*r] -=
-            rxn_selected_reactants_stoichio[reactant_index];
-          std::vector<int>::iterator it1 =
-          std::find(reactions[gene_selected].GRN_rxn_OUT.begin(),
-          reactions[gene_selected].GRN_rxn_OUT.end(),
-          *r);
-          if (it1 != reactions[gene_selected].GRN_rxn_OUT.end()) {
-            int out_index = std::distance(reactions[gene_selected].GRN_rxn_OUT.begin(), it1);
-            GRN_out_changed[out_index] = true;
-          }
-        }
-      }
+      update_fired_reaction_reactants(gene_selected, rxn_index,
+        count_not_changed_reactants, flag_changed_product_count,
+        GRN_out_changed, rxn_selected_reactants, rxn_selected_products,
+        rxn_selected_reactants_stoichio, rxn_selected_products_stoichio);
 
       /*
       Update molecular count for products which change by firing the selected

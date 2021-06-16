@@ -17,7 +17,7 @@ namespace ScnnoiseInterface {
     this->num_genes = num_genes;
     rxn_order.reserve(num_rxns);
     network.reserve(1);
-    network[0] = graph(num_genes);
+    network[0] = GRN(num_genes);
     reactions.reserve(num_genes);
 
     // num_species_gene_type.resize(num_gene_types);
@@ -26,7 +26,7 @@ namespace ScnnoiseInterface {
     // num_rxn_gene_type.resize(num_gene_types);
     // num_rxn_gene_type.assign({6, 7, 5, 9});
 
-    this->num_species_gene_type.reserve(sz);
+    this->num_species_gene_type.reserve(num_species_gene_type.size());
     this->num_species_gene_type = num_species_gene_type;
     this->num_rxns_gene_type.reserve(num_rxns_gene_type.size());
     this->num_rxns_gene_type = num_rxns_gene_type;
@@ -39,49 +39,50 @@ namespace ScnnoiseInterface {
     for (auto &n : num_rxns_gene_type) {
       gene_rxn_dependency.push_back(graph(n));
     }
-  }
 
 
-  void scNNoiSE::init_molecular_count (int molecule_id, int molecule_count) {
-    molecule_count_cur[molecule_id] = molecule_count;
-  }
-
-  void scNNoiSE::add_gene_state (int gene_id, int gene_type, int num_splice_variants) {
-      reactions[gene_id].gene_type = gene_type;
-      reactions[gene_id].num_splice_variants = num_splice_variants;
-    }
-
-  void scNNoiSE::add_reaction ()
-
-  void scNNoiSE::add_rxn_reactants (int rxn_id, std::vector<int> rxn_reactants,
-  std::vector<int> reactants_stoichio) {
-    for (auto &rxn_react: rxn_reactants) {
-      reactions[rxn_id]['reactants'].push_back(rxn_react);
-    }
-
-    for (auto &rxn_stoi: reactants_stoichio) {
-      reactions[rxn_id]['reactant stoichiometry'].push_back(rxn_stoi);
+    molecule_count_history.reserve(num_genes);
+    for (int gene; gene < num_genes; ++gene) {
+      std::vector<std::vector<int>> count_gene;
+      count_gene.reserve(num_species_gene_type[gene]);
+      for (int id; id < num_species_gene_type[gene]; ++id) {
+        std::vector<int> count_species(num_timepoints_save, 0);
+        count_gene.push_back(count_species);
+      }
+      molecule_count_history.push_back(count_gene);
     }
   }
 
-  void scNNoiSE::add_rxn_products (int rxn_id, std::vector<int> rxn_products,
-  std::vector<int> products_stoichio) {
-    for (auto &rxn_prod: rxn_products) {
-      reactions[rxn_id]['products'].push_back(rxn_prod);
-    }
 
-    for (auto &rxn_stoi: products_stoichio) {
-      reactions[rxn_id]['product stoichiometry'].push_back(rxn_stoi);
-    }
+  void scNNoiSE::add_gene_state (int gene_id, int gene_type, std::vector<int> GRN_rxn_IN,
+    std::vector<int> GRN_species_OUT, std::vector<int> molecule_count_cur,
+    std::vector<std::vector<int>> reactants, std::vector<std::vector<int>> products,
+    std::vector<std::vector<int>> reactants_stoichio, std::vector<std::vector<int>> products_stoichio,
+    std::vector<double> rxn_rate, std::vector<double> propensity_val) {
+      gene_rxn_channel_struct gene_state; // struct for gene state info
+      std::vector<rxn_struct> rxns(num_rxns_gene_type[gene_id]); // struct for all rxns for a gene
+      gene_state.gene_type = gene_type;
+      gene_state.GRN_rxn_IN = GRN_rxn_IN;
+      gene_state.GRN_species_OUT = GRN_species_OUT;
+      gene_state.molecule_count_cur = molecule_count_cur;
+      int rxn_index = 0;
+      for (auto &rxn: rxns) {
+        rxn.reactants = reactants[rxn_index];
+        rxn.products = products[rxn_index];
+        rxn.reactants_stoichio = reactants_stoichio[rxn_index];
+        rxn.products_stoichio = products_stoichio[rxn_index];
+        rxn.rxn_rate = rxn_rate[rxn_index];
+        rxn.propensity_val = propensity_val[rxn_index];
+        rxn_index += 1;
+      }
+      gene_state.rxns = rxns;
+      reactions.push_back(gene_state);
+
+      for (int id = 0; id < num_species_gene_type[gene_id]; ++id) {
+        molecule_count_history[gene_id][id][0] = molecule_count_cur[id];
+      }
   }
 
-  void scNNoiSE::add_rxn_rates (int rxn_id, double rxn_rate) {
-    rxn_rates[rxn_id] = rxn_rate;
-  }
-
-  void scNNoiSE::add_species_order_GRN (int molecule_id, int GRN_order) {
-    species_order_GRN[molecule_id] = GRN_order;
-  }
 
   void scNNoiSE::add_GRN_edge (int src, int dest) {
     network[0].add_edge(src, dest);

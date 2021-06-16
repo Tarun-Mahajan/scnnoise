@@ -15,8 +15,12 @@ namespace ScnnoiseInterface {
     namespace SimulatorGillespieSDM {
       /* function definitions */
       // Constructor
-      GillespieSDM::GillespieSDM (int num_rxns, int num_species, int num_nodes_GRN):
-        GillespieSSA (num_rxns, num_species, num_nodes_GRN){
+      GillespieSDM::GillespieSDM (int num_rxns, int num_genes,
+        const std::vector<int> num_species_gene_type,
+        const std::vector<int> num_rxns_gene_type, double max_time,
+        bool save_timeseries, int num_timepoints_save):
+        GillespieSSA (num_rxns, num_genes, num_species_gene_type,
+          num_rxns_gene_type, max_time, save_timeseries, num_timepoints_save) {
       }
 
       GillespieSDM::sort_reaction (int &rxn_selected) {

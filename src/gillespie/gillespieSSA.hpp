@@ -20,10 +20,10 @@ namespace ScnnoiseInterface {
       typedef std::mt19937 RNG;
       /* Member functions */
       // Constructor
-      GillespieSSA (int num_rxns, int num_species, int num_nodes_GRN, double time,
-        bool save_timeseries, int num_timepoints_save
-        std::vector<std::vector<int>> molecule_count_history,
-        std::vector<double> time_history, std::vector<double> rxn_propensity);
+      GillespieSSA (int num_rxns, int num_genes,
+        const std::vector<int> num_species_gene_type,
+        const std::vector<int> num_rxns_gene_type, double max_time,
+        bool save_timeseries, int num_timepoints_save);
 
       // Virtual destructor
       virtual ~GillespieSSA ();

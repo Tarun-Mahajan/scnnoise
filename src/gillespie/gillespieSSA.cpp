@@ -13,21 +13,12 @@ namespace ScnnoiseInterface {
   namespace SimulatorGillespieSSA {
     /* function definitions */
     // Constructor
-    GillespieSSA::GillespieSSA (int num_rxns, int num_species, int num_nodes_GRN):
-      scnnoise (num_rxns, num_species, num_nodes_GRN){
-      const int sz = 1000;
-      this->num_rxns = num_rxns;
-      this->num_species = num_species;
-      time = 0;
-      molecule_count_cur.reserve(sz);
-      save_timeseries = false;
-      num_timepoints_save = 1000;
-      time_history.reserve(int(5*sz));
-      time_history.push_back(0);
-      rxn_rates.reserve(sz);
-      rxn_stoi.reserve(sz);
-      rxn_propensity.reserve(sz);
-      rxn_freq.reserve(sz);
+    GillespieSSA::GillespieSSA (int num_rxns, int num_genes,
+      const std::vector<int> num_species_gene_type,
+      const std::vector<int> num_rxns_gene_type, double max_time,
+      bool save_timeseries, int num_timepoints_save):
+      scnnoise (num_rxns, num_genes, num_species_gene_type,
+        num_rxns_gene_type, max_time, save_timeseries, num_timepoints_save) {
     }
 
     inline double GillespieSSA::sample_time_step (RNG &generator) {

@@ -295,6 +295,32 @@ namespace ScnnoiseInterface {
         }
     }
 
+    void GillespieSSA::update_molecule_count_history (int &num_history, int &num_save_loop) {
+      if (num_history < num_timepoints_save) {
+      }else{
+        num_history = 0;
+        num_save_loop += 1;
+        std::ofstream outfile;
+        outfile.open(count_save_file, std::ios_base::app);
+        for (int id_time = 0; id_time < num_timepoints_save; ++id_time) {
+          outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
+          for (int gene = 0; gene < num_genes; ++gene) {
+            for (int species = 0; species < num_species_gene_type[gene]; ++species) {
+              outfile << molecule_count_history[gene][species][id_time] << ',';
+            }
+          }
+          outfile << '\n';
+        }
+        outfile.close();
+      }
+      for (int gene; gene < num_genes; ++gene) {
+        for (int species; species < num_species_gene_type[gene]; ++species) {
+          molecule_count_history[gene][species][num_history] =
+            reactions[gene].molecule_count_cur[species];
+        }
+      }
+    }
+
     double GillespieSSA::simulate (int num_threads) {
       compute_total_propensity();
 
@@ -302,8 +328,11 @@ namespace ScnnoiseInterface {
       std::seed_seq sd(rd_seeds.begin(), rd_seeds.end());
       thread_local static RNG generator{sd};
       bool stop_sim = false;
+      int num_history = 0;
+      int num_save_loop = 0;
 
       while (!stop_sim) {
+        num_history += 1;
         double next_time_step = sample_time_step(generator);
         int next_rxn = sample_next_rxn(generator);
         bool GRN_out_changed = false;
@@ -313,7 +342,7 @@ namespace ScnnoiseInterface {
           update_fired_Reaction(next_rxn, GRN_out_changed);
           update_dependent_count_propensity(next_rxn, GRN_out_changed);
           time_history.push_back(next_time_step);
-
+          update_molecule_count_history(num_history, num_save_loop);
         }else{
           stop_sim = true;
         }

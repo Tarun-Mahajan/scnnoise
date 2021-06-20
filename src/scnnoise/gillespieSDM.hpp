@@ -28,7 +28,7 @@ namespace ScnnoiseInterface {
         // Virtual destructor
         virtual ~GillespieSDM ();
 
-        void sort_reaction (int &rxn_selected);
+        void sort_reaction (int &rxn_selected) override;
       };
     }
   }

@@ -41,7 +41,7 @@ namespace ScnnoiseInterface {
       void update_dependent_count_propensity (int rxn_selected, bool &GRN_out_changed);
 
       // Simulate.
-      void simulate ();
+      void simulate () override;
 
       virtual void sort_reaction (int &rxn_selected) = 0;
 

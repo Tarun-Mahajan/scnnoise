@@ -23,7 +23,7 @@ namespace ScnnoiseInterface {
           num_rxns_gene_type, max_time, save_timeseries, num_timepoints_save) {
       }
 
-      GillespieSDM::sort_reaction (int &rxn_selected) {
+      GillespieSDM::sort_reaction (int &rxn_selected) override {
         if (rxn_selected > 0) {
           std::swap(rxn_order[rxn_selected - 1], rxn_order[rxn_selected]);
           rxn_selected -= 1;

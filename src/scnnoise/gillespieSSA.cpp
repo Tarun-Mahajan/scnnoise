@@ -323,7 +323,7 @@ namespace ScnnoiseInterface {
       }
     }
 
-    double GillespieSSA::simulate (int num_threads) {
+    double GillespieSSA::simulate () override {
       compute_total_propensity();
 
       std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};

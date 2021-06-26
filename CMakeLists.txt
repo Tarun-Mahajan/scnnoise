@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.4...3.18)
 
-# set the project name and version
-project(scnnoise VERSION 0.0.1)
+# set the project name
+project(scnnoise)
 
 # Set source directory
 set(SOURCE_DIR "src/scnnoise")
@@ -15,6 +15,6 @@ set(SOURCES "${SOURCE_DIR}/graph.cpp" "${SOURCE_DIR}/GRN.cpp"
 add_subdirectory(lib/pybind11/pybind11)
 pybind11_add_module(snnoise ${SOURCES} "${SOURCE_DIR}/bindings.cpp")
 
-# EXAMPLE_VERSION_INFO is defined by setup.py and passed into the C++ code as a
+# SCNNOISE_VERSION_INFO is defined by setup.py and passed into the C++ code as a
 # define (VERSION_INFO) here.
 target_compile_definitions(cmake_example PRIVATE VERSION_INFO=${SCNNOISE_VERSION_INFO})

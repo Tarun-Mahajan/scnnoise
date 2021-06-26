@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <map>
+#include <string>
 #include "../GRN_simulation/graph.hpp"
 #include "../GRN_simulation/GRN.hpp"
 
@@ -434,7 +435,7 @@ namespace ScnnoiseInterface {
     scNNoiSE (int num_rxns, int num_genes,
       const std::vector<int> num_species_gene_type,
       const std::vector<int> num_rxns_gene_type, double max_time,
-      bool save_timeseries, int num_timepoints_save);
+      bool save_timeseries, int num_timepoints_save, std::string count_save_file);
 
     /********************************************//**
      \brief Add state for a gene.

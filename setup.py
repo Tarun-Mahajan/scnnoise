@@ -135,10 +135,7 @@ setup(
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     extras_require={"test": "pytest"},
-    # Currently, build_ext only provides an optional "highest supported C++
-    # level" feature, but in the future it may provide more features.
-    ext_modules=ext_modules,
-    cmdclass={"build_ext": build_ext},
+    # cmdclass={"build_ext": build_ext},
     ext_modules=[CMakeExtension('scnnoise/scnnoise')],
     # add custom build_ext command
     cmdclass=dict(build_ext=CMakeBuild),

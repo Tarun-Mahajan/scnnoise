@@ -12,7 +12,7 @@ set(SOURCES "${SOURCE_DIR}/graph.cpp" "${SOURCE_DIR}/GRN.cpp"
 "${SOURCE_DIR}/gillespieSSA.cpp", "${SOURCE_DIR}/gillespieSDM.cpp")
 
 # Generate Python module
-add_subdirectory(lib/pybind11)
+add_subdirectory(lib/pybind11/pybind11)
 pybind11_add_module(snnoise ${SOURCES} "${SOURCE_DIR}/bindings.cpp")
 
 # EXAMPLE_VERSION_INFO is defined by setup.py and passed into the C++ code as a

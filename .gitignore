@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+lib/*
 lib64/
 parts/
 sdist/
@@ -132,4 +132,4 @@ dmypy.json
 _build/
 _generate/
 *env*
-lib/
+!lib/pybind11/

@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
-#include "GRN_simulation/graph.hpp"
+#include "graph.hpp"
 #include "scnnoise.hpp"
 
 

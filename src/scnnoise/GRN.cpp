@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include "graph.hpp"
+#include "GRN.hpp"
 
 // Constructor
 GRN::GRN (int N): Graph(N) {

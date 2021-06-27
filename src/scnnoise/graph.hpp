@@ -31,7 +31,7 @@ class Graph {
    \param[in] visited boolean vector to track whether vertices in the
               graph have been visited by the DFS or not.
    ***********************************************/
-  void is_connected_DFS (int vert, bool visited[]);
+  void is_connected_DFS (int vert, std::vector<bool> visited);
 
   // Make graph undirected.
   /********************************************//**
@@ -59,7 +59,8 @@ class Graph {
    \param[in] visited boolean vector to track whether vertices in the
               graph have been visited by the DFS or not.
    ***********************************************/
-  bool is_DAG_util (int vert, bool visited[], bool active[]);
+  bool is_DAG_util (int vert, std::vector<bool> visited,
+                    std::vector<bool> active);
 
 
 

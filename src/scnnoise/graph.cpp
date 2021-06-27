@@ -76,7 +76,7 @@ void Graph::unmake_undirected (std::vector<Edge> &edges) {
 }
 
 // Recursive DFS function for checking graph connectedness.
-void Graph::is_connected_DFS (int vert, bool visited[]) {
+void Graph::is_connected_DFS (int vert, std::vector<bool> visited) {
   if (!visited[vert]) {
     std::cout << "current node = " << vert << std::endl;
     visited[vert] = true;
@@ -113,7 +113,8 @@ bool Graph::is_connected () {
 }
 
 // Recursive DFS utility function for determining whether graph is DAG or not.
-bool Graph::is_DAG_util (int vert, bool visited[], bool active[]) {
+bool Graph::is_DAG_util (int vert, std::vector<bool> visited,
+                         std::vector<bool> active) {
 
   visited[vert] = true;
   active[vert] = true;

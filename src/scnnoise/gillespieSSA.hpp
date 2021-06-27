@@ -3,6 +3,7 @@
 #define SSA_H
 
 #include <vector>
+#include <random>
 
 namespace ScnnoiseInterface {
   /********************************************//**

@@ -2,8 +2,8 @@
 #ifndef SCNNOISE
 #define SCNNOISE
 
-#include "graph_dependency.hpp"
-#include "GRN.hpp"
+#include "graph.hpp"
+#include "graph_derived.hpp"
 #include <vector>
 #include <map>
 #include <string>
@@ -227,7 +227,7 @@ namespace ScnnoiseInterface {
             different combinations of gene types and num
             of alternatively spliced mRNA.
      ***********************************************/
-    std::vector<Graph_::GraphDependency> gene_rxn_dependency;
+    std::vector<GraphSpace::GraphDependency> gene_rxn_dependency;
 
     /********************************************//**
      \brief Number of chemical species for each
@@ -259,7 +259,7 @@ namespace ScnnoiseInterface {
      type graph, which is a class for gene regulatory
      networks.
      ***********************************************/
-    std::vector<Graph_::GRN> network;
+    std::vector<GraphSpace::GRN> network;
 
     /********************************************//**
      \brief Map to store all the reaction channels

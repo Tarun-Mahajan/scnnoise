@@ -1,7 +1,7 @@
 // scNNoiSE simulator class
+#include "graph.hpp"
 #include "scnnoise.hpp"
-#include "graph_dependency.hpp"
-#include "GRN.hpp"
+#include "graph_derived.hpp"
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -20,7 +20,7 @@ namespace ScnnoiseInterface {
     this->num_genes = num_genes;
     rxn_order.reserve(num_rxns);
     network.reserve(1);
-    network[0] = Graph_::GRN(num_genes);
+    network[0] = GraphSpace::GRN(num_genes);
     reactions.reserve(num_genes);
     total_propensity = 0;
 
@@ -44,7 +44,7 @@ namespace ScnnoiseInterface {
     gene_rxn_dependency.reserve(num_rxns_gene_type.size());
     int count = 0;
     for (auto &n : num_rxns_gene_type) {
-      gene_rxn_dependency.push_back(graph(n));
+      gene_rxn_dependency.push_back(GraphSpace::GraphDependency(n));
     }
 
 

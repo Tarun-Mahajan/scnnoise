@@ -15,7 +15,7 @@ struct edge_rxn_struct {
   double half_maximal;
   int rxn_IN;
   int species_OUT;
-}
+};
 
 class GRN: public Graph  {
   std::vector<std::vector<edge_rxn_struct>> edge_rxn_params;

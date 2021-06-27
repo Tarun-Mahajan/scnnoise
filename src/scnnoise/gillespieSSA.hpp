@@ -4,7 +4,7 @@
 
 #include <vector>
 #include <random>
-#include "scnnoise.h"
+#include "scnnoise.hpp"
 
 namespace ScnnoiseInterface {
   /********************************************//**

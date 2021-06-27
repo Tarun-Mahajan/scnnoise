@@ -26,9 +26,6 @@ namespace ScnnoiseInterface {
       bool save_timeseries, int num_timepoints_save,
       std::string count_save_file);
 
-    // Virtual destructor
-    virtual ~GillespieSDM ();
-
     void sort_reaction (int &rxn_selected) override;
   };
 }

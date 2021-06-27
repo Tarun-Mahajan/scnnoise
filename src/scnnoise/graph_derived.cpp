@@ -1,5 +1,5 @@
 // Graph class and algorithms
-#include "graph_dependency.hpp"
+#include "graph_derived.hpp"
 #include "graph.hpp"
 
 namespace GraphSpace {

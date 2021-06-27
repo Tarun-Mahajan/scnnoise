@@ -13,11 +13,10 @@ namespace ScnnoiseInterface {
    reaction network.
    ***********************************************/
 
-  class GillespieSDM: public GillespieSSA {
+  class GillespieSDM : public GillespieSSA {
   private:
 
   public:
-    typedef std::mt19937 RNG;
     /* Member functions */
     // Constructor
     GillespieSDM (int num_rxns, int num_genes,

@@ -195,7 +195,7 @@ namespace ScnnoiseInterface {
 
   struct molecule_history_struct {
     std::vector<std::vector<int>> molecule_count;
-  }
+  };
 
   class scNNoiSE {
   protected:

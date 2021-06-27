@@ -3,6 +3,7 @@
 #define SDM_H
 
 #include <vector>
+#include <string>
 
 namespace ScnnoiseInterface {
   /********************************************//**

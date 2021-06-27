@@ -4,18 +4,13 @@
 
 #include <vector>
 
-struct Edge {
-  int src;
-  int dest;
-};
-
 struct edge_rxn_struct {
   double prob_contr;
   double hill_coeff;
   double half_maximal;
   int rxn_IN;
   int species_OUT;
-}
+};
 
 class GraphDependency: public Graph  {
 

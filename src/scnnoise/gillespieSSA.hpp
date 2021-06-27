@@ -5,9 +5,6 @@
 #include <vector>
 
 namespace ScnnoiseInterface {
-  // namespace SimulatorGillespieSSA {
-  //
-  // }
   /********************************************//**
    \brief A class for Gillespie's stochastic simulation algorithm.
 

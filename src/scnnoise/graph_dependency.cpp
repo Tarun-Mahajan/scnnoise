@@ -6,12 +6,16 @@
 #include "graph.hpp"
 #include "graph_dependency.hpp"
 
-// Constructor
-GraphDependency::GraphDependency (int N): Graph(N) {
-}
+namespace Graph_ {
+  namespace GraphDependency_ {
+    // Constructor
+    GraphDependency::GraphDependency (int N): Graph(N) {
+    }
 
-// Function to add edge
-inline void GraphDependency::add_edge (int src, int dest) {
-  adj_list[src].push_back(dest);
-  parent_list[dest].push_back(src);
+    // Function to add edge
+    inline void GraphDependency::add_edge (int src, int dest) {
+      adj_list[src].push_back(dest);
+      parent_list[dest].push_back(src);
+    }
+  }
 }

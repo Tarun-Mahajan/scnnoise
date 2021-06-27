@@ -7,6 +7,7 @@
 #include <string>
 #include "graph.hpp"
 #include "GRN.hpp"
+#include "graph_dependency.hpp"
 
 namespace ScnnoiseInterface {
   /********************************************//**

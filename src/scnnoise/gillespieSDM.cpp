@@ -8,7 +8,7 @@
 #include <random>
 #include <math.h>
 // #include "graph.hpp"
-// #include "scnnoise.hpp"
+#include "scnnoise.hpp"
 
 
 namespace ScnnoiseInterface {

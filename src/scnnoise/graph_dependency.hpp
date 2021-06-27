@@ -2,8 +2,8 @@
 #ifndef GRN_H
 #define GRN_H
 
-#include <vector>
 #include "graph.hpp"
+#include <vector>
 
 struct edge_rxn_struct {
   double prob_contr;
@@ -14,28 +14,26 @@ struct edge_rxn_struct {
 };
 
 namespace Graph_ {
-  namespace GraphDerived {
-    class GraphDependency: public Graph  {
+  class GraphDependency: public Graph_::Graph  {
 
-    public:
-      /* Memeber functions */
-      /********************************************//**
-       \brief Graph Constructor.
+  public:
+    /* Memeber functions */
+    /********************************************//**
+     \brief Graph Constructor.
 
-       \param[in] N Number of nodes in the graph.
-       ***********************************************/
-      GraphDependency (int N);
+     \param[in] N Number of nodes in the graph.
+     ***********************************************/
+    GraphDependency (int N);
 
 
-      /********************************************//**
-       \brief Function to add edge to the graph.
+    /********************************************//**
+     \brief Function to add edge to the graph.
 
-       \param[in] src source vertex for the edge.
-       \param[in] dest destination vertex for the edge.
-       ***********************************************/
-      void add_edge (int src, int dest);
-    };
-  }
+     \param[in] src source vertex for the edge.
+     \param[in] dest destination vertex for the edge.
+     ***********************************************/
+    void add_edge (int src, int dest);
+  };
 }
 
 #endif

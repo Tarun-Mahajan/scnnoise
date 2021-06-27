@@ -1,14 +1,15 @@
 #include <vector>
+#include "gillespieSDM.hpp"
+#include "gillespieSSA.hpp"
 #include <algorithm>
 #include <iostream>
 #include <omp.h>
 #include <string>
 #include <random>
 #include <math.h>
-#include "graph.hpp"
-#include "scnnoise.hpp"
-#include "gillespieSDM.hpp"
-#include "gillespieSSA.hpp"
+// #include "graph.hpp"
+// #include "scnnoise.hpp"
+
 
 namespace ScnnoiseInterface {
   namespace SimulatorGillespieSSA {
@@ -26,7 +27,7 @@ namespace ScnnoiseInterface {
           count_save_file) {
       }
 
-      GillespieSDM::sort_reaction (int &rxn_selected) override {
+      void GillespieSDM::sort_reaction (int &rxn_selected) override {
         if (rxn_selected > 0) {
           std::swap(rxn_order[rxn_selected - 1], rxn_order[rxn_selected]);
           rxn_selected -= 1;

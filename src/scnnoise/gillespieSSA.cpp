@@ -1,3 +1,5 @@
+#include "gillespieSSA.hpp"
+#include "scnnoise.hpp"
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -5,9 +7,9 @@
 #include <string>
 #include <random>
 #include <math.h>
-#include "graph.hpp"
-#include "scnnoise.hpp"
-#include "gillespieSSA.hpp"
+// #include "graph.hpp"
+
+
 
 namespace ScnnoiseInterface {
   namespace SimulatorGillespieSSA {

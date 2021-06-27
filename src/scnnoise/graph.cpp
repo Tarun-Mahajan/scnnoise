@@ -1,8 +1,9 @@
 // Graph class and algorithms
+#include "graph.hpp"
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include "graph.hpp"
+
 
 namespace Graph_ {
   // Constructor

@@ -3,6 +3,7 @@
 #define GRN_H
 
 #include <vector>
+#include "graph.hpp"
 
 // struct Edge {
 //   int src;

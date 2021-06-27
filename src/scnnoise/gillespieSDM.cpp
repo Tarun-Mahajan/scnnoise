@@ -5,8 +5,8 @@
 #include <string>
 #include <random>
 #include <math.h>
-#include "../GRN_simulation/graph.hpp"
-#include "../scnnoise.hpp"
+#include "graph.hpp"
+#include "scnnoise.hpp"
 #include "gillespieSDM.hpp"
 #include "gillespieSSA.hpp"
 

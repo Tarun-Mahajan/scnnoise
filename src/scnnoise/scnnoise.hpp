@@ -5,8 +5,8 @@
 #include <vector>
 #include <map>
 #include <string>
-#include "../GRN_simulation/graph.hpp"
-#include "../GRN_simulation/GRN.hpp"
+#include "graph.hpp"
+#include "GRN.hpp"
 
 namespace ScnnoiseInterface {
   /********************************************//**

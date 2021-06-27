@@ -8,6 +8,7 @@
 #include <random>
 #include <math.h>
 // #include "graph.hpp"
+#include "scnnoise.hpp"
 
 
 

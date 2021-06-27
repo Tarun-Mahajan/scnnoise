@@ -16,7 +16,7 @@ PYBIND11_MODULE(scnnoise, m) {
         .def("add_dependency_edge", &ScnnoiseInterface::scNNoiSE::add_dependency_edge);
     py::class_<ScnnoiseInterface::GillespieSSA,
               ScnnoiseInterface::scNNoiSE>(m, "GillespieSSA")
-        .def("simulate", &ScnnoiseInterface::simulate);
+        .def("simulate", &ScnnoiseInterface::GillespieSSA::simulate);
     py::class_<ScnnoiseInterface::GillespieSDM,
               ScnnoiseInterface::GillespieSSA>(m, "GillespieSDM")
         .def(py::init<int, int, const std::vector<int>, const std::vector<int> \

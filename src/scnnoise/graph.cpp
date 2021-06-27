@@ -57,7 +57,7 @@ void Graph::make_undirected (std::vector<Edge> &edges) {
 
   }
 
-  for (auto &edge: edges) {
+  for (auto edge: edges) {
     if (edge.src != -1) {
       adj_list[edge.src].push_back(edge.dest);
     }
@@ -66,7 +66,7 @@ void Graph::make_undirected (std::vector<Edge> &edges) {
 
 // Unmake graph undirected.
 void Graph::unmake_undirected (std::vector<Edge> &edges) {
-  for (auto &edge: edges) {
+  for (auto edge: edges) {
     if (edge.src != -1) {
       adj_list[edge.src].push_back(edge.dest);
       adj_list[edge.src].erase(std::remove(adj_list[edge.src].begin(),
@@ -92,7 +92,7 @@ void Graph::is_connected_DFS (int vert, bool visited[]) {
 bool Graph::is_connected () {
   std::vector<bool> visited(num_nodes);
   std::vector<Edge> edges;
-  for (auto &vert: visited) {
+  for (auto vert: visited) {
     vert = false;
   }
   make_undirected(edges);
@@ -136,10 +136,10 @@ bool Graph::is_DAG_util (int vert, bool visited[], bool active[]) {
 bool Graph::is_DAG () {
   std::vector<bool> visited(num_nodes);
   std::vector<bool> active(num_nodes);
-  for (auto &vert: visited) {
+  for (auto vert: visited) {
     vert = false;
   }
-  for (auto &vert: active) {
+  for (auto vert: active) {
     vert = false;
   }
   for(int v = 0; v < num_nodes; ++v){

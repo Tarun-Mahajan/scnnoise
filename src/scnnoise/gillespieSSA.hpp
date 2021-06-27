@@ -33,10 +33,10 @@ namespace ScnnoiseInterface {
     virtual ~GillespieSSA ();
 
     // Sample next time step.
-    double sample_time_step ();
+    double sample_time_step (RNG &generator);
 
     // Sample next reaction id.
-    int sample_next_rxn ();
+    int sample_next_rxn (RNG &generator);
 
     // Update molecule counts by firing the selected reaction
     std::vector<bool> update_fired_Reaction (int rxn_selected, bool &GRN_out_changed);

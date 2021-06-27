@@ -1,5 +1,6 @@
 // Graph class and algorithms
 #include <vector>
+#include <map>
 #include <algorithm>
 #include <iostream>
 #include "graph.hpp"

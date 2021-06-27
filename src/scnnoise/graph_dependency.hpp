@@ -3,6 +3,7 @@
 #define GRN_H
 
 #include <vector>
+#include "graph.hpp"
 
 struct edge_rxn_struct {
   double prob_contr;

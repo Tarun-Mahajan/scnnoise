@@ -89,11 +89,11 @@ namespace ScnnoiseInterface {
           reactions[gene_selected].molecule_count_cur[*r] -=
             rxn_selected_reactants_stoichio[reactant_index];
           std::vector<int>::iterator it1 =
-          std::find(reactions[gene_selected].GRN_rxn_OUT.begin(),
-          reactions[gene_selected].GRN_rxn_OUT.end(),
+          std::find(reactions[gene_selected].GRN_species_OUT.begin(),
+          reactions[gene_selected].GRN_species_OUT.end(),
           *r);
-          if (it1 != reactions[gene_selected].GRN_rxn_OUT.end()) {
-            int out_index = std::distance(reactions[gene_selected].GRN_rxn_OUT.begin(), it1);
+          if (it1 != reactions[gene_selected].GRN_species_OUT.end()) {
+            int out_index = std::distance(reactions[gene_selected].GRN_species_OUT.begin(), it1);
             GRN_out_changed[out_index] = true;
           }
         }

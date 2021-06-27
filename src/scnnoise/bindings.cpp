@@ -19,6 +19,6 @@ PYBIND11_MODULE(scnnoise, m) {
         .def("simulate", &ScnnoiseInterface::GillespieSSA::simulate);
     py::class_<ScnnoiseInterface::GillespieSDM,
               ScnnoiseInterface::GillespieSSA>(m, "GillespieSDM")
-        .def(py::init<int, int, const std::vector<int>, const std::vector<int> \
+        .def(py::init<int, int, const std::vector<int>, const std::vector<int>,
              double, bool, int>());
 }

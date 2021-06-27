@@ -1,13 +1,9 @@
 // Graph class and algorithms
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <iostream>
 #include "graph.hpp"
 #include "graph_dependency.hpp"
 
 namespace Graph_ {
-  namespace GraphDependency_ {
+  namespace GraphDerived {
     // Constructor
     GraphDependency::GraphDependency (int N): Graph(N) {
     }

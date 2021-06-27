@@ -7,7 +7,7 @@
 #include "GRN.hpp"
 
 namespace Graph_ {
-  namespace GRN_ {
+  namespace GraphDerived {
     // Constructor
     GRN::GRN (int N): Graph(N) {
       edge_rxn_params.reserve(N);

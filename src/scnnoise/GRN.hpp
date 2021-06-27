@@ -5,11 +5,6 @@
 #include <vector>
 #include "graph.hpp"
 
-// struct Edge {
-//   int src;
-//   int dest;
-// };
-
 struct edge_rxn_struct {
   double prob_contr;
   double hill_coeff;
@@ -19,8 +14,9 @@ struct edge_rxn_struct {
 };
 
 namespace Graph_ {
-  namespace GRN_ {
+  namespace GraphDerived {
     class GRN: public Graph  {
+    protected:
       std::vector<std::vector<edge_rxn_struct>> edge_rxn_params;
 
     public:

@@ -14,7 +14,7 @@ struct edge_rxn_struct {
 };
 
 namespace Graph_ {
-  namespace GraphDependency_ {
+  namespace GraphDerived {
     class GraphDependency: public Graph  {
 
     public:

@@ -10,6 +10,7 @@ struct Edge {
 };
 
 class Graph {
+protected:
   /* Data */
   /********************************************//**
    \brief Number of nodes in the graph.

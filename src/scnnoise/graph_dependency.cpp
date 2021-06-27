@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include "graph.hpp"
+#include "graph_dependency.hpp"
 
 // Constructor
 GraphDependency::GraphDependency (int N): Graph(N) {

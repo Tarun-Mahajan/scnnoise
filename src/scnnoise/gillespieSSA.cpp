@@ -328,7 +328,7 @@ namespace ScnnoiseInterface {
 
   double GillespieSSA::simulate () override {
     compute_total_propensity();
-    
+
     std::random_device rd;
     std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};
     std::seed_seq sd(rd_seeds.begin(), rd_seeds.end());

@@ -9,7 +9,7 @@ struct Edge {
   int dest;
 };
 
-namespace GRAPH {
+namespace Graph_ {
   class Graph {
   protected:
     /* Data */

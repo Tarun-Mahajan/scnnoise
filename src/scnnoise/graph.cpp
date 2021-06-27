@@ -4,7 +4,7 @@
 #include <iostream>
 #include "graph.hpp"
 
-namespace GRAPH {
+namespace Graph_ {
   // Constructor
   Graph::Graph (int N) {
     // const int sz = 1000

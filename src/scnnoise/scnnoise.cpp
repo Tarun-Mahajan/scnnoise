@@ -95,8 +95,8 @@ namespace ScnnoiseInterface {
 
   void scNNoiSE::add_GRN_edge (int src, int dest, double prob_contr,
     double hill_coeff, double half_maximal, int rxn_IN, int species_OUT) {
-    network[0].add_edge(src, dest, double prob_contr, double hill_coeff,
-      double half_maximal, int rxn_IN, int species_OUT);
+    network[0].add_edge(src, dest, prob_contr, hill_coeff,
+      half_maximal, rxn_IN, species_OUT);
   }
 
   void scNNoiSE::add_dependency_edge (int gene_type, int src, int dest) {

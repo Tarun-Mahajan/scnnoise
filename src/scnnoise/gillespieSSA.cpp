@@ -7,7 +7,7 @@
 #include <math.h>
 #include "graph.hpp"
 #include "scnnoise.hpp"
-#include "GillespieSSA.hpp"
+#include "gillespieSSA.hpp"
 
 namespace ScnnoiseInterface {
   namespace SimulatorGillespieSSA {

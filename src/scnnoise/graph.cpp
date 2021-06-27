@@ -5,7 +5,7 @@
 #include <iostream>
 
 
-namespace Graph_ {
+namespace GraphSpace {
   // Constructor
   Graph::Graph (int N) {
     // const int sz = 1000

@@ -36,8 +36,8 @@ public:
    \param[in] src source vertex for the edge.
    \param[in] dest destination vertex for the edge.
    ***********************************************/
-  void add_edge (int src, int dest, double max_expr, double hill_coeff,
-    double half_maximal);
+  void add_edge (int src, int dest, double prob_contr, double hill_coeff,
+    double half_maximal, int rxn_IN, int species_OUT);
 
   void find_children_edge_info (int vert, std::vector<edge_rxn_struct> &children_edge_info);
 };

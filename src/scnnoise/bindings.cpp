@@ -14,11 +14,11 @@ PYBIND11_MODULE(scnnoise, m) {
         .def("add_gene_state", &ScnnoiseInterface::scNNoiSE::add_gene_state)
         .def("add_GRN_edge", &ScnnoiseInterface::scNNoiSE::add_GRN_edge)
         .def("add_dependency_edge", &ScnnoiseInterface::scNNoiSE::add_dependency_edge);
-    py::class_<ScnnoiseInterface::SimulatorGillespieSSA::GillespieSSA,
+    py::class_<ScnnoiseInterface::GillespieSSA,
               ScnnoiseInterface::scNNoiSE>(m, "GillespieSSA")
-        .def("simulate", &ScnnoiseInterface::SimulatorGillespieSSA::simulate);
-    py::class_<ScnnoiseInterface::SimulatorGillespieSSA::SimulatorGillespieSDM::GillespieSDM,
-              ScnnoiseInterface::SimulatorGillespieSSA::GillespieSSA>(m, "GillespieSDM")
+        .def("simulate", &ScnnoiseInterface::simulate);
+    py::class_<ScnnoiseInterface::GillespieSDM,
+              ScnnoiseInterface::GillespieSSA>(m, "GillespieSDM")
         .def(py::init<int, int, const std::vector<int>, const std::vector<int> \
              double, bool, int>());
 }

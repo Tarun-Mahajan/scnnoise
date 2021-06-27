@@ -68,7 +68,7 @@ namespace ScnnoiseInterface {
           int product_index = std::distance(rxn_selected_products.begin(), it);
           flag_changed_product_count[product_index] = true;
           int count_change = rxn_selected_products_stoichio[product_index] -
-            rxn_selected_reactants_stoichio[reactant_index]
+            rxn_selected_reactants_stoichio[reactant_index];
           if (count_change) {
             reactions[gene_selected].molecule_count_cur[*r] += count_change;
             std::vector<int>::iterator it1 =

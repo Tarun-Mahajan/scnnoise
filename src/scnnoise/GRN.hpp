@@ -4,10 +4,10 @@
 
 #include <vector>
 
-struct Edge {
-  int src;
-  int dest;
-};
+// struct Edge {
+//   int src;
+//   int dest;
+// };
 
 struct edge_rxn_struct {
   double prob_contr;

@@ -13,8 +13,8 @@ struct edge_rxn_struct {
   int species_OUT;
 };
 
-namespace Graph_ {
-  class GRN: public Graph_::Graph  {
+namespace GraphSpace {
+  class GRN : public Graph  {
   protected:
     std::vector<std::vector<edge_rxn_struct>> edge_rxn_params;
 
@@ -28,14 +28,17 @@ namespace Graph_ {
     GRN (int N);
 
 
+
+    void add_edge_kinetics (int src, int dest, double prob_contr,
+                            double hill_coeff, double half_maximal,
+                            int rxn_IN, int species_OUT);
     /********************************************//**
      \brief Function to add edge to the graph.
 
      \param[in] src source vertex for the edge.
      \param[in] dest destination vertex for the edge.
      ***********************************************/
-    void add_edge (int src, int dest, double prob_contr, double hill_coeff,
-      double half_maximal, int rxn_IN, int species_OUT);
+    void add_edge (int src, int dest) override;
 
     void find_children_edge_info (int vert, std::vector<edge_rxn_struct> &children_edge_info);
   };

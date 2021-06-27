@@ -2,6 +2,8 @@
 #ifndef SDM_H
 #define SDM_H
 
+#include <vector>
+
 namespace ScnnoiseInterface {
   /********************************************//**
    \brief A class for Gillespie's stochastic simulation algorithm.

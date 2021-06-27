@@ -7,7 +7,7 @@ project(scnnoise)
 set(SOURCE_DIR "src/scnnoise")
 # Tell CMake that headers are also in SOURCE_DIR
 include_directories(${SOURCE_DIR})
-set(SOURCES "${SOURCE_DIR}/graph.cpp" "${SOURCE_DIR}/GRN.cpp"
+set(SOURCES "${SOURCE_DIR}/graph.cpp" "${SOURCE_DIR}/GRN.cpp" 
 "${SOURCE_DIR}/graph_dependency.cpp" "${SOURCE_DIR}/scnnoise.cpp"
 "${SOURCE_DIR}/gillespieSSA.cpp" "${SOURCE_DIR}/gillespieSDM.cpp")
 

@@ -1,6 +1,6 @@
 #include <vector>
-#include "gillespieSDM.hpp"
 #include "gillespieSSA.hpp"
+#include "gillespieSDM.hpp"
 #include <algorithm>
 #include <iostream>
 #include <omp.h>

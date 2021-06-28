@@ -122,7 +122,7 @@ namespace ScnnoiseInterface {
       reactions[gene_selected].rxns[rxn_index].products_stoichio;
 
 
-    std::vector<bool> GRN_out_changed(reactions[gene_selected].GRN_rxn_OUT.size(), false);
+    std::vector<bool> GRN_out_changed(reactions[gene_selected].GRN_species_OUT.size(), false);
     /*
     Subtract current reaction propensity from total reaction propensity for
     computing updated total propensity later.
@@ -154,11 +154,11 @@ namespace ScnnoiseInterface {
           // }
 
           std::vector<int>::iterator it1 =
-          std::find(reactions[gene_selected].GRN_rxn_OUT.begin(),
-          reactions[gene_selected].GRN_rxn_OUT.end(),
+          std::find(reactions[gene_selected].GRN_species_OUT.begin(),
+          reactions[gene_selected].GRN_species_OUT.end(),
           *r);
-          if (it1 != reactions[gene_selected].GRN_rxn_OUT.end()) {
-            int out_index = std::distance(reactions[gene_selected].GRN_rxn_OUT.begin(), it1);
+          if (it1 != reactions[gene_selected].GRN_species_OUT.end()) {
+            int out_index = std::distance(reactions[gene_selected].GRN_species_OUT.begin(), it1);
             GRN_out_changed[out_index] = true;
           }
       }
@@ -268,7 +268,7 @@ namespace ScnnoiseInterface {
             // int rxn = reactions[gene_selected[g]].GRN_rxn_IN;
             int rxn = gene_children_edge_info[g].rxn_IN;
             int out_species = gene_children_edge_info[g].species_OUT;
-            if (out_species == reactions[gene_selected].GRN_rxn_OUT[g_index]) {
+            if (out_species == reactions[gene_selected].GRN_species_OUT[g_index]) {
               total_propensity -= reactions[gene_children[g]].rxns[rxn].propensity_val;
               rxn_selected_reactants =
                 reactions[gene_selected[g]].rxns[rxn].reactants;

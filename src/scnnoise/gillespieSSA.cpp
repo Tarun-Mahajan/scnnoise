@@ -205,7 +205,7 @@ namespace ScnnoiseInterface {
       int gene_selected = rxn_order[rxn_selected].gene_id;
       int rxn_index = rxn_order[rxn_selected].rxn_type;
       int gene_type = reactions[gene_selected].gene_type;
-      vector<int> rxn_selected_children;
+      std::vector<int> rxn_selected_children;
       rxn_selected_children.reserve(gene_rxn_dependency[gene_type].get_size());
       gene_rxn_dependency[gene_type].find_children(rxn_index, rxn_selected_children);
       std::vector<int> rxn_selected_reactants;

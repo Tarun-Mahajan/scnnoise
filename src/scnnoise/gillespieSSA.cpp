@@ -1,5 +1,5 @@
-#include "gillespieSSA.hpp"
 #include "scnnoise.hpp"
+#include "gillespieSSA.hpp"
 #include <vector>
 #include <algorithm>
 #include <iostream>

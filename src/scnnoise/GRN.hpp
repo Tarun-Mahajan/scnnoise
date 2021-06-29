@@ -11,6 +11,7 @@ struct edge_rxn_struct {
   double half_maximal;
   int rxn_IN;
   int species_OUT;
+  int activator;
 };
 
 namespace GraphSpace {

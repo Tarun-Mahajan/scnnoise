@@ -16,10 +16,10 @@ struct edge_rxn_struct {
 
 namespace GraphSpace {
   class GRN : public Graph  {
-  protected:
+  public:
     std::vector<std::vector<edge_rxn_struct>> edge_rxn_params;
 
-  public:
+  // public:
     /* Memeber functions */
     /********************************************//**
      \brief Graph Constructor.

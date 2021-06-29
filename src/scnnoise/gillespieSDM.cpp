@@ -25,7 +25,7 @@ namespace ScnnoiseInterface {
       count_save_file) {
   }
 
-  void GillespieSDM::sort_reaction (int &rxn_selected) override {
+  void GillespieSDM::sort_reaction (int &rxn_selected) {
     if (rxn_selected > 0) {
       std::swap(rxn_order[rxn_selected - 1], rxn_order[rxn_selected]);
       rxn_selected -= 1;

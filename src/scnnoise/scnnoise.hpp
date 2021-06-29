@@ -493,6 +493,18 @@ namespace ScnnoiseInterface {
      expression. Needs to be overridden in any derived class.
      ***********************************************/
     virtual void simulate () = 0;
+
+    /********************************************//**
+     \brief Function to compute gene expression regulation by transcription factors
+     ***********************************************/
+    double regulation_function (int gene_selected, int rxn);
+
+    /********************************************//**
+     \brief Hill function for regulation
+     ***********************************************/
+    double hill_function (int tf_count, double hill_coeff, double half_maximal);
+
+
   };
 }
 #endif

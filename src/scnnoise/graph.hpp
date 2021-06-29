@@ -11,7 +11,7 @@ struct Edge {
 
 namespace GraphSpace {
   class Graph {
-  protected:
+  public:
     /* Data */
     /********************************************//**
      \brief Number of nodes in the graph.
@@ -66,7 +66,7 @@ namespace GraphSpace {
 
 
 
-  public:
+  // public:
     /* Memeber functions */
     /********************************************//**
      \brief Graph Constructor.

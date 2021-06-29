@@ -327,7 +327,7 @@ namespace ScnnoiseInterface {
     }
   }
 
-  void GillespieSSA::simulate () override {
+  void GillespieSSA::simulate () {
     compute_total_propensity();
 
     std::random_device rd;

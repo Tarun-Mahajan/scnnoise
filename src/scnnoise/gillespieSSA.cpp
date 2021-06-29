@@ -279,8 +279,8 @@ namespace ScnnoiseInterface {
               for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
                 int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
                 int reactant_stoichio = rxn_selected_reactants_stoichio[reactant_index];
-                new_propensity *= (factorial(reactions[gene_selected[g]].molecule_count_cur[*r])/
-                  factorial(reactions[gene_selected[g]].molecule_count_cur[*r] - reactant_stoichio));
+                new_propensity *= (factorial(reactions[gene_children[g]].molecule_count_cur[*r])/
+                  factorial(reactions[gene_children[g]].molecule_count_cur[*r] - reactant_stoichio));
               }
               new_propensity *= regulation_function(gene_children[g], rxn);
               reactions[gene_children[g]].rxns[rxn].propensity_val = new_propensity;

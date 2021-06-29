@@ -2,6 +2,7 @@
 #include <pybind11/stl_bind.h>
 // #include "../../lib/pybind11/pybind11/include/pybind11/pybind11.h"
 // #include "../../lib/pybind11/pybind11/include/pybind11/stl.h"
+#include <string>
 #include "scnnoise.hpp"
 #include "gillespieSSA.hpp"
 #include "gillespieSDM.hpp"
@@ -20,5 +21,5 @@ PYBIND11_MODULE(scnnoise, m) {
     py::class_<ScnnoiseInterface::GillespieSDM,
               ScnnoiseInterface::GillespieSSA>(m, "GillespieSDM")
         .def(py::init<int, int, const std::vector<int>, const std::vector<int>,
-             double, bool, int>());
+             double, bool, int, std::string>());
 }

@@ -342,11 +342,11 @@ namespace ScnnoiseInterface {
       num_history += 1;
       double next_time_step = sample_time_step(generator);
       int next_rxn = sample_next_rxn(generator);
-      bool GRN_out_changed = false;
+      std::vector<bool> GRN_out_changed;
       double total_time = std::accumulate(time_history.begin(), time_history.end(),
         decltype(time_history)::value_type(0)) + next_time_step;
       if (total_time < max_time) {
-        update_fired_Reaction(next_rxn, GRN_out_changed);
+        GRN_out_changed = update_fired_Reaction(next_rxn);
         update_dependent_count_propensity(next_rxn, GRN_out_changed);
         time_history.push_back(next_time_step);
         update_molecule_count_history(num_history, num_save_loop);

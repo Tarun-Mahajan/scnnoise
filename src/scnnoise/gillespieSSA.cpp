@@ -271,9 +271,9 @@ namespace ScnnoiseInterface {
             if (out_species == reactions[gene_selected].GRN_species_OUT[g_index]) {
               total_propensity -= reactions[gene_children[g]].rxns[rxn].propensity_val;
               rxn_selected_reactants =
-                reactions[gene_selected[g]].rxns[rxn].reactants;
+                reactions[gene_children[g]].rxns[rxn].reactants;
               rxn_selected_reactants_stoichio =
-                reactions[gene_selected[g]].rxns[rxn].reactants_stoichio;
+                reactions[gene_children[g]].rxns[rxn].reactants_stoichio;
 
               double new_propensity = reactions[gene_children[g]].rxns[rxn].rxn_rate;
               for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {

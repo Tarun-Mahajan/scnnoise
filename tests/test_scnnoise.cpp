@@ -1,9 +1,9 @@
-#include <catch.hpp>
+#include "catch.hpp"
 #include "scnnoise.hpp"
 #include "gillespieSSA.hpp"
 #include "gillespieSDM.hpp"
 
-TEST_CASE("Test scNNoiSE", )
+TEST_CASE("Test scNNoiSE")
 {
     int num_rxns = 14;
     int num_genes = 2;

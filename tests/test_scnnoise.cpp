@@ -1,4 +1,4 @@
-#include "../lib/Catch2/catch_amalgamated.hpp"
+#include <catch2/catch_all.hpp>
 #include "scnnoise.hpp"
 #include "gillespieSSA.hpp"
 #include "gillespieSDM.hpp"

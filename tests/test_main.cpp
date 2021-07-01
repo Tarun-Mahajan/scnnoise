@@ -1,2 +1,2 @@
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include "lib/Catch2/lib/Catch2/catch_amalgamated.hpp"

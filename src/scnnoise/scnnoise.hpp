@@ -201,7 +201,7 @@ namespace ScnnoiseInterface {
   };
 
   class scNNoiSE {
-  protected:
+  public:
     /* data */
     /********************************************//**
     \brief Number of chemical reaction channels.
@@ -420,7 +420,7 @@ namespace ScnnoiseInterface {
     // file to save molecule count history
     std::string count_save_file;
 
-  public:
+  // public:
     /********************************************//**
      \brief Constructor for scNNoiSE.
 

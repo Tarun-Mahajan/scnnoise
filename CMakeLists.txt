@@ -6,17 +6,22 @@ project(scnnoise)
 # Set source directory
 set(SOURCE_DIR "src/scnnoise")
 
+# Tell CMake that headers are also in SOURCE_DIR
+include_directories(${SOURCE_DIR})
+set(SOURCES "${SOURCE_DIR}/graph.cpp"
+"${SOURCE_DIR}/graph_derived.cpp" "${SOURCE_DIR}/scnnoise.cpp"
+"${SOURCE_DIR}/gillespieSSA.cpp" "${SOURCE_DIR}/gillespieSDM.cpp")
+
 # Set test directory
 SET(TEST_DIR "tests")
 SET(TESTS ${SOURCES}
     "${TEST_DIR}/test_main.cpp"
 "${TEST_DIR}/test_scnnoise.cpp")
 
-# Tell CMake that headers are also in SOURCE_DIR
-include_directories(${SOURCE_DIR})
-set(SOURCES "${SOURCE_DIR}/graph.cpp"
-"${SOURCE_DIR}/graph_derived.cpp" "${SOURCE_DIR}/scnnoise.cpp"
-"${SOURCE_DIR}/gillespieSSA.cpp" "${SOURCE_DIR}/gillespieSDM.cpp")
+# Generate a test executable
+find_package(Catch2 REQUIRED)
+add_executable("${PROJECT_NAME}_test" ${TESTS})
+target_link_libraries(tests Catch2::Catch2)
 
 # Generate Python module
 add_subdirectory(lib/pybind11/pybind11)

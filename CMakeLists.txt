@@ -21,7 +21,7 @@ SET(TESTS ${SOURCES}
 # Generate a test executable
 find_package(Catch2 REQUIRED)
 add_executable("${PROJECT_NAME}_test" ${TESTS})
-target_link_libraries("${PROJECT_NAME}_test" Catch2::Catch2)
+target_link_libraries("${PROJECT_NAME}_test" PRIVATE Catch2::Catch2WithMain)
 
 # Generate Python module
 add_subdirectory(lib/pybind11/pybind11)

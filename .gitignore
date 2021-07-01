@@ -133,3 +133,7 @@ _build/
 _generate/
 *env*
 !lib/pybind11/
+
+
+# Exclude certain data folders
+data/testing_temp/

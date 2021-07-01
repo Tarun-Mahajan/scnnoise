@@ -66,7 +66,7 @@ class CMakeBuild(build_ext):
         dest_file = os.path.join(dest_dir, os.path.basename(src_file))
         print("copying {} -> {}".format(src_file, dest_file))
         copyfile(src_file, dest_file)
-        copymode(src_file, dest_file
+        copymode(src_file, dest_file)
 
     def build_extension(self, ext):
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))

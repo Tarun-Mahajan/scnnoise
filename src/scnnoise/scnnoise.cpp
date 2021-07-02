@@ -137,8 +137,10 @@ namespace ScnnoiseInterface {
         double hill_coeff = network[0].edge_rxn_params[gene_selected][src].hill_coeff;
         double half_maximal = network[0].edge_rxn_params[gene_selected][src].half_maximal;
         double prob_contr = network[0].edge_rxn_params[gene_selected][src].prob_contr;
+        bool activator = network[0].edge_rxn_params[gene_selected][src].activator;
         int tf_count = reactions[network[0].parent_list[gene_selected][src]].molecule_count_cur[out_species];
-        regulation_val += prob_contr * hill_function(tf_count, hill_coeff, half_maximal);
+        regulation_val += prob_contr * hill_function(tf_count, hill_coeff, half_maximal,
+                                                    activator);
       }
     }
     return regulation_val;

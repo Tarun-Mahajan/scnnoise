@@ -465,7 +465,8 @@ namespace ScnnoiseInterface {
      \param[in] dest destination gene for the edge.
      ***********************************************/
     void add_GRN_edge (int src, int dest, double prob_contr,
-      double hill_coeff, double half_maximal, int rxn_IN, int species_OUT);
+                      double hill_coeff, double half_maximal, int rxn_IN,
+                      int species_OUT, bool activator);
 
     /********************************************//**
      \brief Add dependency edge.

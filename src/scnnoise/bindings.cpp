@@ -7,6 +7,9 @@
 #include "gillespieSSA.hpp"
 #include "gillespieSDM.hpp"
 
+#define STRINGIFY(x) #x
+#define MACRO_STRINGIFY(x) STRINGIFY(x)
+
 namespace py = pybind11;
 
 PYBIND11_MODULE(scnnoise, m) {
@@ -20,6 +23,21 @@ PYBIND11_MODULE(scnnoise, m) {
         .def("simulate", &ScnnoiseInterface::GillespieSSA::simulate);
     py::class_<ScnnoiseInterface::GillespieSDM,
               ScnnoiseInterface::GillespieSSA>(m, "GillespieSDM")
-        .def(py::init<int, int, const std::vector<int>, const std::vector<int>,
+        .def(py::init<int, int, std::vector<int>, std::vector<int>,
              double, bool, int, std::string>());
+// For testing the binding
+    py::class_<CLASS_::class1>(m, "class1")
+         // .def(py::init<int, int>());
+        .def("add", &CLASS_::class1::add);
+         // .def("print_address", &CLASS_::class1::print_address);
+         // .def("subtract_", &class1::subtract_);
+    py::class_<CLASS_::class2, CLASS_::class1>(m, "class2")
+        .def(py::init<py::list>())
+        .def("subtract_", &CLASS_::class2::subtract_);
+
+#ifdef VERSION_INFO
+ m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
+#else
+ m.attr("__version__") = "dev";
+#endif
 }

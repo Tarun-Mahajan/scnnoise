@@ -118,7 +118,7 @@ namespace ScnnoiseInterface {
     }
   }
 
-  double hill_function (int tf_count, double hill_coeff, double half_maximal,
+  double scNNoiSE::hill_function (int tf_count, double hill_coeff, double half_maximal,
                        bool activator) {
                          double tf_count_pow = pow(double(tf_count), hill_coeff);
                          double half_maximal_pow = pow(double(half_maximal), hill_coeff);

@@ -6,6 +6,7 @@
 #include "scnnoise.hpp"
 #include "gillespieSSA.hpp"
 #include "gillespieSDM.hpp"
+#include "class12.hpp"
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)

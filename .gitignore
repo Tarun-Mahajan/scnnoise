@@ -137,3 +137,7 @@ _generate/
 
 # Exclude certain data folders
 data/testing_temp/
+
+
+# Exclude build files
+tests/bin

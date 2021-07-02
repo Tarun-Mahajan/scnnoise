@@ -54,7 +54,7 @@ namespace GraphSpace {
 
     void add_edge_kinetics (int src, int dest, double prob_contr,
                             double hill_coeff, double half_maximal,
-                            int rxn_IN, int species_OUT);
+                            int rxn_IN, int species_OUT, bool activator);
     /********************************************//**
      \brief Function to add edge to the graph.
 

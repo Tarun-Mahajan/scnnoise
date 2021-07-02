@@ -502,7 +502,8 @@ namespace ScnnoiseInterface {
     /********************************************//**
      \brief Hill function for regulation
      ***********************************************/
-    double hill_function (int tf_count, double hill_coeff, double half_maximal);
+    double hill_function (int tf_count, double hill_coeff, double half_maximal,
+                         bool activator);
 
 
   };

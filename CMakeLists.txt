@@ -10,7 +10,8 @@ set(SOURCE_DIR "src/scnnoise")
 include_directories(${SOURCE_DIR})
 set(SOURCES "${SOURCE_DIR}/graph.cpp"
 "${SOURCE_DIR}/graph_derived.cpp" "${SOURCE_DIR}/scnnoise.cpp"
-"${SOURCE_DIR}/gillespieSSA.cpp" "${SOURCE_DIR}/gillespieSDM.cpp")
+"${SOURCE_DIR}/gillespieSSA.cpp" "${SOURCE_DIR}/gillespieSDM.cpp"
+"${SOURCE_DIR}/class12.cpp")
 
 # Set test directory
 SET(TEST_DIR "tests")
@@ -26,6 +27,7 @@ target_link_libraries("${PROJECT_NAME}_test" PRIVATE Catch2::Catch2WithMain)
 # Generate Python module
 add_subdirectory(lib/pybind11/pybind11)
 pybind11_add_module(scnnoise ${SOURCES} "${SOURCE_DIR}/bindings.cpp")
+
 
 # SCNNOISE_VERSION_INFO is defined by setup.py and passed into the C++ code as a
 # define (VERSION_INFO) here.

@@ -29,9 +29,6 @@ namespace ScnnoiseInterface {
       bool save_timeseries, int num_timepoints_save,
       std::string count_save_file);
 
-    // Virtual destructor
-    virtual ~GillespieSSA ();
-
     // Sample next time step.
     double sample_time_step (RNG &generator);
 

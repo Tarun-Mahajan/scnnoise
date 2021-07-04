@@ -10,7 +10,7 @@ set(SOURCE_DIR "src/scnnoise")
 include_directories(${SOURCE_DIR})
 set(SOURCES "${SOURCE_DIR}/graph.cpp"
 "${SOURCE_DIR}/graph_derived.cpp" "${SOURCE_DIR}/scnnoise.cpp"
-"${SOURCE_DIR}/gillespieSSA.cpp" "${SOURCE_DIR}/gillespieSDM.cpp")
+"${SOURCE_DIR}/gillespieSSA.cpp" "${SOURCE_DIR}/gillespieSDMnoCellCycle.cpp")
 
 # Set test directory
 SET(TEST_DIR "tests")

@@ -14,7 +14,7 @@
 namespace ScnnoiseInterface {
   /* function definitions */
   // Constructor
-  GillespieSDM::GillespieSDM (int num_rxns, int num_genes,
+  gillespieSDMnoCellCycle::gillespieSDMnoCellCycle (int num_rxns, int num_genes,
                               std::vector<int> num_species_gene_type,
                               std::vector<int> num_rxns_gene_type,
                               double max_time,
@@ -25,14 +25,14 @@ namespace ScnnoiseInterface {
       count_save_file) {
   }
 
-  void GillespieSDM::sort_reaction (int &rxn_selected) {
+  void gillespieSDMnoCellCycle::sort_reaction (int &rxn_selected) {
     if (rxn_selected > 0) {
       std::swap(rxn_order[rxn_selected - 1], rxn_order[rxn_selected]);
       rxn_selected -= 1;
     }
   }
 
-  inline void update_cell_cycle_state (double cur_time) {
+  inline void gillespieSDMnoCellCycle::update_cell_cycle_state (double cur_time) {
 
   }
 }

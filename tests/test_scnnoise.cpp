@@ -1,7 +1,7 @@
 #include <catch2/catch_all.hpp>
 #include "scnnoise.hpp"
 #include "gillespieSSA.hpp"
-#include "gillespieSDM.hpp"
+#include "gillespieSDMnoCellCycle.hpp"
 
 TEST_CASE("Test scNNoiSE")
 {
@@ -13,7 +13,7 @@ TEST_CASE("Test scNNoiSE")
     bool save_timeseries = true;
     int num_timepoints_save = 100;
     std::string count_save_file = "data/testing_temp.two_gene_test.csv";
-    ScnnoiseInterface::GillespieSDM obj(num_rxns, num_genes,
+    ScnnoiseInterface::gillespieSDMnoCellCycle obj(num_rxns, num_genes,
                                        num_species_gene_type, num_rxns_gene_type,
                                        max_time, save_timeseries,
                                        num_timepoints_save, count_save_file);

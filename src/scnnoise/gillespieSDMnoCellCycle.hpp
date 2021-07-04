@@ -15,13 +15,13 @@ namespace ScnnoiseInterface {
    reaction network.
    ***********************************************/
 
-  class GillespieSDM : public GillespieSSA {
+  class gillespieSDMnoCellCycle : public GillespieSSA {
   private:
 
   public:
     /* Member functions */
     // Constructor
-    GillespieSDM (int num_rxns, int num_genes,
+    gillespieSDMnoCellCycle (int num_rxns, int num_genes,
       std::vector<int> num_species_gene_type,
       std::vector<int> num_rxns_gene_type, double max_time,
       bool save_timeseries, int num_timepoints_save,

@@ -21,8 +21,8 @@ PYBIND11_MODULE(_scnnoise, m) {
     py::class_<ScnnoiseInterface::GillespieSSA,
               ScnnoiseInterface::scNNoiSE>(m, "GillespieSSA")
         .def("simulate", &ScnnoiseInterface::GillespieSSA::simulate);
-    py::class_<ScnnoiseInterface::GillespieSDM,
-              ScnnoiseInterface::GillespieSSA>(m, "GillespieSDM")
+    py::class_<ScnnoiseInterface::gillespieSDMnoCellCycle,
+              ScnnoiseInterface::GillespieSSA>(m, "gillespieSDMnoCellCycle")
         .def(py::init<int, int, std::vector<int>, std::vector<int>,
              double, bool, int, std::string>());
 

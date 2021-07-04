@@ -47,6 +47,8 @@ namespace ScnnoiseInterface {
 
     virtual void sort_reaction (int &rxn_selected) = 0;
 
+    virtual void update_cell_cycle_state (double cur_time) = 0;
+
     // Update molecule count for reactants belonging to the fired reaction
     // channel
     void update_fired_reaction_reactants(int gene_selected,

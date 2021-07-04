@@ -104,7 +104,7 @@ class CMakeBuild(build_ext):
         cmake_args = [
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}".format(extdir),
             "-DPYTHON_EXECUTABLE={}".format(sys.executable),
-            "-DSCNNOISE_VERSION_INFO={}".format(self.distribution.get_version()),
+            "-DEXAMPLE_VERSION_INFO={}".format(self.distribution.get_version()),
             "-DCMAKE_BUILD_TYPE={}".format(cfg),  # not used on MSVC, but no harm
         ]
         build_args = []
@@ -183,9 +183,9 @@ setup(
     package_dir={"": "src"},
     extras_require={"test": "pytest"},
     # cmdclass={"build_ext": build_ext},
-    ext_modules=[CMakeExtension('scnnoise/scnnoise')],
+    ext_modules=[CMakeExtension('scnnoise._scnnoise')],
     # add custom build_ext command
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
-    options={"bdist_wheel": {"universal": True}}
+    options={"bdist_wheel": {"universal": True}},
 )

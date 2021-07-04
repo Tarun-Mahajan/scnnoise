@@ -12,7 +12,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(scnnoise, m) {
+PYBIND11_MODULE(_scnnoise, m) {
     py::bind_vector<std::vector<int>>(m, "VectorInt", py::buffer_protocol());
     py::class_<ScnnoiseInterface::scNNoiSE>(m, "scNNoiSE")
         .def("add_gene_state", &ScnnoiseInterface::scNNoiSE::add_gene_state)

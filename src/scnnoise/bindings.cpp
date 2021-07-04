@@ -5,7 +5,7 @@
 #include <string>
 #include "scnnoise.hpp"
 #include "gillespieSSA.hpp"
-#include "gillespieSDM.hpp"
+#include "gillespieSDMnoCellCycle.hpp"
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)

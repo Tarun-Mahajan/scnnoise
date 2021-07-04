@@ -1,6 +1,6 @@
 #include <vector>
 #include "gillespieSSA.hpp"
-#include "gillespieSDM.hpp"
+#include "gillespieSDMnoCellCycle.hpp"
 #include <algorithm>
 #include <iostream>
 #include <omp.h>
@@ -30,5 +30,9 @@ namespace ScnnoiseInterface {
       std::swap(rxn_order[rxn_selected - 1], rxn_order[rxn_selected]);
       rxn_selected -= 1;
     }
+  }
+
+  inline void update_cell_cycle_state (double cur_time) {
+
   }
 }

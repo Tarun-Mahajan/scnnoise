@@ -28,6 +28,7 @@ namespace ScnnoiseInterface {
       std::string count_save_file);
 
     void sort_reaction (int &rxn_selected) override;
+    void update_cell_cycle_state (double cur_time) override;
   };
 }
 

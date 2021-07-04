@@ -14,53 +14,53 @@
 namespace ScnnoiseInterface {
   // Constructor
   scNNoiSE::scNNoiSE (int num_rxns, int num_genes,
-    std::vector<int> num_species_gene_type,
-    std::vector<int> num_rxns_gene_type, double max_time,
-    bool save_timeseries, int num_timepoints_save, std::string count_save_file) {
-    this->num_rxns = num_rxns;
-    this->num_genes = num_genes;
-    rxn_order.reserve(num_rxns);
-    network.reserve(1);
-    network[0] = GraphSpace::GRN(num_genes);
-    reactions.reserve(num_genes);
-    total_propensity = 0;
+                     std::vector<int> num_species_gene_type,
+                     std::vector<int> num_rxns_gene_type, double max_time,
+                     bool save_timeseries, int num_timepoints_save, std::string count_save_file) {
+                    this->num_rxns = num_rxns;
+                    this->num_genes = num_genes;
+                    rxn_order.reserve(num_rxns);
+                    network.reserve(1);
+                    network.push_back(GraphSpace::GRN(num_genes));
+                    reactions.reserve(num_genes);
+                    total_propensity = 0;
 
-    // num_species_gene_type.resize(num_gene_types);
-    // num_species_gene_type.assign({4, 5, 4, 7});
-    //
-    // num_rxn_gene_type.resize(num_gene_types);
-    // num_rxn_gene_type.assign({6, 7, 5, 9});
-    this->max_time = max_time;
-    this->save_timeseries = save_timeseries;
-    this->num_timepoints_save = num_timepoints_save;
-    this->num_species_gene_type.reserve(num_species_gene_type.size());
-    this->num_species_gene_type = num_species_gene_type;
-    this->num_rxns_gene_type.reserve(num_rxns_gene_type.size());
-    this->num_rxns_gene_type = num_rxns_gene_type;
-    this->count_save_file = count_save_file;
+                    // num_species_gene_type.resize(num_gene_types);
+                    // num_species_gene_type.assign({4, 5, 4, 7});
+                    //
+                    // num_rxn_gene_type.resize(num_gene_types);
+                    // num_rxn_gene_type.assign({6, 7, 5, 9});
+                    this->max_time = max_time;
+                    this->save_timeseries = save_timeseries;
+                    this->num_timepoints_save = num_timepoints_save;
+                    this->num_species_gene_type.reserve(num_species_gene_type.size());
+                    this->num_species_gene_type = num_species_gene_type;
+                    this->num_rxns_gene_type.reserve(num_rxns_gene_type.size());
+                    this->num_rxns_gene_type = num_rxns_gene_type;
+                    this->count_save_file = count_save_file;
 
-    /********************************************//**
-     \brief Initialize dependency graph for different gene types.
-     ***********************************************/
-    gene_rxn_dependency.reserve(num_rxns_gene_type.size());
-    int count = 0;
-    for (auto &n : num_rxns_gene_type) {
-      gene_rxn_dependency.push_back(GraphSpace::GraphDependency(n));
-    }
+                    /********************************************//**
+                     \brief Initialize dependency graph for different gene types.
+                     ***********************************************/
+                    gene_rxn_dependency.reserve(num_rxns_gene_type.size());
+                    int count = 0;
+                    for (auto &n : num_rxns_gene_type) {
+                      gene_rxn_dependency.push_back(GraphSpace::GraphDependency(n));
+                    }
 
 
-    molecule_count_history.reserve(num_genes);
-    for (int gene; gene < num_genes; ++gene) {
-      std::vector<std::vector<int>> count_gene;
-      count_gene.reserve(num_species_gene_type[gene]);
-      for (int id; id < num_species_gene_type[gene]; ++id) {
-        std::vector<int> count_species(num_timepoints_save, 0);
-        count_gene.push_back(count_species);
-      }
-      molecule_count_history.push_back(count_gene);
-    }
+                    molecule_count_history.reserve(num_genes);
+                    for (int gene; gene < num_genes; ++gene) {
+                      std::vector<std::vector<int>> count_gene;
+                      count_gene.reserve(num_species_gene_type[gene]);
+                      for (int id; id < num_species_gene_type[gene]; ++id) {
+                        std::vector<int> count_species(num_timepoints_save, 0);
+                        count_gene.push_back(count_species);
+                      }
+                      molecule_count_history.push_back(count_gene);
+                    }
 
-    time_history.push_back(0);
+                    time_history.push_back(0);
   }
 
 

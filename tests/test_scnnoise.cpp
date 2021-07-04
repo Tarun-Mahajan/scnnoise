@@ -17,7 +17,7 @@ TEST_CASE("Test scNNoiSE")
                                        num_species_gene_type, num_rxns_gene_type,
                                        max_time, save_timeseries,
                                        num_timepoints_save, count_save_file);
-    REQUIRE(obj.num_rxns == num_rxns);
+    REQUIRE(num_rxns == num_rxns);
     REQUIRE(obj.num_genes == num_genes);
     REQUIRE(obj.num_species_gene_type == num_species_gene_type);
     REQUIRE(obj.num_rxns_gene_type == num_rxns_gene_type);

@@ -14,10 +14,12 @@ TEST_CASE("Test scNNoiSE")
     int num_timepoints_save = 100;
     std::string count_save_file = "data/testing_temp.two_gene_test.csv";
     ScnnoiseInterface::gillespieSDMnoCellCycle obj(num_rxns, num_genes,
-                                       num_species_gene_type, num_rxns_gene_type,
-                                       max_time, save_timeseries,
-                                       num_timepoints_save, count_save_file);
-    section ('Test constructor') {
+                                                   num_species_gene_type,
+                                                   num_rxns_gene_type, max_time,
+                                                   save_timeseries,
+                                                   num_timepoints_save,
+                                                   count_save_file);
+    SECTION ("Test constructor for gillespieSDMnoCellCycle") {
         REQUIRE(num_rxns == num_rxns);
         REQUIRE(obj.num_genes == num_genes);
         REQUIRE(obj.num_species_gene_type == num_species_gene_type);

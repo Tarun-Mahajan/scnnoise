@@ -141,3 +141,7 @@ data/testing_temp/
 
 # Exclude build files
 tests/bin
+
+# CLion files
+cmake-build-debug/
+.idea/

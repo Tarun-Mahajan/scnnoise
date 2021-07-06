@@ -3,7 +3,7 @@
 #include "gillespieSSA.hpp"
 #include "gillespieSDMnoCellCycle.hpp"
 
-TEST_CASE("Test scNNoiSE")
+TEST_CASE("Test constructor for gillespieSDMnoCellCycle")
 {
     int num_rxns = 14;
     int num_genes = 2;

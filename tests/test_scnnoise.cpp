@@ -3,6 +3,8 @@
 #include "gillespieSSA.hpp"
 #include "gillespieSDMnoCellCycle.hpp"
 
+// Add functions to create GRNs of sizes 2 and 3
+
 TEST_CASE("Test constructor for gillespieSDMnoCellCycle")
 {
     int num_rxns = 14;

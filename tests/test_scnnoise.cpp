@@ -4,6 +4,9 @@
 #include "gillespieSDMnoCellCycle.hpp"
 
 // Add functions to create GRNs of sizes 2 and 3
+ScnnoiseInterface::gillespieSDMnoCellCycle create_sim_GRN () {
+    
+}
 
 TEST_CASE("Test constructor for gillespieSDMnoCellCycle")
 {

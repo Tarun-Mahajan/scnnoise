@@ -1,0 +1,5 @@
+include README.md LICENSE lib/pybind11/pybind11/LICENSE
+graft lib/pybind11/pybind11/include
+graft lib/pybind11/pybind11/tools
+graft src
+global-include CMakeLists.txt *.cmake

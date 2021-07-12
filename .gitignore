@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+lib/*
 lib64/
 parts/
 sdist/
@@ -127,3 +127,21 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+_build/
+_generate/
+*env*
+!lib/pybind11/
+
+
+# Exclude certain data folders
+data/testing_temp/
+
+
+# Exclude build files
+tests/bin
+
+# CLion files
+cmake-build-debug/
+.idea/

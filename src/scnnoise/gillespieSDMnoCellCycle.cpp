@@ -2,8 +2,7 @@
 #include "gillespieSSA.hpp"
 #include "gillespieSDMnoCellCycle.hpp"
 #include <algorithm>
-#include <iostream>
-#include <omp.h>
+#include <iostream> 
 #include <string>
 #include <random>
 #include <math.h>

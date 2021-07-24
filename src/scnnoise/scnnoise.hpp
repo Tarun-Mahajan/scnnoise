@@ -31,6 +31,10 @@ namespace ScnnoiseInterface {
     double propensity_val;
   };
 
+  struct gene_type_struct {
+      std::vector<rxn_struct> rxns;
+  };
+
   /********************************************//**
    \brief Struct to store information for all reaction
           channels for a gene.

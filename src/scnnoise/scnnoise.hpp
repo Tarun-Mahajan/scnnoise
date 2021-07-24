@@ -33,6 +33,7 @@ namespace ScnnoiseInterface {
 
   struct gene_type_struct {
       std::vector<rxn_struct> rxns;
+      std::vector<GraphSpace::GraphDependency> gene_rxn_dependency;
   };
 
   /********************************************//**

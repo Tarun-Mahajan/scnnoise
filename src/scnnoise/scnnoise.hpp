@@ -197,7 +197,7 @@ namespace ScnnoiseInterface {
   };
 
   struct molecule_history_struct {
-    std::vector<std::vector<int>> molecule_count;
+    std::vector<std::vector<int> > molecule_count;
   };
 
   class scNNoiSE {
@@ -410,7 +410,7 @@ namespace ScnnoiseInterface {
      num_timepoints_save > 1, This reduces the number of times data has to be
      written to the output file.
      ***********************************************/
-    std::vector<std::vector<std::vector<int>>> molecule_count_history;
+    std::vector<std::vector<std::vector<int> > > molecule_count_history;
 
     /********************************************//**
      \brief Vector to store time points along the simulation path.
@@ -454,8 +454,8 @@ namespace ScnnoiseInterface {
      ***********************************************/
     void add_gene_state (int gene_id, int gene_type, std::vector<int> GRN_rxn_IN,
       std::vector<int> GRN_species_OUT, std::vector<int> molecule_count_cur,
-      std::vector<std::vector<int>> reactants, std::vector<std::vector<int>> products,
-      std::vector<std::vector<int>> reactants_stoichio, std::vector<std::vector<int>> products_stoichio,
+      std::vector<std::vector<int> > reactants, std::vector<std::vector<int> > products,
+      std::vector<std::vector<int> > reactants_stoichio, std::vector<std::vector<int> > products_stoichio,
       std::vector<double> rxn_rate, std::vector<double> propensity_val);
 
     /********************************************//**

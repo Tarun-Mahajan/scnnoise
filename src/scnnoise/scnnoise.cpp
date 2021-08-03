@@ -50,10 +50,10 @@ namespace ScnnoiseInterface {
 
 
                     molecule_count_history.reserve(num_genes);
-                    for (int gene; gene < num_genes; ++gene) {
+                    for (int gene=0; gene < num_genes; ++gene) {
                       std::vector<std::vector<int>> count_gene;
                       count_gene.reserve(num_species_gene_type[gene]);
-                      for (int id; id < num_species_gene_type[gene]; ++id) {
+                      for (int id=0; id < num_species_gene_type[gene]; ++id) {
                         std::vector<int> count_species(num_timepoints_save, 0);
                         count_gene.push_back(count_species);
                       }
@@ -76,6 +76,7 @@ namespace ScnnoiseInterface {
       gene_state.GRN_species_OUT = GRN_species_OUT;
       gene_state.molecule_count_cur = molecule_count_cur;
       int rxn_index = 0;
+      
       for (auto &rxn: rxns) {
         rxn.reactants = reactants[rxn_index];
         rxn.products = products[rxn_index];
@@ -85,10 +86,12 @@ namespace ScnnoiseInterface {
         rxn.propensity_val = propensity_val[rxn_index];
         rxn_index += 1;
       }
+      
       gene_state.rxns = rxns;
       reactions.push_back(gene_state);
-
+      
       for (int id = 0; id < num_species_gene_type[gene_id]; ++id) {
+       
         molecule_count_history[gene_id][id][0] = molecule_count_cur[id];
       }
   }

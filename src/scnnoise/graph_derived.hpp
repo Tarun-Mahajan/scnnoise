@@ -39,7 +39,7 @@ namespace GraphSpace {
   // class GRN
   class GRN : public Graph  {
   public:
-    std::vector<std::vector<edge_rxn_struct>> edge_rxn_params;
+    std::vector<std::vector<edge_rxn_struct> > edge_rxn_params;
 
   // public:
     /* Memeber functions */

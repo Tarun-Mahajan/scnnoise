@@ -212,7 +212,7 @@ namespace ScnnoiseInterface {
       rxn_selected_reactants.reserve(reactions[gene_selected].molecule_count_cur.size());
       std::vector<int> rxn_selected_reactants_stoichio;
       rxn_selected_reactants_stoichio.reserve(reactions[gene_selected].molecule_count_cur.size());
-
+      std::cout<< "rxn_selected size:"<< rxn_selected_children.size()<<std::endl;
       for (auto &rxn : rxn_selected_children) {
         total_propensity -= reactions[gene_selected].rxns[rxn].propensity_val;
         rxn_selected_reactants =
@@ -328,7 +328,7 @@ namespace ScnnoiseInterface {
 
   void GillespieSSA::simulate () {
     compute_total_propensity();
-
+    std::cout<< "total prop"<<total_propensity<<std::endl;
     std::random_device rd;
     std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};
     std::seed_seq sd(rd_seeds.begin(), rd_seeds.end());
@@ -347,10 +347,17 @@ namespace ScnnoiseInterface {
       if (total_time < max_time) {
           update_cell_cycle_state(total_time);
           GRN_out_changed = update_fired_Reaction(next_rxn);
+          for (int gene=0; gene < num_genes; ++gene) {
+            for (int species=0; species < num_species_gene_type[gene]; ++species) {
+                std::cout<<reactions[gene].molecule_count_cur[species]<<" ";
+            }
+          }
+          std::cout<<std::endl;
           update_dependent_count_propensity(next_rxn, GRN_out_changed);
           time_history.push_back(next_time_step);
           update_molecule_count_history(num_history, num_save_loop);
       }else{
+        /**
         for(int i = 0; i<molecule_count_history.size(); ++i){
           std::cout<<"gene"<<std::endl;
           for (int j = 0; j<molecule_count_history[i].size(); ++j){
@@ -361,6 +368,7 @@ namespace ScnnoiseInterface {
           }
           std::cout<<std::endl;
         }
+        */
         stop_sim = true;
       }
     }

@@ -77,6 +77,14 @@ namespace ScnnoiseInterface {
       gene_state.molecule_count_cur = molecule_count_cur;
       int rxn_index = 0;
       
+      for(int r = 0; r<propensity_val.size(); ++r){
+        rxn_order_struct temp_rxn;
+        temp_rxn.gene_id = gene_id;
+        temp_rxn.rxn_type = r;
+        temp_rxn.propensity_val = propensity_val[r];
+        rxn_order.push_back(temp_rxn);
+      }
+
       for (auto &rxn: rxns) {
         rxn.reactants = reactants[rxn_index];
         rxn.products = products[rxn_index];

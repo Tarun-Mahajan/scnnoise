@@ -173,9 +173,9 @@ namespace ScnnoiseInterface {
       for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
         int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
         int reactant_stoichio = rxn_selected_reactants_stoichio[reactant_index];
- 
-        std::cout<< "total prop:"<<gene_selected<<" "<<rxn_index<<std::endl; 
       /**
+        std::cout<< "total prop:"<<gene_selected<<" "<<rxn_index<<std::endl; 
+      
         for (int gene=0; gene < num_genes; ++gene) {
               for (int species=0; species < num_species_gene_type[gene]; ++species) {
                   std::cout<<reactions[gene].molecule_count_cur[species]<<" ";
@@ -241,17 +241,21 @@ namespace ScnnoiseInterface {
         for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
           int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
           int reactant_stoichio = rxn_selected_reactants_stoichio[reactant_index];
+          if (reactions[gene_selected].molecule_count_cur[*r] < reactant_stoichio){
+          new_propensity *= 0;
+          }else{
           new_propensity *= (factorial(reactions[gene_selected].molecule_count_cur[*r])/
             factorial(reactions[gene_selected].molecule_count_cur[*r] - reactant_stoichio));
+          }
         }
         std::vector<int>::iterator it1 =
         std::find(reactions[gene_selected].GRN_rxn_IN.begin(),
         reactions[gene_selected].GRN_rxn_IN.end(),
         rxn);
+        
         if (it1 != reactions[gene_selected].GRN_rxn_IN.end()) {
           // int rxn_index =
           // std::distance(reactions[gene_selected].GRN_rxn_IN.begin(), *it1);
-          //std::cout<<"done"<<std::endl;
           new_propensity *= regulation_function(gene_selected, rxn);
         }
          
@@ -270,7 +274,7 @@ namespace ScnnoiseInterface {
         total_propensity += reactions[gene_selected].rxns[rxn].propensity_val;
          
       }
-       
+      
 
       /*
       Update propensity for dependent reactions belonging to genes
@@ -300,8 +304,12 @@ namespace ScnnoiseInterface {
               for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
                 int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
                 int reactant_stoichio = rxn_selected_reactants_stoichio[reactant_index];
-                new_propensity *= (factorial(reactions[gene_children[g]].molecule_count_cur[*r])/
-                  factorial(reactions[gene_children[g]].molecule_count_cur[*r] - reactant_stoichio));
+                if (reactions[gene_selected].molecule_count_cur[*r] < reactant_stoichio){
+                  new_propensity *= 0;
+                }else{
+                new_propensity *= (factorial(reactions[gene_selected].molecule_count_cur[*r])/
+                  factorial(reactions[gene_selected].molecule_count_cur[*r] - reactant_stoichio));
+                }
               }
               
               new_propensity *= regulation_function(gene_children[g], rxn);
@@ -373,7 +381,7 @@ namespace ScnnoiseInterface {
         //
 
           update_dependent_count_propensity(next_rxn, GRN_out_changed);
-          
+           
           time_history.push_back(next_time_step);
           update_molecule_count_history(num_history, num_save_loop);
           

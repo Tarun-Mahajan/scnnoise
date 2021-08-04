@@ -318,8 +318,8 @@ namespace ScnnoiseInterface {
         outfile.close();
       }
     }
-    for (int gene; gene < num_genes; ++gene) {
-      for (int species; species < num_species_gene_type[gene]; ++species) {
+    for (int gene=0; gene < num_genes; ++gene) {
+      for (int species=0; species < num_species_gene_type[gene]; ++species) {
         molecule_count_history[gene][species][num_history] =
           reactions[gene].molecule_count_cur[species];
       }
@@ -351,6 +351,16 @@ namespace ScnnoiseInterface {
           time_history.push_back(next_time_step);
           update_molecule_count_history(num_history, num_save_loop);
       }else{
+        for(int i = 0; i<molecule_count_history.size(); ++i){
+          std::cout<<"gene"<<std::endl;
+          for (int j = 0; j<molecule_count_history[i].size(); ++j){
+            for (int k = 0; k<molecule_count_history[i][j].size(); ++k){
+              std::cout<<molecule_count_history[i][j][k]<<" ";
+            }
+            std::cout<<std::endl;
+          }
+          std::cout<<std::endl;
+        }
         stop_sim = true;
       }
     }

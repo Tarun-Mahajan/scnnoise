@@ -228,37 +228,43 @@ namespace ScnnoiseInterface {
       rxn_selected_reactants.reserve(reactions[gene_selected].molecule_count_cur.size());
       std::vector<int> rxn_selected_reactants_stoichio;
       rxn_selected_reactants_stoichio.reserve(reactions[gene_selected].molecule_count_cur.size());
-      
       for (auto &rxn : rxn_selected_children) {
-        total_propensity -= reactions[gene_selected].rxns[rxn].propensity_val;
+        total_propensity -= reactions[gene_selected].rxns[rxn].propensity_val; //
         rxn_selected_reactants =
           reactions[gene_selected].rxns[rxn].reactants;
         rxn_selected_reactants_stoichio =
           reactions[gene_selected].rxns[rxn].reactants_stoichio;
-        
         double new_propensity = reactions[gene_selected].rxns[rxn].rxn_rate;
         
         for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
+          
           int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
           int reactant_stoichio = rxn_selected_reactants_stoichio[reactant_index];
+        
           if (reactions[gene_selected].molecule_count_cur[*r] < reactant_stoichio){
           new_propensity *= 0;
           }else{
-          new_propensity *= (factorial(reactions[gene_selected].molecule_count_cur[*r])/
-            factorial(reactions[gene_selected].molecule_count_cur[*r] - reactant_stoichio));
+          for(int rs = 0; rs<reactant_stoichio; ++rs)
+            new_propensity *= (reactions[gene_selected].molecule_count_cur[*r]-rs);
           }
+          std::cout<<new_propensity<<std::endl;
         }
         std::vector<int>::iterator it1 =
         std::find(reactions[gene_selected].GRN_rxn_IN.begin(),
         reactions[gene_selected].GRN_rxn_IN.end(),
         rxn);
+
+        
+
         
         if (it1 != reactions[gene_selected].GRN_rxn_IN.end()) {
           // int rxn_index =
           // std::distance(reactions[gene_selected].GRN_rxn_IN.begin(), *it1);
           new_propensity *= regulation_function(gene_selected, rxn);
         }
-         
+
+        
+
         // if (rxn == reactions[gene_selected].GRN_rxn_IN) {
         //   new_propensity *= regulation_function(gene_selected);
         // }
@@ -270,9 +276,8 @@ namespace ScnnoiseInterface {
             break;
           }
         }
-        
         total_propensity += reactions[gene_selected].rxns[rxn].propensity_val;
-         
+        
       }
       
 
@@ -291,7 +296,7 @@ namespace ScnnoiseInterface {
 
             // int rxn = reactions[gene_selected[g]].GRN_rxn_IN;
             int rxn = gene_children_edge_info[g].rxn_IN;
-            int out_species = gene_children_edge_info[g].species_OUT;
+            int out_species = gene_children_edge_info[g].species_OUT;  
             if (out_species == reactions[gene_selected].GRN_species_OUT[g_index]) {
               total_propensity -= reactions[gene_children[g]].rxns[rxn].propensity_val;
               rxn_selected_reactants =
@@ -313,6 +318,9 @@ namespace ScnnoiseInterface {
               }
               
               new_propensity *= regulation_function(gene_children[g], rxn);
+                           
+          
+        
               reactions[gene_children[g]].rxns[rxn].propensity_val = new_propensity;
               for (auto &r : rxn_order) {
                 if ((r.gene_id == gene_children[g]) && (r.rxn_type == rxn)) {
@@ -320,6 +328,7 @@ namespace ScnnoiseInterface {
                   break;
                 }
               }
+ 
               total_propensity += reactions[gene_children[g]].rxns[rxn].propensity_val;
             }
 
@@ -381,10 +390,24 @@ namespace ScnnoiseInterface {
         //
 
           update_dependent_count_propensity(next_rxn, GRN_out_changed);
-           
+          /**
+          for (auto &r : rxn_order) {
+              std::cout<<r.gene_id<<" "<<r.rxn_type<<" "<<r.propensity_val<<", ";
+          }
+          std::cout<<std::endl;
+          */
           time_history.push_back(next_time_step);
           update_molecule_count_history(num_history, num_save_loop);
-          
+          for (auto &r : rxn_order) {
+            std::cout<<r.propensity_val<<" ";
+          }
+          std::cout<<std::endl;
+          for (int i =0; i<reactions.size(); ++i){
+            for(int j =0; j<reactions[i].molecule_count_cur.size();++j){
+              std::cout<<reactions[i].molecule_count_cur[j]<<" ";
+            }
+          }
+          std::cout<<std::endl;
       }else{
         /**
         for(int i = 0; i<molecule_count_history.size(); ++i){

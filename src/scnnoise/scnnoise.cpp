@@ -137,17 +137,36 @@ namespace ScnnoiseInterface {
   double scNNoiSE::regulation_function (int gene_selected, int rxn) {
     double regulation_val = 0;
     for (int src = 0; src < network[0].parent_list[gene_selected].size(); ++src) {
-      if (network[0].edge_rxn_params[gene_selected][src].rxn_IN == rxn) {
-        int out_species = network[0].edge_rxn_params[gene_selected][src].species_OUT;
-        double hill_coeff = network[0].edge_rxn_params[gene_selected][src].hill_coeff;
-        double half_maximal = network[0].edge_rxn_params[gene_selected][src].half_maximal;
-        double prob_contr = network[0].edge_rxn_params[gene_selected][src].prob_contr;
-        bool activator = network[0].edge_rxn_params[gene_selected][src].activator;
+      std::vector<int>::iterator it =
+        std::find(network[0].adj_list[src].begin(),
+        network[0].adj_list[src].end(),
+        gene_selected);
+      int gene_selected_id = std::distance(network[0].adj_list[src].begin(), gene_selected);
+      if (network[0].edge_rxn_params[src][gene_selected_id].rxn_IN == rxn) {
+        int out_species = network[0].edge_rxn_params[src][gene_selected_id].species_OUT;
+        double hill_coeff = network[0].edge_rxn_params[src][gene_selected_id].hill_coeff;
+        double half_maximal = network[0].edge_rxn_params[src][gene_selected_id].half_maximal;
+        double prob_contr = network[0].edge_rxn_params[src][gene_selected_id].prob_contr;
+        bool activator = network[0].edge_rxn_params[src][gene_selected_id].activator;
         int tf_count = reactions[network[0].parent_list[gene_selected][src]].molecule_count_cur[out_species];
         regulation_val += prob_contr * hill_function(tf_count, hill_coeff, half_maximal,
                                                     activator);
       }
     }
     return regulation_val;
+  }
+
+  void init_gene_type_info () {
+      /********************************************//**
+       \brief  Classic two-state model of gene expression.
+               No nascent and mature mRNA
+
+       rxn_ids:
+       0 - promoter in off state
+       1 - promoter in on state
+       2 - mRNA
+       ***********************************************/
+      std::vector<gene_type_struct> two_state(1);
+      two_state
   }
 }

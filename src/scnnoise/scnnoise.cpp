@@ -117,6 +117,14 @@ namespace ScnnoiseInterface {
     }
   }
 
+  int scNNoiSE::factorial_ratio_propensity_func (int N, int r) {
+      int propensity_factor = 1;
+      for (int i = 0; i < r; ++i) {
+          propensity_factor *= propensity_factor * (N - i);
+      }
+      return propensity_factor;
+  }
+
   void scNNoiSE::compute_total_propensity () {
     for (auto &rxn : rxn_order) {
       total_propensity += rxn.propensity_val;

@@ -2,3 +2,4 @@
 cd ../build
 cmake ../tests
 cmake --build . --target scnnoise_graph_test
+./scnnoise_graph_test

@@ -2,7 +2,7 @@
 #define UTILS_H
 
 #include <string>
-#include "../src/scnnoise/graph_derived.hpp"
+#include "graph_derived.hpp"
 
 bool test_node_count (GraphSpace::GRN gene_net, unsigned int num_nodes);
 

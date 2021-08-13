@@ -1,6 +1,7 @@
 // Graph class and algorithms
 #include "graph_derived.hpp"
 #include "graph.hpp"
+#include <iostream>
 
 namespace GraphSpace {
   // Constructor
@@ -16,7 +17,7 @@ namespace GraphSpace {
   // class GRN
   // Constructor
   GRN::GRN (int N): Graph(N) {
-    edge_rxn_params.reserve(N);
+    edge_rxn_params.resize(N);
   }
 
   // Function to add edge

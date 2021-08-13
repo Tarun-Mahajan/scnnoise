@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef TEST_UTILS_H
+#define TEST_UTILS_H
 
 #include <string>
 #include "graph_derived.hpp"

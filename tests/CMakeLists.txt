@@ -16,7 +16,7 @@ set(SOURCES "${SOURCE_DIR}/graph.cpp" "${SOURCE_DIR}/graph_derived.cpp")
 # Set test directory
 # SET(TEST_DIR "tests")
 # SET(TESTS ${SOURCES} "test_graph.cpp")
-SET(TESTS "test_main.cpp" "test_GRN.cpp" "${SOURCE_DIR}/utils.cpp" ${SOURCES})
+SET(TESTS "test_main.cpp" "test_GRN.cpp" "${SOURCE_DIR}/test_utils.cpp" ${SOURCES})
 
 # Generate a test executable for graph-related classes
 # add_executable("scnnoise_graph_test" ${TESTS})

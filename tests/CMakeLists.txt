@@ -11,7 +11,8 @@ project(scnnoise LANGUAGES CXX)
 set(SOURCE_DIR "../src/scnnoise")
 
 # Tell CMake that headers are also in SOURCE_DIR
-set(SOURCES "${SOURCE_DIR}/graph.cpp" "${SOURCE_DIR}/graph_derived.cpp")
+set(SOURCES "${SOURCE_DIR}/graph.cpp" "${SOURCE_DIR}/graph_derived.cpp"
+"${SOURCE_DIR}/utils.cpp" )
 
 # Set test directory
 # SET(TEST_DIR "tests")

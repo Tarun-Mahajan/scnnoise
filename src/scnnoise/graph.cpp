@@ -9,8 +9,8 @@ namespace GraphSpace {
   // Constructor
   Graph::Graph (int N) {
     // const int sz = 1000
-    adj_list.reserve(N);
-    parent_list.reserve(N);
+    adj_list.resize(N);
+    parent_list.resize(N);
     num_nodes = N;
     // adj_list.resize(N);
   }

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <string>
 #include "../src/scnnoise/graph_derived.hpp"
 
 unsigned int count_edges (GraphSpace::GRN gene_net) {
@@ -12,6 +13,10 @@ unsigned int count_edges (GraphSpace::GRN gene_net) {
         node += 1;
     }
     return num_edges;
+}
+
+void create_graph_from_file (GraphSpace::GRN &gene_net, std::string filepath) {
+    
 }
 
 int main () {

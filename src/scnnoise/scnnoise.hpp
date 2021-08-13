@@ -31,6 +31,11 @@ namespace ScnnoiseInterface {
     double propensity_val;
   };
 
+  struct gene_type_struct {
+      std::vector<rxn_struct> rxns;
+      std::vector<GraphSpace::GraphDependency> gene_rxn_dependency;
+  };
+
   /********************************************//**
    \brief Struct to store information for all reaction
           channels for a gene.
@@ -221,6 +226,7 @@ namespace ScnnoiseInterface {
      ***********************************************/
     int num_genes;
 
+    std::map<std::string, std::vector<gene_type_struct>> gene_type_info;
 
     /********************************************//**
      \brief Dependency graph for reaction channels for
@@ -458,6 +464,8 @@ namespace ScnnoiseInterface {
       std::vector<std::vector<int>> reactants_stoichio, std::vector<std::vector<int>> products_stoichio,
       std::vector<double> rxn_rate, std::vector<double> propensity_val);
 
+    void init_gene_type_info ();
+
     /********************************************//**
      \brief Add GRN edge.
 
@@ -483,6 +491,8 @@ namespace ScnnoiseInterface {
     void add_dependency_edge (int gene_type, int src, int dest);
 
     int factorial (int num);
+
+    int scNNoiSE::factorial_ratio_propensity_func (int N, int r);
 
     void compute_total_propensity ();
 

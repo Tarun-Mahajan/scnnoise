@@ -9,8 +9,8 @@ namespace GraphSpace {
   // Constructor
   Graph::Graph (int N) {
     // const int sz = 1000
-    adj_list.reserve(N);
-    parent_list.reserve(N);
+    adj_list.resize(N);
+    parent_list.resize(N);
     num_nodes = N;
     // adj_list.resize(N);
   }
@@ -157,6 +157,7 @@ namespace GraphSpace {
 
   // Function to return children nodes of a given node.
   void Graph::find_children (int vert, std::vector<int> &children) {
+      children.clear();
     if (!adj_list[vert].empty()) {
       for (int v: adj_list[vert]) {
         children.push_back(v);

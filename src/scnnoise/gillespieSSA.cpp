@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
-#include <omp.h>
 #include <string>
 #include <random>
 #include <math.h>
@@ -173,8 +172,10 @@ namespace ScnnoiseInterface {
       for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
         int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
         int reactant_stoichio = rxn_selected_reactants_stoichio[reactant_index];
-        new_propensity *= (factorial(reactions[gene_selected].molecule_count_cur[*r])/
-          factorial(reactions[gene_selected].molecule_count_cur[*r] - reactant_stoichio));
+        // new_propensity *= (factorial(reactions[gene_selected].molecule_count_cur[*r])/
+        //   factorial(reactions[gene_selected].molecule_count_cur[*r] - reactant_stoichio));
+        new_propensity *= factorial_ratio_propensity_func(
+            reactions[gene_selected].molecule_count_cur[*r], reactant_stoichio);
       }
       std::vector<int>::iterator it1 =
       std::find(reactions[gene_selected].GRN_rxn_IN.begin(),
@@ -225,8 +226,10 @@ namespace ScnnoiseInterface {
         for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
           int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
           int reactant_stoichio = rxn_selected_reactants_stoichio[reactant_index];
-          new_propensity *= (factorial(reactions[gene_selected].molecule_count_cur[*r])/
-            factorial(reactions[gene_selected].molecule_count_cur[*r] - reactant_stoichio));
+          // new_propensity *= (factorial(reactions[gene_selected].molecule_count_cur[*r])/
+          //   factorial(reactions[gene_selected].molecule_count_cur[*r] - reactant_stoichio));
+          new_propensity *= factorial_ratio_propensity_func(
+              reactions[gene_selected].molecule_count_cur[*r], reactant_stoichio);
         }
         std::vector<int>::iterator it1 =
         std::find(reactions[gene_selected].GRN_rxn_IN.begin(),
@@ -280,8 +283,10 @@ namespace ScnnoiseInterface {
               for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
                 int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
                 int reactant_stoichio = rxn_selected_reactants_stoichio[reactant_index];
-                new_propensity *= (factorial(reactions[gene_children[g]].molecule_count_cur[*r])/
-                  factorial(reactions[gene_children[g]].molecule_count_cur[*r] - reactant_stoichio));
+                // new_propensity *= (factorial(reactions[gene_children[g]].molecule_count_cur[*r])/
+                //   factorial(reactions[gene_children[g]].molecule_count_cur[*r] - reactant_stoichio));
+                new_propensity *= factorial_ratio_propensity_func(
+                  reactions[gene_children[g]].molecule_count_cur[*r], reactant_stoichio);
               }
               new_propensity *= regulation_function(gene_children[g], rxn);
               reactions[gene_children[g]].rxns[rxn].propensity_val = new_propensity;

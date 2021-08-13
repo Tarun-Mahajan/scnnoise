@@ -5,7 +5,7 @@
 #include <sstream>
 // #include <string>
 // #include "../src/scnnoise/graph_derived.hpp"
-#include "utils.hpp"
+#include "test_utils.hpp"
 
 void create_GRN_from_file (GraphSpace::GRN &gene_net, std::string filepath) {
     std::ifstream GRN_file(filepath);

@@ -1,7 +1,7 @@
 #include <catch2/catch_all.hpp>
 #include <iostream>
 #include <vector>
-#include "../src/scnnoise/utils.hpp"
+#include "test_utils.hpp"
 #include "test_GRN_global_variables.hpp"
 // #include "../src/scnnoise/graph_derived.hpp"
 

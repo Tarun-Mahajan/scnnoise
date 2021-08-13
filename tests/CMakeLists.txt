@@ -15,8 +15,16 @@ set(SOURCES "${SOURCE_DIR}/graph.cpp" "${SOURCE_DIR}/graph_derived.cpp")
 
 # Set test directory
 # SET(TEST_DIR "tests")
-SET(TESTS ${SOURCES} "test_graph.cpp")
+# SET(TESTS ${SOURCES} "test_graph.cpp")
+SET(TESTS "test_main.cpp" "test_GRN.cpp" "${SOURCE_DIR}/utils.cpp" ${SOURCES})
 
 # Generate a test executable for graph-related classes
+# add_executable("scnnoise_graph_test" ${TESTS})
+# target_include_directories("scnnoise_graph_test" PUBLIC ${SOURCE_DIR})
+SET(INCLUDE_DIRS ${SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Generate a test executable
+find_package(Catch2 REQUIRED)
 add_executable("scnnoise_graph_test" ${TESTS})
-target_include_directories("scnnoise_graph_test" PUBLIC ${SOURCE_DIR})
+target_include_directories("scnnoise_graph_test" PUBLIC ${INCLUDE_DIRS})
+target_link_libraries("scnnoise_graph_test" PRIVATE Catch2::Catch2WithMain)

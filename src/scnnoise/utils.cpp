@@ -2,27 +2,27 @@
 #include <fstream>
 #include <algorithm>
 #include <cctype>
-#include <string>
-#include "../src/scnnoise/graph_derived.hpp"
+#include <sstream>
+// #include <string>
+// #include "../src/scnnoise/graph_derived.hpp"
 #include "utils.hpp"
 
-void create_GRN_from_file (GraphSpace::GRN &gene_net, std::string filepath,
-    unsigned int num_nodes) {
+void create_GRN_from_file (GraphSpace::GRN &gene_net, std::string filepath) {
     std::ifstream GRN_file(filepath);
     std::string row_text;
-    vector<int> GRN_int_param;
-    vector<double> GRN_params;
-    vector<bool> GRN_activation;
+    std::vector<int> GRN_int_param;
+    std::vector<double> GRN_params;
+    std::vector<bool> GRN_activation;
     std::string word;
     while (std::getline(GRN_file, row_text)) {
         GRN_int_param.clear();
         GRN_params.clear();
         GRN_activation.clear();
-        std::stringstream str_stream(row_text);
+        std::istringstream str_stream(row_text);
 
         unsigned int id_counter = 0;
-        while (std::getline(str_stream, word, ', ')) {
-            if (id_counter < 4) {
+        while (std::getline(str_stream, word, ',')) {
+            if (id_counter < 2 || (id_counter >=5 && id_counter <= 6)) {
                 GRN_int_param.push_back(std::stoi(word));
             }else{
                 if (id_counter == 7) {
@@ -35,6 +35,7 @@ void create_GRN_from_file (GraphSpace::GRN &gene_net, std::string filepath,
                     GRN_params.push_back(std::stod(word));
                 }
             }
+            id_counter += 1;
         }
         gene_net.add_edge_kinetics(GRN_int_param[0], GRN_int_param[1],
             GRN_params[0], GRN_params[1], GRN_params[2],
@@ -67,7 +68,7 @@ unsigned int count_GRN_edges_from_file (std::string filepath) {
 
 bool test_edges_count (GraphSpace::GRN gene_net, std::string filepath) {
     unsigned int count_edges_from_file =
-        count_GRN_edges_from_file(std::string filepath);
+        count_GRN_edges_from_file(filepath);
     unsigned int count_edges_GRN = count_edges(gene_net);
     if (count_edges_from_file == count_edges_GRN) {
         return true;
@@ -89,24 +90,24 @@ std::vector<bool> test_edge_properties (GraphSpace::GRN gene_net, std::string fi
     std::vector<bool> out_flags;
     bool is_adjlist_set = true;
     bool is_parentlist_set = true;
-    bool are_edgeparams_set = false;
+    bool are_edgeparams_set = true;
     std::ifstream GRN_file(filepath);
     std::string row_text;
-    vector<int> GRN_int_param;
-    vector<double> GRN_params;
-    vector<bool> GRN_activation;
+    std::vector<int> GRN_int_param;
+    std::vector<double> GRN_params;
+    std::vector<bool> GRN_activation;
     std::string word;
-    while (!(is_adjlist_set == false && is_parentlist_set == false &&
-        are_edgeparams_set == false)) {
-        while (std::getline(GRN_file, row_text)) {
+    while (std::getline(GRN_file, row_text))  {
+        if (!(is_adjlist_set == false && is_parentlist_set == false &&
+            are_edgeparams_set == false)) {
             GRN_int_param.clear();
             GRN_params.clear();
             GRN_activation.clear();
             std::stringstream str_stream(row_text);
 
             unsigned int id_counter = 0;
-            while (std::getline(str_stream, word, ', ')) {
-                if (id_counter < 4) {
+            while (std::getline(str_stream, word, ',')) {
+                if (id_counter < 2 || (id_counter >=5 && id_counter <= 6)) {
                     GRN_int_param.push_back(std::stoi(word));
                 }else{
                     if (id_counter == 7) {
@@ -119,6 +120,7 @@ std::vector<bool> test_edge_properties (GraphSpace::GRN gene_net, std::string fi
                         GRN_params.push_back(std::stod(word));
                     }
                 }
+                id_counter += 1;
             }
             std::vector<int>::iterator it =
                 std::find(gene_net.adj_list[GRN_int_param[0]].begin(),
@@ -130,7 +132,7 @@ std::vector<bool> test_edge_properties (GraphSpace::GRN gene_net, std::string fi
                 }else{
                     if (are_edgeparams_set) {
                         int id =
-                            std::distance(gene_net.adj_list[GRN_int_param[0]].begin(), GRN_int_param[1]);
+                            std::distance(gene_net.adj_list[GRN_int_param[0]].begin(), it);
                         unsigned int count_param_test = 0;
                         if (gene_net.edge_rxn_params[GRN_int_param[0]][id].prob_contr ==
                             GRN_params[0]) {

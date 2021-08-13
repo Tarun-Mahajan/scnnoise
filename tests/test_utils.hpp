@@ -6,8 +6,6 @@
 
 bool test_node_count (GraphSpace::GRN gene_net, unsigned int num_nodes);
 
-void create_GRN_from_file (GraphSpace::GRN &gene_net, std::string filepath);
-
 unsigned int count_edges (GraphSpace::GRN gene_net);
 
 bool test_edges_count (GraphSpace::GRN gene_net, std::string filepath);

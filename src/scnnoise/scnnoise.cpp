@@ -2,6 +2,7 @@
 #include "graph.hpp"
 #include "scnnoise.hpp"
 #include "graph_derived.hpp"
+#include "utils.hpp"
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -103,6 +104,10 @@ namespace ScnnoiseInterface {
                                                               half_maximal,
                                                               rxn_IN, species_OUT,
                                                               activator);
+  }
+
+  void scNNoiSE::create_GRN (std::string filepath) {
+      create_GRN_from_file(network[0], filepath);
   }
 
   void scNNoiSE::add_dependency_edge (int gene_type, int src, int dest) {

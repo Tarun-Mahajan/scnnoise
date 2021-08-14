@@ -476,6 +476,8 @@ namespace ScnnoiseInterface {
                       double hill_coeff, double half_maximal, int rxn_IN,
                       int species_OUT, bool activator);
 
+    void create_GRN (std::string filepath);
+
     /********************************************//**
      \brief Add dependency edge.
 

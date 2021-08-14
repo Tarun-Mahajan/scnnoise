@@ -174,16 +174,7 @@ namespace ScnnoiseInterface {
       for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
         int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
         int reactant_stoichio = rxn_selected_reactants_stoichio[reactant_index];
-      /**
-        std::cout<< "total prop:"<<gene_selected<<" "<<rxn_index<<std::endl; 
-      
-        for (int gene=0; gene < num_genes; ++gene) {
-              for (int species=0; species < num_species_gene_type[gene]; ++species) {
-                  std::cout<<reactions[gene].molecule_count_cur[species]<<" ";
-              }
-        }
-        std::cout<<std::endl;
-      */
+
         if (reactions[gene_selected].molecule_count_cur[*r] < reactant_stoichio){
           new_propensity *= 0;
         }else{
@@ -248,7 +239,6 @@ namespace ScnnoiseInterface {
           for(int rs = 0; rs<reactant_stoichio; ++rs)
             new_propensity *= (reactions[gene_selected].molecule_count_cur[*r]-rs);
           }
-          //std::cout<<new_propensity<<std::endl;
         }
         std::vector<int>::iterator it1 =
         std::find(reactions[gene_selected].GRN_rxn_IN.begin(),
@@ -391,47 +381,11 @@ namespace ScnnoiseInterface {
           update_cell_cycle_state(total_time);
           
           GRN_out_changed = update_fired_Reaction(next_rxn);
-          
-        //
-           
-        //
-
           update_dependent_count_propensity(next_rxn, GRN_out_changed);
-      
-          /**
-          for (auto &r : rxn_order) {
-              std::cout<<r.gene_id<<" "<<r.rxn_type<<" "<<r.propensity_val<<", ";
-          }
-          std::cout<<std::endl;
-          */
           time_history.push_back(next_time_step);
           update_molecule_count_history(num_history, num_save_loop);
         
-        /*
-          for (auto &r : rxn_order) {
-            std::cout<<r.propensity_val<<" ";
-          }
-          std::cout<<std::endl;
-          for (int i =0; i<reactions.size(); ++i){
-            for(int j =0; j<reactions[i].molecule_count_cur.size();++j){
-              std::cout<<reactions[i].molecule_count_cur[j]<<" ";
-            }
-          }
-          std::cout<<std::endl;
-        */
       }else{
-        /**
-        for(int i = 0; i<molecule_count_history.size(); ++i){
-          std::cout<<"gene"<<std::endl;
-          for (int j = 0; j<molecule_count_history[i].size(); ++j){
-            for (int k = 0; k<molecule_count_history[i][j].size(); ++k){
-              std::cout<<molecule_count_history[i][j][k]<<" ";
-            }
-            std::cout<<std::endl;
-          }
-          std::cout<<std::endl;
-        }
-        */
         stop_sim = true;
       }
     }

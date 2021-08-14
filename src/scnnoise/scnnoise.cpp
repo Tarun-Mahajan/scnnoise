@@ -165,8 +165,6 @@ namespace ScnnoiseInterface {
         bool activator = network[0].edge_rxn_params[src][gene_selected_id].activator;
 
         int tf_count = reactions[network[0].parent_list[gene_selected][src]].molecule_count_cur[out_species];
-
-         // std::cout<<network[0].parent_list[gene_selected][src]<< " "<< out_species<<std::endl;
         regulation_val += prob_contr * hill_function(tf_count, hill_coeff, half_maximal,
                                                     activator);
       }

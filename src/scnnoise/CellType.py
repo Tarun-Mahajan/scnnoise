@@ -29,13 +29,8 @@ class CellType:
         #Step 2: Sample num_samples reads for each gene
         #Step 3: Recusively run sim_transition() on all children (this could be parallelized)
         
-        
-        #base case
-        if len(children) == 0:
-            return 
-        
         #recursive case
-        else:
+        if len(children) != 0:
             for cell_type in self.children:
                 cell_type.sim_transition(num_samples, simulator)
                 
@@ -53,7 +48,7 @@ class CellType:
         #Step 1: Save new kinetic parameters into simulator
             #a. maybe here it would be better to add options to the c++ code to make this easier 
         for gene in range(simulator.num_genes):   
-                rxn_struct.rxn_rate = self.rxn_rates[gene][param_id]
+            simulator.set_rxn_rates(self.rxn_rates)
             
             
         #Step 2: simluate transition from parent steady state to daughter steady state

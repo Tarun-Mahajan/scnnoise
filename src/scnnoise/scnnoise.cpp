@@ -63,6 +63,9 @@ namespace ScnnoiseInterface {
 
                     time_history.push_back(0);
 
+                    // Create GRN from input file
+                    create_GRN(GRN_filepath);
+
                     // Create dependency graphs
                     create_init_gene_type_info();
   }
@@ -118,13 +121,19 @@ namespace ScnnoiseInterface {
   // }
   typedef std::map<std::string, std::map<std::string, int>> reactant_product_type;
   void scNNoiSE::add_new_dependency_graph (std::string gene_type_name,
-    std::map<std::string, int> species_map, std::map<int, std::string> rxn_map,
+    std::map<std::string, int> species_rev_map, std::map<int, std::string> rxn_map,
     reactant_product_type rxns_reactants,
     reactant_product_type rxns_products, std::vector<std::vector<int>> edge_list) {
         gene_type_struct new_gene_type;
-        new_gene_type.species = species_map;
-        new_gene_type.num_species = species_map.size();
+        new_gene_type.species_rev_map = species_rev_map;
+        for (auto const &it : species_rev_map) {
+            new_gene_type.species_map[it.second] = it.first;
+        }
+        new_gene_type.num_species = species_rev_map.size();
         new_gene_type.rxn_map = rxn_map;
+        for (auto const &it : rxn_map) {
+            new_gene_type.rxn_rev_map[it.second] = it.first;
+        }
         new_gene_type.num_rxns = rxn_map.size();
         for (auto const &it : rxns_reactants) {
             new_gene_type.rxns[it.first].reactants_stoichio = it.second;
@@ -147,16 +156,22 @@ namespace ScnnoiseInterface {
   gene_type_struct scNNoiSE::create_constitutive_type () {
       gene_type_struct gene_info;
       // Species are 0:gene, 1:mRNA, 2:protein
-      gene_info.species['gene'] = 0;
-      gene_info.species['mRNA'] = 1;
-      gene_info.species['protein'] = 2;
-      gene_info.num_species = gene_info.species.size();
+      gene_info.species_rev_map['gene'] = 0;
+      gene_info.species_rev_map['mRNA'] = 1;
+      gene_info.species_rev_map['protein'] = 2;
+      for (auto const &it : gene_info.species_rev_map) {
+          gene_info.species_map[it.second] = it.first;
+      }
+      gene_info.num_species = gene_info.species_map.size();
       // Reactions are 0:transcription, 1:mRNA decay, 2:translation,
       // 3:protein decay
       gene_info.rxn_map[0] = 'transcription';
       gene_info.rxn_map[1] = 'mRNA decay';
       gene_info.rxn_map[2] = 'translation';
       gene_info.rxn_map[3] = 'protein decay';
+      for (auto const &it : gene_info.rxn_map) {
+          gene_info.rxn_rev_map[it.second] = it.first;
+      }
       gene_info.num_rxns = gene_info.rxn_map.size();
       std::map<std::string, rxn_struct> rxns_;
       // Transcription
@@ -190,11 +205,14 @@ namespace ScnnoiseInterface {
   gene_type_struct scNNoiSE::create_constitutive_nascent_type () {
       gene_type_struct gene_info;
       // Species are 0:gene, 1:nascent mRNA, 2:mature mRNA, 3:protein
-      gene_info.species['gene'] = 0;
-      gene_info.species['nascent mRNA'] = 1;
-      gene_info.species['mature mRNA'] = 2;
-      gene_info.species['protein'] = 3;
-      gene_info.num_species = gene_info.species.size();
+      gene_info.species_rev_map['gene'] = 0;
+      gene_info.species_rev_map['nascent mRNA'] = 1;
+      gene_info.species_rev_map['mature mRNA'] = 2;
+      gene_info.species_rev_map['protein'] = 3;
+      for (auto const &it : gene_info.species_rev_map) {
+          gene_info.species_map[it.second] = it.first;
+      }
+      gene_info.num_species = gene_info.species_map.size();
       // Reactions are 0:transcription, 1:mRNA maturation, 2:mRNA decay, 3:translation,
       // 4:protein decay
       gene_info.rxn_map[0] = 'transcription';
@@ -202,6 +220,9 @@ namespace ScnnoiseInterface {
       gene_info.rxn_map[2] = 'mRNA decay';
       gene_info.rxn_map[3] = 'translation';
       gene_info.rxn_map[4] = 'protein decay';
+      for (auto const &it : gene_info.rxn_map) {
+          gene_info.rxn_rev_map[it.second] = it.first;
+      }
       gene_info.num_rxns = gene_info.rxn_map.size();
       std::map<std::string, rxn_struct> rxns_;
       // Transcription
@@ -241,11 +262,14 @@ namespace ScnnoiseInterface {
   gene_type_struct scNNoiSE::create_two_state_type () {
       gene_type_struct gene_info;
       // Species are 0:gene off, 1:gene on, 2:mRNA, 3:protein
-      gene_info.species['gene off'] = 0;
-      gene_info.species['gene on'] = 1;
-      gene_info.species['mRNA'] = 2;
-      gene_info.species['protein'] = 3;
-      gene_info.num_species = gene_info.species.size();
+      gene_info.species_rev_map['gene off'] = 0;
+      gene_info.species_rev_map['gene on'] = 1;
+      gene_info.species_rev_map['mRNA'] = 2;
+      gene_info.species_rev_map['protein'] = 3;
+      for (auto const &it : gene_info.species_rev_map) {
+          gene_info.species_map[it.second] = it.first;
+      }
+      gene_info.num_species = gene_info.species_map.size();
       // Reactions are 0:gene on, 1:gene off 2:transcription, 3:mRNA decay,
       // 4:translation, 5:protein decay
       gene_info.rxn_map[0] = 'gene on';
@@ -254,6 +278,9 @@ namespace ScnnoiseInterface {
       gene_info.rxn_map[3] = 'mRNA decay';
       gene_info.rxn_map[4] = 'translation';
       gene_info.rxn_map[5] = 'protein decay';
+      for (auto const &it : gene_info.rxn_map) {
+          gene_info.rxn_rev_map[it.second] = it.first;
+      }
       gene_info.num_rxns = gene_info.rxn_map.size();
       std::map<std::string, rxn_struct> rxns_;
       // Gene on
@@ -301,12 +328,15 @@ namespace ScnnoiseInterface {
   gene_type_struct scNNoiSE::create_two_state_nascent_type () {
       gene_type_struct gene_info;
       // Species are 0:gene off, 1:gene on, 2:mRNA, 3:protein
-      gene_info.species['gene off'] = 0;
-      gene_info.species['gene on'] = 1;
-      gene_info.species['nascent mRNA'] = 2;
-      gene_info.species['mature mRNA'] = 3;
-      gene_info.species['protein'] = 4;
-      gene_info.num_species = gene_info.species.size();
+      gene_info.species_rev_map['gene off'] = 0;
+      gene_info.species_rev_map['gene on'] = 1;
+      gene_info.species_rev_map['nascent mRNA'] = 2;
+      gene_info.species_rev_map['mature mRNA'] = 3;
+      gene_info.species_rev_map['protein'] = 4;
+      for (auto const &it : gene_info.species_rev_map) {
+          gene_info.species_map[it.second] = it.first;
+      }
+      gene_info.num_species = gene_info.species_map.size();
       // Reactions are 0:gene on, 1:gene off 2:transcription, 3:mRNA decay,
       // 4:translation, 5:protein decay
       gene_info.rxn_map[0] = 'gene on';
@@ -316,6 +346,9 @@ namespace ScnnoiseInterface {
       gene_info.rxn_map[4] = 'mRNA decay';
       gene_info.rxn_map[5] = 'translation';
       gene_info.rxn_map[6] = 'protein decay';
+      for (auto const &it : gene_info.rxn_map) {
+          gene_info.rxn_rev_map[it.second] = it.first;
+      }
       gene_info.num_rxns = gene_info.rxn_map.size();
       std::map<std::string, rxn_struct> rxns_;
       // Gene on

@@ -34,7 +34,9 @@ namespace ScnnoiseInterface {
   struct gene_type_struct {
       unsigned int num_rxns;
       unsigned int num_species;
-      std::map<std::string, int> species;
+      std::map<std::string, int> species_rev_map;
+      std::map<int, std::string> species_map;
+      std::map<std::string, int> rxn_rev_map;
       std::map<int, std::string> rxn_map;
       std::map<std::string, rxn_struct> rxns;
       std::vector<GraphSpace::GraphDependency> gene_rxn_dependency;

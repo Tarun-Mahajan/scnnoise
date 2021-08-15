@@ -503,6 +503,11 @@ namespace ScnnoiseInterface {
      \param[in] dest destination rxn for the edge.
      ***********************************************/
     // void add_dependency_edge (int gene_type, int src, int dest);
+    typedef std::map<std::string, std::map<std::string, int>> reactant_product_type;
+    void add_new_dependency_graph (std::string gene_type_name,
+      std::map<std::string, int> species_map, std::map<int, std::string> rxn_map,
+      reactant_product_type rxns_reactants,
+      reactant_product_type rxns_products, std::vector<std::vector<int>> edge_list);
 
     int factorial (int num);
 

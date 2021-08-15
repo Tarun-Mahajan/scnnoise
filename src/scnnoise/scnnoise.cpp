@@ -116,6 +116,33 @@ namespace ScnnoiseInterface {
   // void scNNoiSE::add_dependency_edge (int gene_type, int src, int dest) {
   //   gene_rxn_dependency[gene_type].add_edge(src, dest);
   // }
+  typedef std::map<std::string, std::map<std::string, int>> reactant_product_type;
+  void scNNoiSE::add_new_dependency_graph (std::string gene_type_name,
+    std::map<std::string, int> species_map, std::map<int, std::string> rxn_map,
+    reactant_product_type rxns_reactants,
+    reactant_product_type rxns_products, std::vector<std::vector<int>> edge_list) {
+        gene_type_struct new_gene_type;
+        new_gene_type.species = species_map;
+        new_gene_type.num_species = species_map.size();
+        new_gene_type.rxn_map = rxn_map;
+        new_gene_type.num_rxns = rxn_map.size();
+        for (auto const &it : rxns_reactants) {
+            new_gene_type.rxns[it.first].reactants_stoichio = it.second;
+        }
+        for (auto const &it : rxns_products) {
+            new_gene_type.rxns[it.first].products_stoichio = it.second;
+        }
+        new_gene_type.gene_rxn_dependency.push_back(
+            GraphSpace::GraphDependency(new_gene_type.num_rxns));
+        unsigned int node_count = 0;
+        for (auto src : edge_list) {
+            for (auto dest : src) {
+                new_gene_type.gene_rxn_dependency[0].add_edge(node_count, dest);
+            }
+            ++node_count;
+        }
+        gene_type_info[gene_type_name] = new_gene_type;
+    }
 
   gene_type_struct scNNoiSE::create_constitutive_type () {
       gene_type_struct gene_info;

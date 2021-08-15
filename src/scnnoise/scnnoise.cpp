@@ -62,6 +62,9 @@ namespace ScnnoiseInterface {
                     }
 
                     time_history.push_back(0);
+
+                    // Create dependency graphs
+                    create_init_gene_type_info();
   }
 
 
@@ -112,6 +115,235 @@ namespace ScnnoiseInterface {
 
   void scNNoiSE::add_dependency_edge (int gene_type, int src, int dest) {
     gene_rxn_dependency[gene_type].add_edge(src, dest);
+  }
+
+  gene_type_struct scNNoiSE::create_constitutive_type () {
+      gene_type_struct gene_info;
+      // Species are 0:gene, 1:mRNA, 2:protein
+      gene_info.species['gene'] = 0;
+      gene_info.species['mRNA'] = 1;
+      gene_info.species['protein'] = 2;
+      gene_info.num_species = gene_info.species.size();
+      // Reactions are 0:transcription, 1:mRNA decay, 2:translation,
+      // 3:protein decay
+      gene_info.rxn_map[0] = 'transcription';
+      gene_info.rxn_map[1] = 'mRNA decay';
+      gene_info.rxn_map[2] = 'translation';
+      gene_info.rxn_map[3] = 'protein decay';
+      gene_info.num_rxns = gene_info.rxn_map.size();
+      std::map<std::string, rxn_struct> rxns_;
+      // Transcription
+      std::string str_ = "transcription";
+      rxns_[str_].reactants_stoichio["gene"] = 1;
+      rxns_[str_].products_stoichio["gene"] = 1;
+      rxns_[str_].products_stoichio["mRNA"] = 1;
+      // mRNA decay
+      std::string str_ = "mRNA decay";
+      rxns_[str_].reactants_stoichio["mRNA"] = 1;
+      // Translation rxn
+      std::string str_ = "translation";
+      rxns_[str_].reactants_stoichio["mRNA"] = 1;
+      rxns_[str_].products_stoichio["mRNA"] = 1;
+      rxns_[str_].products_stoichio["protein"] = 1;
+      // protein decay
+      std::string str_ = "protein decay";
+      rxns_[str_].reactants_stoichio["protein"] = 1;
+      gene_info.rxns = rxns_;
+      gene_info.gene_rxn_dependency.push_back(
+          GraphSpace::GraphDependency(gene_info.num_rxns));
+      gene_info.gene_rxn_dependency[0].add_edge(0, 1);
+      gene_info.gene_rxn_dependency[0].add_edge(0, 2);
+      gene_info.gene_rxn_dependency[0].add_edge(1, 1);
+      gene_info.gene_rxn_dependency[0].add_edge(1, 2);
+      gene_info.gene_rxn_dependency[0].add_edge(2, 3);
+      gene_info.gene_rxn_dependency[0].add_edge(3, 3);
+      return gene_info;
+  }
+
+  gene_type_struct scNNoiSE::create_constitutive_nascent_type () {
+      gene_type_struct gene_info;
+      // Species are 0:gene, 1:nascent mRNA, 2:mature mRNA, 3:protein
+      gene_info.species['gene'] = 0;
+      gene_info.species['nascent mRNA'] = 1;
+      gene_info.species['mature mRNA'] = 2;
+      gene_info.species['protein'] = 3;
+      gene_info.num_species = gene_info.species.size();
+      // Reactions are 0:transcription, 1:mRNA maturation, 2:mRNA decay, 3:translation,
+      // 4:protein decay
+      gene_info.rxn_map[0] = 'transcription';
+      gene_info.rxn_map[1] = 'mRNA maturation';
+      gene_info.rxn_map[2] = 'mRNA decay';
+      gene_info.rxn_map[3] = 'translation';
+      gene_info.rxn_map[4] = 'protein decay';
+      gene_info.num_rxns = gene_info.rxn_map.size();
+      std::map<std::string, rxn_struct> rxns_;
+      // Transcription
+      std::string str_ = "transcription";
+      rxns_[str_].reactants_stoichio["gene"] = 1;
+      rxns_[str_].products_stoichio["gene"] = 1;
+      rxns_[str_].products_stoichio["nascent mRNA"] = 1;
+      // mRNA maturation
+      std::string str_ = "mRNA maturation";
+      rxns_[str_].reactants_stoichio["nascent mRNA"] = 1;
+      rxns_[str_].products_stoichio["mature mRNA"] = 1;
+      // mRNA decay
+      std::string str_ = "mRNA decay";
+      rxns_[str_].reactants_stoichio["mature mRNA"] = 1;
+      // Translation rxn
+      std::string str_ = "translation";
+      rxns_[str_].reactants_stoichio["mature mRNA"] = 1;
+      rxns_[str_].products_stoichio["mature mRNA"] = 1;
+      rxns_[str_].products_stoichio["protein"] = 1;
+      // protein decay
+      std::string str_ = "protein decay";
+      rxns_[str_].reactants_stoichio["protein"] = 1;
+      gene_info.rxns = rxns_;
+      gene_info.gene_rxn_dependency.push_back(
+          GraphSpace::GraphDependency(gene_info.num_rxns));
+      gene_info.gene_rxn_dependency[0].add_edge(0, 1);
+      gene_info.gene_rxn_dependency[0].add_edge(1, 1);
+      gene_info.gene_rxn_dependency[0].add_edge(1, 2);
+      gene_info.gene_rxn_dependency[0].add_edge(1, 3);
+      gene_info.gene_rxn_dependency[0].add_edge(2, 2);
+      gene_info.gene_rxn_dependency[0].add_edge(2, 3);
+      gene_info.gene_rxn_dependency[0].add_edge(3, 4);
+      gene_info.gene_rxn_dependency[0].add_edge(4, 4);
+      return gene_info;
+  }
+
+  gene_type_struct scNNoiSE::create_two_state_type () {
+      gene_type_struct gene_info;
+      // Species are 0:gene off, 1:gene on, 2:mRNA, 3:protein
+      gene_info.species['gene off'] = 0;
+      gene_info.species['gene on'] = 1;
+      gene_info.species['mRNA'] = 2;
+      gene_info.species['protein'] = 3;
+      gene_info.num_species = gene_info.species.size();
+      // Reactions are 0:gene on, 1:gene off 2:transcription, 3:mRNA decay,
+      // 4:translation, 5:protein decay
+      gene_info.rxn_map[0] = 'gene on';
+      gene_info.rxn_map[1] = 'gene off';
+      gene_info.rxn_map[2] = 'transcription';
+      gene_info.rxn_map[3] = 'mRNA decay';
+      gene_info.rxn_map[4] = 'translation';
+      gene_info.rxn_map[5] = 'protein decay';
+      gene_info.num_rxns = gene_info.rxn_map.size();
+      std::map<std::string, rxn_struct> rxns_;
+      // Gene on
+      std::string str_ = "gene on";
+      rxns_[str_].reactants_stoichio["gene off"] = 1;
+      rxns_[str_].products_stoichio["gene on"] = 1;
+      // Gene off
+      std::string str_ = "gene off";
+      rxns_[str_].reactants_stoichio["gene on"] = 1;
+      rxns_[str_].products_stoichio["gene off"] = 1;
+      // Transcription
+      std::string str_ = "transcription";
+      rxns_[str_].reactants_stoichio["gene on"] = 1;
+      rxns_[str_].products_stoichio["gene on"] = 1;
+      rxns_[str_].products_stoichio["mRNA"] = 1;
+      // mRNA decay
+      std::string str_ = "mRNA decay";
+      rxns_[str_].reactants_stoichio["mRNA"] = 1;
+      // Translation rxn
+      std::string str_ = "translation";
+      rxns_[str_].reactants_stoichio["mRNA"] = 1;
+      rxns_[str_].products_stoichio["mRNA"] = 1;
+      rxns_[str_].products_stoichio["protein"] = 1;
+      // protein decay
+      std::string str_ = "protein decay";
+      rxns_[str_].reactants_stoichio["protein"] = 1;
+      gene_info.rxns = rxns_;
+      gene_info.gene_rxn_dependency.push_back(
+          GraphSpace::GraphDependency(gene_info.num_rxns));
+      gene_info.gene_rxn_dependency[0].add_edge(0, 0);
+      gene_info.gene_rxn_dependency[0].add_edge(0, 1);
+      gene_info.gene_rxn_dependency[0].add_edge(0, 2);
+      gene_info.gene_rxn_dependency[0].add_edge(1, 0);
+      gene_info.gene_rxn_dependency[0].add_edge(1, 1);
+      gene_info.gene_rxn_dependency[0].add_edge(1, 2);
+      gene_info.gene_rxn_dependency[0].add_edge(2, 3);
+      gene_info.gene_rxn_dependency[0].add_edge(2, 4);
+      gene_info.gene_rxn_dependency[0].add_edge(3, 3);
+      gene_info.gene_rxn_dependency[0].add_edge(3, 4);
+      gene_info.gene_rxn_dependency[0].add_edge(4, 5);
+      gene_info.gene_rxn_dependency[0].add_edge(5, 5);
+      return gene_info;
+  }
+
+  gene_type_struct scNNoiSE::create_two_state_nascent_type () {
+      gene_type_struct gene_info;
+      // Species are 0:gene off, 1:gene on, 2:mRNA, 3:protein
+      gene_info.species['gene off'] = 0;
+      gene_info.species['gene on'] = 1;
+      gene_info.species['nascent mRNA'] = 2;
+      gene_info.species['mature mRNA'] = 3;
+      gene_info.species['protein'] = 4;
+      gene_info.num_species = gene_info.species.size();
+      // Reactions are 0:gene on, 1:gene off 2:transcription, 3:mRNA decay,
+      // 4:translation, 5:protein decay
+      gene_info.rxn_map[0] = 'gene on';
+      gene_info.rxn_map[1] = 'gene off';
+      gene_info.rxn_map[2] = 'transcription';
+      gene_info.rxn_map[3] = 'mRNA maturation';
+      gene_info.rxn_map[4] = 'mRNA decay';
+      gene_info.rxn_map[5] = 'translation';
+      gene_info.rxn_map[6] = 'protein decay';
+      gene_info.num_rxns = gene_info.rxn_map.size();
+      std::map<std::string, rxn_struct> rxns_;
+      // Gene on
+      std::string str_ = "gene on";
+      rxns_[str_].reactants_stoichio["gene off"] = 1;
+      rxns_[str_].products_stoichio["gene on"] = 1;
+      // Gene off
+      std::string str_ = "gene off";
+      rxns_[str_].reactants_stoichio["gene on"] = 1;
+      rxns_[str_].products_stoichio["gene off"] = 1;
+      // Transcription
+      std::string str_ = "transcription";
+      rxns_[str_].reactants_stoichio["gene on"] = 1;
+      rxns_[str_].products_stoichio["gene on"] = 1;
+      rxns_[str_].products_stoichio["nascent mRNA"] = 1;
+      // mRNA maturation
+      std::string str_ = "mRNA maturation";
+      rxns_[str_].reactants_stoichio["nascent mRNA"] = 1;
+      rxns_[str_].products_stoichio["mature mRNA"] = 1;
+      // mRNA decay
+      std::string str_ = "mRNA decay";
+      rxns_[str_].reactants_stoichio["mature mRNA"] = 1;
+      // Translation rxn
+      std::string str_ = "translation";
+      rxns_[str_].reactants_stoichio["mature mRNA"] = 1;
+      rxns_[str_].products_stoichio["mature mRNA"] = 1;
+      rxns_[str_].products_stoichio["protein"] = 1;
+      // protein decay
+      std::string str_ = "protein decay";
+      rxns_[str_].reactants_stoichio["protein"] = 1;
+      gene_info.rxns = rxns_;
+      gene_info.gene_rxn_dependency.push_back(
+          GraphSpace::GraphDependency(gene_info.num_rxns));
+      gene_info.gene_rxn_dependency[0].add_edge(0, 0);
+      gene_info.gene_rxn_dependency[0].add_edge(0, 1);
+      gene_info.gene_rxn_dependency[0].add_edge(0, 2);
+      gene_info.gene_rxn_dependency[0].add_edge(1, 0);
+      gene_info.gene_rxn_dependency[0].add_edge(1, 1);
+      gene_info.gene_rxn_dependency[0].add_edge(1, 2);
+      gene_info.gene_rxn_dependency[0].add_edge(2, 3);
+      gene_info.gene_rxn_dependency[0].add_edge(3, 4);
+      gene_info.gene_rxn_dependency[0].add_edge(3, 5);
+      gene_info.gene_rxn_dependency[0].add_edge(4, 4);
+      gene_info.gene_rxn_dependency[0].add_edge(4, 5);
+      gene_info.gene_rxn_dependency[0].add_edge(5, 6);
+      gene_info.gene_rxn_dependency[0].add_edge(6, 6);
+
+      return gene_info;
+  }
+
+  void scNNoiSE::create_init_gene_type_info () {
+      gene_type_info['constitutive'] = create_constitutive_type();
+      gene_type_info['constitutive nascent'] = create_constitutive_type();
+      gene_type_info['two-state'] = create_two_state_type();
+      gene_type_info['two-state nascent'] = create_two_state_nascent_type();
   }
 
   int scNNoiSE::factorial (int num) {

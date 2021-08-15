@@ -23,16 +23,20 @@ namespace ScnnoiseInterface {
   };
 
   struct rxn_struct {
-    std::vector<int> reactants;
-    std::vector<int> products;
-    std::vector<int> reactants_stoichio;
-    std::vector<int> products_stoichio;
-    double rxn_rate;
-    double propensity_val;
+    // std::vector<int> reactants;
+    // std::vector<int> products;
+    std::map<std::string, int> reactants_stoichio;
+    std::map<std::string, int> products_stoichio;
+    // double rxn_rate;
+    // double propensity_val;
   };
 
   struct gene_type_struct {
-      std::vector<rxn_struct> rxns;
+      unsigned int num_rxns;
+      unsigned int num_species;
+      std::map<std::string, int> species;
+      std::map<int, std::string> rxn_map;
+      std::map<std::string, rxn_struct> rxns;
       std::vector<GraphSpace::GraphDependency> gene_rxn_dependency;
   };
 
@@ -226,7 +230,7 @@ namespace ScnnoiseInterface {
      ***********************************************/
     int num_genes;
 
-    std::map<std::string, std::vector<gene_type_struct>> gene_type_info;
+    std::map<std::string, gene_type_struct> gene_type_info;
 
     /********************************************//**
      \brief Dependency graph for reaction channels for
@@ -464,7 +468,15 @@ namespace ScnnoiseInterface {
       std::vector<std::vector<int>> reactants_stoichio, std::vector<std::vector<int>> products_stoichio,
       std::vector<double> rxn_rate, std::vector<double> propensity_val);
 
-    void init_gene_type_info ();
+    void create_init_gene_type_info ();
+
+    gene_type_struct create_constitutive_exp_type ();
+
+    gene_type_struct create_constitutive_nascent_type ();
+
+    gene_type_struct create_two_state_type ();
+
+    gene_type_struct create_two_state_nascent_type ();
 
     /********************************************//**
      \brief Add GRN edge.

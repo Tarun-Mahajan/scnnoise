@@ -113,9 +113,9 @@ namespace ScnnoiseInterface {
       create_GRN_from_file(network[0], filepath);
   }
 
-  void scNNoiSE::add_dependency_edge (int gene_type, int src, int dest) {
-    gene_rxn_dependency[gene_type].add_edge(src, dest);
-  }
+  // void scNNoiSE::add_dependency_edge (int gene_type, int src, int dest) {
+  //   gene_rxn_dependency[gene_type].add_edge(src, dest);
+  // }
 
   gene_type_struct scNNoiSE::create_constitutive_type () {
       gene_type_struct gene_info;

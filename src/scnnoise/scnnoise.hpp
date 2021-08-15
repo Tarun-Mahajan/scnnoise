@@ -237,7 +237,7 @@ namespace ScnnoiseInterface {
             different combinations of gene types and num
             of alternatively spliced mRNA.
      ***********************************************/
-    std::vector<GraphSpace::GraphDependency> gene_rxn_dependency;
+    // std::vector<GraphSpace::GraphDependency> gene_rxn_dependency;
 
     /********************************************//**
      \brief Number of chemical species for each
@@ -502,7 +502,7 @@ namespace ScnnoiseInterface {
      \param[in] src source rxn for the edge.
      \param[in] dest destination rxn for the edge.
      ***********************************************/
-    void add_dependency_edge (int gene_type, int src, int dest);
+    // void add_dependency_edge (int gene_type, int src, int dest);
 
     int factorial (int num);
 

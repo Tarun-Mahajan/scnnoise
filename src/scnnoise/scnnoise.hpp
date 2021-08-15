@@ -511,7 +511,7 @@ namespace ScnnoiseInterface {
 
     int factorial (int num);
 
-    int scNNoiSE::factorial_ratio_propensity_func (int N, int r);
+    int factorial_ratio_propensity_func (int N, int r);
 
     void compute_total_propensity ();
 

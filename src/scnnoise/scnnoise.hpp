@@ -472,6 +472,8 @@ namespace ScnnoiseInterface {
       std::vector<std::vector<int>> reactants_stoichio, std::vector<std::vector<int>> products_stoichio,
       std::vector<double> rxn_rate, std::vector<double> propensity_val);
 
+    std::string scNNoiSE::match_and_return_gene_type (std::string in_gene_type);
+
     void init_gene_states_from_file (std::string filepath);
 
     void create_init_gene_type_info ();

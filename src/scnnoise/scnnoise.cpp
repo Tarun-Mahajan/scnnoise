@@ -223,7 +223,7 @@ namespace ScnnoiseInterface {
   }
 
   void scNNoiSE::create_GRN (std::string filepath) {
-      create_GRN_from_file(network[0], filepath);
+      create_GRN_from_file(network[0], filepath, gene_rev_map);
   }
 
   // void scNNoiSE::add_dependency_edge (int gene_type, int src, int dest) {

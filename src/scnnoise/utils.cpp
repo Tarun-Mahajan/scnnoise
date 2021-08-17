@@ -7,7 +7,8 @@
 // #include "../src/scnnoise/graph_derived.hpp"
 #include "utils.hpp"
 
-void create_GRN_from_file (GraphSpace::GRN &gene_net, std::string filepath) {
+void create_GRN_from_file (GraphSpace::GRN &gene_net, std::string filepath,
+    std::map<std::string, int> gene_rev_map) {
     std::ifstream GRN_file(filepath);
     std::string row_text;
     std::vector<int> GRN_int_param;
@@ -23,7 +24,11 @@ void create_GRN_from_file (GraphSpace::GRN &gene_net, std::string filepath) {
         unsigned int id_counter = 0;
         while (std::getline(str_stream, word, ',')) {
             if (id_counter < 2 || (id_counter >=5 && id_counter <= 6)) {
-                GRN_int_param.push_back(std::stoi(word));
+                if (id_counter < 2) {
+                    GRN_int_param.push_back(gene_rev_map[word]);
+                }else{
+                    GRN_int_param.push_back(std::stoi(word));
+                }
             }else{
                 if (id_counter == 7) {
                     std::transform(word.begin(), word.end(), word.begin(), ::tolower);

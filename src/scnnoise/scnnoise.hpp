@@ -16,31 +16,31 @@ namespace ScnnoiseInterface {
    \brief Struct to store information for each reaction in
           the reaction order list.
    ***********************************************/
-  struct rxn_order_struct {
-    int gene_id;
-    int rxn_type;
-    double propensity_val;
-  };
+    struct rxn_order_struct {
+        int gene_id;
+        int rxn_type;
+        double propensity_val;
+    };
 
-  struct rxn_struct {
-    // std::vector<int> reactants;
-    // std::vector<int> products;
-    std::map<std::string, int> reactants_stoichio;
-    std::map<std::string, int> products_stoichio;
-    // double rxn_rate;
-    // double propensity_val;
-  };
+    struct rxn_struct {
+        // std::vector<int> reactants;
+        // std::vector<int> products;
+        std::map<std::string, int> reactants_stoichio;
+        std::map<std::string, int> products_stoichio;
+        // double rxn_rate;
+        // double propensity_val;
+    };
 
-  struct gene_type_struct {
-      unsigned int num_rxns;
-      unsigned int num_species;
-      std::map<std::string, int> species_rev_map;
-      std::map<int, std::string> species_map;
-      std::map<std::string, int> rxn_rev_map;
-      std::map<int, std::string> rxn_map;
-      std::map<std::string, rxn_struct> rxns;
-      std::vector<GraphSpace::GraphDependency> gene_rxn_dependency;
-  };
+    struct gene_type_struct {
+        unsigned int num_rxns;
+        unsigned int num_species;
+        std::map<std::string, int> species_rev_map;
+        std::map<int, std::string> species_map;
+        std::map<std::string, int> rxn_rev_map;
+        std::map<int, std::string> rxn_map;
+        std::map<std::string, rxn_struct> rxns;
+        std::vector<GraphSpace::GraphDependency> gene_rxn_dependency;
+    };
 
   /********************************************//**
    \brief Struct to store information for all reaction
@@ -198,18 +198,19 @@ namespace ScnnoiseInterface {
    4 + 2n : mature miRNA-host
 
    ***********************************************/
-  struct gene_rxn_channel_struct {
-    int gene_type;
-    std::vector<int> GRN_rxn_IN;
-    std::vector<int> GRN_species_OUT;
-    std::vector<int> rxn_type;
-    std::vector<rxn_struct> rxns;
-    std::vector<int> molecule_count_cur;
-  };
+    struct gene_rxn_channel_struct {
+        std::string gene_name;
+        std::string gene_type;
+        std::vector<std::string> GRN_rxn_IN;
+        std::vector<std::string> GRN_species_OUT;
+        std::vector<std::string> rxn_names;
+        std::vector<int> rxn_rates;
+        std::vector<int> molecule_count_cur;
+    };
 
-  struct molecule_history_struct {
-    std::vector<std::vector<int>> molecule_count;
-  };
+    struct molecule_history_struct {
+        std::vector<std::vector<int>> molecule_count;
+    };
 
   class scNNoiSE {
   public:
@@ -221,7 +222,7 @@ namespace ScnnoiseInterface {
     reaction channels that are present in the  user
     provided chemical reaction network.
      ***********************************************/
-    int num_rxns;
+      int num_rxns;
 
     /********************************************//**
     \brief Number of nodes in GRN.
@@ -230,13 +231,13 @@ namespace ScnnoiseInterface {
     species that are present in the user
     provided GRN.
      ***********************************************/
-    int num_genes;
+      int num_genes;
 
-    std::map<std::string, gene_type_struct> gene_type_info;
+      std::map<std::string, gene_type_struct> gene_type_info;
 
-    std::map<int, std::string> gene_map;
+      std::map<int, std::string> gene_map;
 
-    std::map<std::string, int> gene_rev_map;
+      std::map<std::string, int> gene_rev_map;
 
     /********************************************//**
      \brief Dependency graph for reaction channels for
@@ -250,14 +251,14 @@ namespace ScnnoiseInterface {
             different combinations of gene types and num
             of alternatively spliced mRNA.
      ***********************************************/
-    std::vector<int> num_species_gene_type;
+      std::vector<int> num_species_gene_type;
 
      /********************************************//**
       \brief Number of chemical reactions for each
              different combinations of gene types and num
              of alternatively spliced mRNA.
       ***********************************************/
-    std::vector<int> num_rxns_gene_type;
+      std::vector<int> num_rxns_gene_type;
 
      /********************************************//**
       \brief Reaction search order
@@ -266,7 +267,7 @@ namespace ScnnoiseInterface {
       for reaction channel selection at each step of the
       simulation.
       ***********************************************/
-    std::vector<rxn_order_struct> rxn_order;
+      std::vector<rxn_order_struct> rxn_order;
 
     /********************************************//**
      \brief Gene regulatory network.
@@ -275,7 +276,7 @@ namespace ScnnoiseInterface {
      type graph, which is a class for gene regulatory
      networks.
      ***********************************************/
-    std::vector<GraphSpace::GRN> network;
+      std::vector<GraphSpace::GRN> network;
 
     /********************************************//**
      \brief Map to store all the reaction channels
@@ -349,7 +350,7 @@ namespace ScnnoiseInterface {
      ***********************************************/
     // std::map<int, std::map<std:string, std::vector<int>>> reactions;
     // std::vector<std::map<int, std::map<std:string, std::vector<int>>>> reactions;
-    std::vector<gene_rxn_channel_struct> reactions;
+      std::vector<gene_rxn_channel_struct> reactions;
 
 
     // /********************************************//**
@@ -386,7 +387,7 @@ namespace ScnnoiseInterface {
       The total time period for which the chemical
       reaction network should be simulated.
        ***********************************************/
-    double max_time;
+      double max_time;
 
     /********************************************//**
      \brief Save time series count data.
@@ -396,7 +397,7 @@ namespace ScnnoiseInterface {
      is false, when only steady state count values are
      reported.
      ***********************************************/
-    bool save_timeseries;
+      bool save_timeseries;
 
     /********************************************//**
      \brief Number of previous time points for which molecular counts are stored in
@@ -412,9 +413,9 @@ namespace ScnnoiseInterface {
      output file. This process continues until the simulation terminates.
      At termination, the array again appends its values to the output file.
      ***********************************************/
-    int num_timepoints_save;
+      int num_timepoints_save;
 
-    double total_propensity;
+      double total_propensity;
 
     /********************************************//**
      \brief Vector of vectors to store running molecule counts for all species
@@ -426,15 +427,15 @@ namespace ScnnoiseInterface {
      num_timepoints_save > 1, This reduces the number of times data has to be
      written to the output file.
      ***********************************************/
-    std::vector<std::vector<std::vector<int>>> molecule_count_history;
+      std::vector<std::vector<std::vector<int>>> molecule_count_history;
 
     /********************************************//**
      \brief Vector to store time points along the simulation path.
      ***********************************************/
-    std::vector<double> time_history;
+      std::vector<double> time_history;
 
     // file to save molecule count history
-    std::string count_save_file;
+      std::string count_save_file;
 
   // public:
     /********************************************//**
@@ -451,10 +452,10 @@ namespace ScnnoiseInterface {
                 the number of chemical reactions for each
                 gene type.
      ***********************************************/
-    scNNoiSE (int num_rxns, int num_genes,
-      std::vector<int> num_species_gene_type,
-      std::vector<int> num_rxns_gene_type, double max_time,
-      bool save_timeseries, int num_timepoints_save, std::string count_save_file);
+      scNNoiSE (int num_rxns, int num_genes,
+          std::vector<int> num_species_gene_type,
+          std::vector<int> num_rxns_gene_type, double max_time,
+          bool save_timeseries, int num_timepoints_save, std::string count_save_file);
 
     /********************************************//**
      \brief Add state for a gene.
@@ -468,25 +469,25 @@ namespace ScnnoiseInterface {
      \param[in] num_splice_variants number of AS variants for the gene identified by
                 gene_id.
      ***********************************************/
-    void add_gene_state (int gene_id, int gene_type, std::vector<int> GRN_rxn_IN,
-      std::vector<int> GRN_species_OUT, std::vector<int> molecule_count_cur,
-      std::vector<std::vector<int>> reactants, std::vector<std::vector<int>> products,
-      std::vector<std::vector<int>> reactants_stoichio, std::vector<std::vector<int>> products_stoichio,
-      std::vector<double> rxn_rate, std::vector<double> propensity_val);
+      void add_gene_state (int gene_id, int gene_type, std::vector<int> GRN_rxn_IN,
+          std::vector<int> GRN_species_OUT, std::vector<int> molecule_count_cur,
+          std::vector<std::vector<int>> reactants, std::vector<std::vector<int>> products,
+          std::vector<std::vector<int>> reactants_stoichio, std::vector<std::vector<int>> products_stoichio,
+          std::vector<double> rxn_rate, std::vector<double> propensity_val);
 
-    std::string scNNoiSE::match_and_return_gene_type (std::string in_gene_type);
+      std::string scNNoiSE::match_and_return_gene_type (std::string in_gene_type);
 
-    void init_gene_states_from_file (std::string filepath);
+      void init_gene_states_from_file (std::string filepath);
 
-    void create_init_gene_type_info ();
+      void create_init_gene_type_info ();
 
-    gene_type_struct create_constitutive_exp_type ();
+      gene_type_struct create_constitutive_exp_type ();
 
-    gene_type_struct create_constitutive_nascent_type ();
+      gene_type_struct create_constitutive_nascent_type ();
 
-    gene_type_struct create_two_state_type ();
+      gene_type_struct create_two_state_type ();
 
-    gene_type_struct create_two_state_nascent_type ();
+      gene_type_struct create_two_state_nascent_type ();
 
     /********************************************//**
      \brief Add GRN edge.
@@ -494,11 +495,11 @@ namespace ScnnoiseInterface {
      \param[in] src source gene for the edge.
      \param[in] dest destination gene for the edge.
      ***********************************************/
-    void add_GRN_edge (int src, int dest, double prob_contr,
+      void add_GRN_edge (int src, int dest, double prob_contr,
                       double hill_coeff, double half_maximal, int rxn_IN,
                       int species_OUT, bool activator);
 
-    void create_GRN (std::string filepath);
+      void create_GRN (std::string filepath);
 
     /********************************************//**
      \brief Add dependency edge.
@@ -513,17 +514,17 @@ namespace ScnnoiseInterface {
      \param[in] dest destination rxn for the edge.
      ***********************************************/
     // void add_dependency_edge (int gene_type, int src, int dest);
-    typedef std::map<std::string, std::map<std::string, int>> reactant_product_type;
-    void add_new_dependency_graph (std::string gene_type_name,
-      std::map<std::string, int> species_map, std::map<int, std::string> rxn_map,
-      reactant_product_type rxns_reactants,
-      reactant_product_type rxns_products, std::vector<std::vector<int>> edge_list);
+      typedef std::map<std::string, std::map<std::string, int>> reactant_product_type;
+      void add_new_dependency_graph (std::string gene_type_name,
+          std::map<std::string, int> species_map, std::map<int, std::string> rxn_map,
+          reactant_product_type rxns_reactants,
+          reactant_product_type rxns_products, std::vector<std::vector<int>> edge_list);
 
-    int factorial (int num);
+      int factorial (int num);
 
-    int factorial_ratio_propensity_func (int N, int r);
+      int factorial_ratio_propensity_func (int N, int r);
 
-    void compute_total_propensity ();
+      void compute_total_propensity ();
 
 
     /********************************************//**
@@ -532,17 +533,17 @@ namespace ScnnoiseInterface {
      A pure virtual function for simulating stochastic gene
      expression. Needs to be overridden in any derived class.
      ***********************************************/
-    virtual void simulate () = 0;
+      virtual void simulate () = 0;
 
     /********************************************//**
      \brief Function to compute gene expression regulation by transcription factors
      ***********************************************/
-    double regulation_function (int gene_selected, int rxn);
+      double regulation_function (int gene_selected, int rxn);
 
     /********************************************//**
      \brief Hill function for regulation
      ***********************************************/
-    double hill_function (int tf_count, double hill_coeff, double half_maximal,
+      double hill_function (int tf_count, double hill_coeff, double half_maximal,
                          bool activator);
 
 

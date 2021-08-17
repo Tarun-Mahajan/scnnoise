@@ -63,14 +63,14 @@ namespace ScnnoiseInterface {
 
                     time_history.push_back(0);
 
+                    // Create dependency graphs
+                    create_init_gene_type_info();
+
                     // Initialize gene states from file
                     init_gene_states_from_file (gene_filepath);
 
                     // Create GRN from input file
                     create_GRN(GRN_filepath);
-
-                    // Create dependency graphs
-                    create_init_gene_type_info();
   }
 
 

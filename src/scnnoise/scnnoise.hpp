@@ -236,6 +236,8 @@ namespace ScnnoiseInterface {
 
     std::map<int, std::string> gene_map;
 
+    std::map<std::string, int> gene_rev_map;
+
     /********************************************//**
      \brief Dependency graph for reaction channels for
             different combinations of gene types and num

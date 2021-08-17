@@ -198,6 +198,7 @@ namespace ScnnoiseInterface {
           }
           gene_rxns.gene_name = gene_name;
           gene_map[gene_count] = gene_name;
+          gene_map[gene_name] = gene_count;
           gene_rxns.gene_type = match_and_return_gene_type(gene_type);
           gene_rxns.GRN_rxn_IN = GRN_rxn_IN;
           gene_rxns.GRN_species_OUT = GRN_species_OUT;

@@ -63,6 +63,9 @@ namespace ScnnoiseInterface {
 
                     time_history.push_back(0);
 
+                    // Initialize gene states from file
+                    init_gene_states_from_file (gene_filepath);
+
                     // Create GRN from input file
                     create_GRN(GRN_filepath);
 

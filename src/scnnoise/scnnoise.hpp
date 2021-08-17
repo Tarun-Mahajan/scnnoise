@@ -234,6 +234,8 @@ namespace ScnnoiseInterface {
 
     std::map<std::string, gene_type_struct> gene_type_info;
 
+    std::map<int, std::string> gene_map;
+
     /********************************************//**
      \brief Dependency graph for reaction channels for
             different combinations of gene types and num
@@ -469,6 +471,8 @@ namespace ScnnoiseInterface {
       std::vector<std::vector<int>> reactants, std::vector<std::vector<int>> products,
       std::vector<std::vector<int>> reactants_stoichio, std::vector<std::vector<int>> products_stoichio,
       std::vector<double> rxn_rate, std::vector<double> propensity_val);
+
+    void init_gene_states_from_file (std::string filepath);
 
     void create_init_gene_type_info ();
 

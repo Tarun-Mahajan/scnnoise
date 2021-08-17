@@ -100,6 +100,83 @@ namespace ScnnoiseInterface {
       }
   }
 
+  void scNNoiSE::init_gene_states_from_file (std::string filepath) {
+      std::ifstream gene_state_file(filepath);
+      std::string row_text;
+      std::string gene_name;
+      std::string gene_type;
+      std::vector<std::string>  GRN_rxn_IN;
+      std::vector<std::string>  GRN_species_OUT;
+      std::vector<std::string> rxn_names;
+      std::vector<int> rxn_rates;
+      std::string word;
+      unsigned int num_rxn_IN = 1;
+      unsigned int num_species_OUT = 0;
+      unsigned int gene_count = 0;
+      while (std::getline(gene_state_file, row_text)) {
+          gene_rxn_channel_struct gene_rxns;
+          GRN_rxn_IN.clear();
+          GRN_species_OUT.clear();
+          rxn_names.clear();
+          rxn_rates.clear();
+          GRN_activation.clear();
+          std::istringstream str_stream(row_text);
+
+          unsigned int id_counter = 0;
+          while (std::getline(str_stream, word, ',')) {
+              switch(id_counter) {
+                  case 0:
+                        {
+                            gene_name = word;
+                        }
+                  case 1:
+                        {
+                            gene_type = word;
+                        }
+                  case 2:
+                        {
+                            num_rxn_IN = (unsigned int) std::stoi(word);
+                        }
+                  default:
+                        {
+                            if (id_counter > 2 && id_counter < 3 + num_rxn_IN) {
+                                GRN_rxn_IN.push_back(word);
+                            }else{
+                                if (id_counter == 3 + num_rxn_IN) {
+                                    num_species_OUT = (unsigned int) std::stoi(word);
+                                }else{
+                                    if (id_counter > 3 + num_rxn_IN &&
+                                        id_counter <
+                                        4 + num_rxn_IN + num_species_OUT) {
+                                            GRN_species_OUT.push_back(word);
+                                    }else{
+                                        unsigned int diff_ = id_counter -
+                                            (4 + num_rxn_IN + num_species_OUT);
+                                        if (diff_ % 2 == 0) {
+                                            rxn_names.push_back(word);
+                                        }else{
+                                            rxn_rates.push_back(std::stod(word));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+              }
+              ++id_counter;
+          }
+          gene_rxns.gene_name = gene_name;
+          gene_map[gene_count] = gene_name;
+          gene_rxns.gene_type = match_and_return_gene_type(gene_type);
+          gene_rxns.GRN_rxn_IN = GRN_rxn_IN;
+          gene_rxns.GRN_species_OUT = GRN_species_OUT;
+          for (unsigned int i = 0; i < rxn_names.size(); ++i) {
+              gene_rxns.rxn_rates[rxn_names[i]] = rxn_rates[i];
+          }
+          gene_rxns.molecule_count_cur.resize(gene_type_info[gene_rxns.gene_type].num_species, 0);
+          ++gene_count;
+      }
+  }
+
 
   void scNNoiSE::add_GRN_edge (int src, int dest, double prob_contr,
     double hill_coeff, double half_maximal, int rxn_IN, int species_OUT,

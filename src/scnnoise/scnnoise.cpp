@@ -268,7 +268,7 @@ namespace ScnnoiseInterface {
             }
         }
 
-        new_propensity *= compute_regulation_function(gene_id);
+        new_propensity *= compute_regulation_function(gene_id, rxn_name);
     }
 
     void scNNoiSE::init_rxn_order () {

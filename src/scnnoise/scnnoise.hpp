@@ -479,7 +479,7 @@ namespace ScnnoiseInterface {
             std::vector<std::vector<int>> products_stoichio,
             std::vector<double> rxn_rate, std::vector<double> propensity_val);
 
-        std::string scNNoiSE::match_and_return_gene_type (std::string in_gene_type);
+        std::string match_and_return_gene_type (std::string in_gene_type);
 
         void init_gene_states_from_file (std::string filepath);
 
@@ -504,6 +504,8 @@ namespace ScnnoiseInterface {
                       int species_OUT, bool activator);
 
         void create_GRN (std::string filepath);
+
+        void create_GRN_from_file (std::string filepath);
 
         /********************************************//**
         \brief Add dependency edge.

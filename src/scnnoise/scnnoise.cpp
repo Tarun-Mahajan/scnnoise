@@ -659,13 +659,13 @@ namespace ScnnoiseInterface {
     }
 
     double scNNoiSE::hill_function (int tf_count, double hill_coeff,
-        double half_maximal, bool activator) {
+        double half_maximal, bool activator, double prob_contr) {
         double tf_count_pow = pow(double(tf_count), hill_coeff);
         double half_maximal_pow = pow(double(half_maximal), hill_coeff);
         if (activator) {
-            return tf_count_pow/(tf_count_pow + half_maximal_pow);
+            return (tf_count_pow/(tf_count_pow + half_maximal_pow))*prob_contr;
         }else{
-            return half_maximal_pow/(tf_count_pow + half_maximal_pow);
+            return (half_maximal_pow/(tf_count_pow + half_maximal_pow))*prob_contr;
         }
     }
 

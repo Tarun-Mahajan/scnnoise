@@ -535,6 +535,7 @@ namespace ScnnoiseInterface {
 
         void compute_total_propensity ();
 
+        double compute_propensity (std::string gene_name, std::string rxn_name);
 
         /********************************************//**
         \brief Simulating stochastic gene expression.

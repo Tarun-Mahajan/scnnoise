@@ -70,6 +70,9 @@ namespace ScnnoiseInterface {
             // Initialize gene states from file
             init_gene_states_from_file (gene_filepath);
 
+            // Initialize rxn order
+            init_rxn_order ();
+
             // Create GRN from input file
             create_GRN(GRN_filepath);
     }
@@ -211,6 +214,61 @@ namespace ScnnoiseInterface {
             }
             gene_rxns.molecule_count_cur.resize(gene_type_info[gene_rxns.gene_type].num_species, 0);
             ++gene_count;
+        }
+    }
+
+    double scNNoiSE::compute_propensity (std::string gene_name,
+        std::string rxn_name) {
+        int gene_id = gene_rev_map[gene_name];
+        double new_propensity = reactions[gene_id].rxn_rates[rxn_name];
+        std::map<std::string, int> rxn_stoi_map =
+            gene_type_info[reactions[gene_id].gene_type].rxns[rxn_name].reactants_stoichio;
+        if (rxn_stoi_map.size() > 0) {
+            for (auto const &it : rxn_stoi_map) {
+                int species_id = gene_type_info[reactions[gene_id].gene_type].species_rev_map[it.first];
+                new_propensity *=
+                    factorial_ratio_propensity_func(reactions[gene_id].molecule_count_cur[species_id],
+                    it.second);
+            }
+        }
+
+        if (reactions[gene_id].GRN_rxn_IN.size() != 0){
+            auto it = std::find(reactions[gene_id].GRN_rxn_IN.begin(),
+                reactions[gene_id].GRN_rxn_IN.end(),
+                rxn_name);
+
+            if (it != reactions[gene_id].GRN_rxn_IN.end()) {
+                std::vector<int> parents;
+                    find_parents(gene_id, parents);
+                std::vector<std::tuple<edge_rxn_struct, int>> tf_properties;
+                for (auto const &src : parents) {
+                    for (std::size_t dest = 0; dest < adj_list[src].size(); ++dest) {
+                        if ((adj_list[src][dest] == gene_id) &&
+                            (edge_rxn_params[src][dest].rxn_IN == rxn_name)) {
+                                std::string species_out = edge_rxn_params[src][dest].species_OUT;
+                                int species_out_id =
+                                    gene_type_info[reactions[src].gene_type].species_rev_map[species_out];
+                                int mol_count = reactions[src].molecule_count_cur[species_out_id];
+                                tf_properties.push_back(std::make_tuple<edge_rxn_params, mol_count>);
+                        }
+                    }
+                }
+                new_propensity *= regulation_function_(tf_properties);
+            }
+        }
+
+    }
+
+    void scNNoiSE::init_rxn_order () {
+        unsigned int gene_count = 0;
+        unsigned int order_count = 0;
+        for (auto const &it : reactions) {
+            for (std::size_t i = 0; i < it.rxn_names.size(); i++) {
+                rxn_order_struct rxn_order_temp;
+                rxn_order_temp.gene_id = gene_rev_map[it.gene_name];
+                rxn_order_temp.rxn_name = rxn_names[i];
+
+            }
         }
     }
 

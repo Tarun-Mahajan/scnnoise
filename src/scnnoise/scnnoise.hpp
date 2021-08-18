@@ -484,6 +484,8 @@ namespace ScnnoiseInterface {
 
         std::string match_and_return_gene_type (std::string in_gene_type);
 
+        void scNNoiSE::init_rxn_order ();
+
         void init_gene_states_from_file (std::string filepath);
 
         void create_init_gene_type_info ();

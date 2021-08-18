@@ -278,8 +278,10 @@ namespace ScnnoiseInterface {
             for (std::size_t i = 0; i < it.rxn_names.size(); i++) {
                 rxn_order_struct rxn_order_temp;
                 rxn_order_temp.gene_id = gene_rev_map[it.gene_name];
-                rxn_order_temp.rxn_name = rxn_names[i];
-
+                rxn_order_temp.rxn_name = it.rxn_names[i];
+                rxn_order_temp.propensity_val = compute_propensity(it.gene_name,
+                    it.rxn_names[i]);
+                rxn_order.push_back(rxn_order_temp);
             }
         }
     }

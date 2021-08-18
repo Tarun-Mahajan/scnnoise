@@ -353,6 +353,8 @@ namespace ScnnoiseInterface {
         // std::vector<std::map<int, std::map<std:string, std::vector<int>>>> reactions;
         std::vector<gene_rxn_channel_struct> reactions;
 
+        std::map<int, std::map<std::string, double>> max_rxn_rate_change;
+
 
         // /********************************************//**
         //  \brief Vector for status in GRN

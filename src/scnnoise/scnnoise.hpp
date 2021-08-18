@@ -535,6 +535,8 @@ namespace ScnnoiseInterface {
 
         void compute_total_propensity ();
 
+        double compute_regulation_function (int gene_id, std::string rxn_name)
+
         double compute_propensity (std::string gene_name, std::string rxn_name);
 
         /********************************************//**

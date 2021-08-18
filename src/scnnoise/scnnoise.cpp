@@ -217,21 +217,8 @@ namespace ScnnoiseInterface {
         }
     }
 
-    double scNNoiSE::compute_propensity (std::string gene_name,
-        std::string rxn_name) {
-        int gene_id = gene_rev_map[gene_name];
-        double new_propensity = reactions[gene_id].rxn_rates[rxn_name];
-        std::map<std::string, int> rxn_stoi_map =
-            gene_type_info[reactions[gene_id].gene_type].rxns[rxn_name].reactants_stoichio;
-        if (rxn_stoi_map.size() > 0) {
-            for (auto const &it : rxn_stoi_map) {
-                int species_id = gene_type_info[reactions[gene_id].gene_type].species_rev_map[it.first];
-                new_propensity *=
-                    factorial_ratio_propensity_func(reactions[gene_id].molecule_count_cur[species_id],
-                    it.second);
-            }
-        }
-
+    double scNNoiSE::compute_regulation_function (int gene_id, std::string rxn_name) {
+        double regulation_function_factor = 0;
         if (reactions[gene_id].GRN_rxn_IN.size() != 0){
             auto it = std::find(reactions[gene_id].GRN_rxn_IN.begin(),
                 reactions[gene_id].GRN_rxn_IN.end(),
@@ -249,14 +236,39 @@ namespace ScnnoiseInterface {
                                 int species_out_id =
                                     gene_type_info[reactions[src].gene_type].species_rev_map[species_out];
                                 int mol_count = reactions[src].molecule_count_cur[species_out_id];
+                                regulation_function_factor +=
+                                    hill_function(mol_count,
+                                        edge_rxn_params[src][dest].hill_coeff,
+                                        edge_rxn_params[src][dest].half_maximal,
+                                        edge_rxn_params[src][dest].activator,
+                                        edge_rxn_params[src][dest].prob_contr);
                                 tf_properties.push_back(std::make_tuple<edge_rxn_params, mol_count>);
                         }
                     }
                 }
-                new_propensity *= regulation_function_(tf_properties);
+            }
+        }
+        regulation_function_factor *= max_rxn_rate_change[gene_id][rxn_name];
+        regulation_function_factor += 1;
+        return regulation_function_factor;
+    }
+
+    double scNNoiSE::compute_propensity (std::string gene_name,
+        std::string rxn_name) {
+        int gene_id = gene_rev_map[gene_name];
+        double new_propensity = reactions[gene_id].rxn_rates[rxn_name];
+        std::map<std::string, int> rxn_stoi_map =
+            gene_type_info[reactions[gene_id].gene_type].rxns[rxn_name].reactants_stoichio;
+        if (rxn_stoi_map.size() > 0) {
+            for (auto const &it : rxn_stoi_map) {
+                int species_id = gene_type_info[reactions[gene_id].gene_type].species_rev_map[it.first];
+                new_propensity *=
+                    factorial_ratio_propensity_func(reactions[gene_id].molecule_count_cur[species_id],
+                    it.second);
             }
         }
 
+        new_propensity *= compute_regulation_function(gene_id);
     }
 
     void scNNoiSE::init_rxn_order () {

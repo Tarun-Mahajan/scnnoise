@@ -18,7 +18,7 @@ namespace ScnnoiseInterface {
    ***********************************************/
     struct rxn_order_struct {
         int gene_id;
-        int rxn_type;
+        std::string rxn_name;
         double propensity_val;
     };
 
@@ -203,8 +203,9 @@ namespace ScnnoiseInterface {
         std::string gene_type;
         std::vector<std::string> GRN_rxn_IN;
         std::vector<std::string> GRN_species_OUT;
-        std::vector<std::string> rxn_names;
-        std::vector<int> rxn_rates;
+        // std::vector<std::string> rxn_names;
+        // std::vector<int> rxn_rates;
+        std::map<std::string, double> rxn_rates;
         std::vector<int> molecule_count_cur;
     };
 

@@ -348,6 +348,7 @@ namespace ScnnoiseInterface {
                 rxn_order_temp.rxn_name = rxns_.first;
                 rxn_order_temp.propensity_val = compute_propensity(it.gene_name,
                     rxns_.first);
+                it.propensity_vals[rxns_.first] = rxn_order_temp.propensity_val;
                 rxn_order.push_back(rxn_order_temp);
             }
         }

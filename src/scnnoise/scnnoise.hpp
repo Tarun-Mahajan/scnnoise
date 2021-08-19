@@ -207,6 +207,7 @@ namespace ScnnoiseInterface {
         // std::vector<int> rxn_rates;
         std::map<std::string, double> rxn_rates;
         std::vector<int> molecule_count_cur;
+        std::map<std::string, double> propensity_vals;
     };
 
     struct molecule_history_struct {

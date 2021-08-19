@@ -488,6 +488,8 @@ namespace ScnnoiseInterface {
 
         void init_molecule_count (std::string filepath);
 
+        void init_molecule_count_history ();
+
         void init_gene_states_from_file (std::string filepath);
 
         void create_init_gene_type_info ();

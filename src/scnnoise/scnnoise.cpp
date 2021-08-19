@@ -51,17 +51,6 @@ namespace ScnnoiseInterface {
             }
 
 
-            molecule_count_history.reserve(num_genes);
-            for (int gene; gene < num_genes; ++gene) {
-              std::vector<std::vector<int>> count_gene;
-              count_gene.reserve(num_species_gene_type[gene]);
-              for (int id; id < num_species_gene_type[gene]; ++id) {
-                std::vector<int> count_species(num_timepoints_save, 0);
-                count_gene.push_back(count_species);
-              }
-              molecule_count_history.push_back(count_gene);
-            }
-
             time_history.push_back(0);
 
             // Create dependency graphs
@@ -171,6 +160,19 @@ namespace ScnnoiseInterface {
                     species_count[i];
             }
 
+        }
+    }
+
+    void init_molecule_count_history () {
+        molecule_count_history.resize(num_genes);
+        for (int gene; gene < num_genes; ++gene) {
+          std::vector<std::vector<int>> count_gene;
+          count_gene.resize(reactions[gene].molecule_count_cur.size());
+          for (std::size_t id = 0; id < reactions[gene].molecule_count_cur.size(); ++id) {
+            std::vector<int> count_species(num_timepoints_save, 0);
+            count_gene.push_back(count_species);
+          }
+          molecule_count_history.push_back(count_gene);
         }
     }
 

@@ -237,7 +237,6 @@ namespace ScnnoiseInterface {
             if (it != reactions[gene_id].GRN_rxn_IN.end()) {
                 std::vector<int> parents;
                     find_parents(gene_id, parents);
-                std::vector<std::tuple<edge_rxn_struct, int>> tf_properties;
                 for (auto const &src : parents) {
                     for (std::size_t dest = 0; dest < adj_list[src].size(); ++dest) {
                         if ((adj_list[src][dest] == gene_id) &&
@@ -252,7 +251,6 @@ namespace ScnnoiseInterface {
                                         edge_rxn_params[src][dest].half_maximal,
                                         edge_rxn_params[src][dest].activator,
                                         edge_rxn_params[src][dest].prob_contr);
-                                tf_properties.push_back(std::make_tuple<edge_rxn_params, mol_count>);
                         }
                     }
                 }

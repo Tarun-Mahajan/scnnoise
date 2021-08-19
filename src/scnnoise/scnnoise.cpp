@@ -18,7 +18,7 @@ namespace ScnnoiseInterface {
         std::string GRN_filepath, std::string molecule_count_filepath) {
         // this->num_rxns = num_rxns;
         this->num_genes = num_genes;
-        rxn_order.reserve(num_rxns);
+        // rxn_order.reserve(num_rxns);
         network.reserve(1);
         network.push_back(GraphSpace::GRN(num_genes));
         reactions.reserve(num_genes);
@@ -29,23 +29,19 @@ namespace ScnnoiseInterface {
         //
         // num_rxn_gene_type.resize(num_gene_types);
         // num_rxn_gene_type.assign({6, 7, 5, 9});
-        this->max_time = max_time;
-        this->save_timeseries = save_timeseries;
-        this->num_timepoints_save = num_timepoints_save;
-        this->num_species_gene_type.reserve(num_species_gene_type.size());
-        this->num_species_gene_type = num_species_gene_type;
-        this->num_rxns_gene_type.reserve(num_rxns_gene_type.size());
-        this->num_rxns_gene_type = num_rxns_gene_type;
-        this->count_save_file = count_save_file;
+        this->max_time = 10000;
+        this->save_timeseries = false;
+        this->num_timepoints_save = 1000;
+        // this->count_save_file = count_save_file;
 
         /********************************************//**
          \brief Initialize dependency graph for different gene types.
          ***********************************************/
-        gene_rxn_dependency.reserve(num_rxns_gene_type.size());
-        int count = 0;
-        for (auto &n : num_rxns_gene_type) {
-          gene_rxn_dependency.push_back(GraphSpace::GraphDependency(n));
-        }
+        // gene_rxn_dependency.reserve(num_rxns_gene_type.size());
+        // int count = 0;
+        // for (auto &n : num_rxns_gene_type) {
+        //   gene_rxn_dependency.push_back(GraphSpace::GraphDependency(n));
+        // }
 
 
         time_history.push_back(0);

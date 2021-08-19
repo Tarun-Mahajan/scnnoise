@@ -139,6 +139,16 @@ namespace ScnnoiseInterface {
         return gene_return_type;
     }
 
+    void scNNoiSE::init_max_rxn_rate_change () {
+        for (unsigned int i = 0; i < num_genes; ++i) {
+            std::string gene_type = reactions[i].gene_type;
+            for (auto const &it : gene_type_info[gene_type].rxn_rev_map) {
+                max_rxn_rate_change[i][it.first] = 0.5;
+            }
+
+        }
+    }
+
     void scNNoiSE::init_gene_states_from_file (std::string filepath) {
         std::ifstream gene_state_file(filepath);
         std::string row_text;

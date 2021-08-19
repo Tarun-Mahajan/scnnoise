@@ -70,14 +70,14 @@ namespace ScnnoiseInterface {
             // Initialize gene states from file
             init_gene_states_from_file(gene_filepath);
 
-            // Initialize rxn order
-            init_rxn_order();
-
             // Create GRN from input file
             create_GRN(GRN_filepath);
 
             // Initialize max_rxn_rate_change
             init_max_rxn_rate_change();
+
+            // Initialize rxn order
+            init_rxn_order();
     }
 
 

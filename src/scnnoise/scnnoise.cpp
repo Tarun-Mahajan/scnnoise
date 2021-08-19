@@ -341,7 +341,7 @@ namespace ScnnoiseInterface {
     void scNNoiSE::init_rxn_order () {
         unsigned int gene_count = 0;
         unsigned int order_count = 0;
-        for (auto it : reactions) {
+        for (auto &it : reactions) {
             for (auto const &rxns_ : it.rxn_rates) {
                 rxn_order_struct rxn_order_temp;
                 rxn_order_temp.gene_id = gene_rev_map[it.gene_name];

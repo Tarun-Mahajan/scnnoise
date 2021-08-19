@@ -398,8 +398,8 @@ namespace ScnnoiseInterface {
         new_gene_type.gene_rxn_dependency.push_back(
             GraphSpace::GraphDependency(new_gene_type.num_rxns));
         unsigned int node_count = 0;
-        for (auto src : edge_list) {
-            for (auto dest : src) {
+        for (auto &src : edge_list) {
+            for (auto &dest : src) {
                 new_gene_type.gene_rxn_dependency[0].add_edge(node_count, dest);
             }
             ++node_count;
@@ -723,7 +723,7 @@ namespace ScnnoiseInterface {
     }
 
     void scNNoiSE::compute_total_propensity () {
-        for (auto &rxn : rxn_order) {
+        for (auto const &rxn : rxn_order) {
             total_propensity += rxn.propensity_val;
         }
     }

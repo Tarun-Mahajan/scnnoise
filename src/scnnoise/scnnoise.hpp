@@ -486,8 +486,7 @@ namespace ScnnoiseInterface {
 
         void init_rxn_order ();
 
-        void init_molecule_count (std::map<std::string,
-            std::map<std::String, int>> molecule_count_init);
+        void init_molecule_count (std::string filepath);
 
         void init_gene_states_from_file (std::string filepath);
 

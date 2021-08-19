@@ -78,6 +78,9 @@ namespace ScnnoiseInterface {
 
             // Initialize rxn order
             init_rxn_order();
+
+            // Initialize molecule count
+            init_molecule_count (molecule_count_filepath)
     }
 
 
@@ -113,15 +116,59 @@ namespace ScnnoiseInterface {
             }
     }
 
-    void scNNoiSE::init_molecule_count (std::map<std::string,
-        std::map<std::String, int>> molecule_count_init) {
-        for (auto const &it : molecule_count_init) {
-            int gene_id = gene_rev_map[it.first];
+    void scNNoiSE::init_molecule_count (std::string filepath) {
+        // for (auto const &it : molecule_count_init) {
+        //     int gene_id = gene_rev_map[it.first];
+        //     gene_rxn_channel_struct rxn_ = reactions[gene_id];
+        //     gene_type_struct gene_info = gene_type_info[rxn_.gene_type];
+        //     for (auto const &rxns : it.second) {
+        //         reactions[gene_id].molecule_count_cur[gene_info.species_rev_map[rxns.first]] =
+        //             rxns.second;
+        //     }
+        //
+        // }
+
+
+        std::ifstream count_state_file(filepath);
+        std::string row_text;
+        std::string gene_name;
+        std::string gene_type;
+        std::vector<std::string>  species_name;
+        std::vector<int>  species_count;
+        std::string word;
+        while (std::getline(count_state_file, row_text)) {
+            species_name.clear();
+            species_count.clear();
+            std::istringstream str_stream(row_text);
+
+            unsigned int id_counter = 0;
+            while (std::getline(str_stream, word, ',')) {
+                switch(id_counter) {
+                    case 0:
+                        {
+                            gene_name = word;
+                        }
+                    case 1:
+                        {
+                            gene_type = word;
+                        }
+                    default:
+                        {
+                            if ((id_counter - 2) % 2 == 0) {
+                                species_name.push_back(word);
+                            }else{
+                                species_count.push_back(std::stoi(word));
+                            }
+                        }
+                }
+                ++id_counter;
+            }
+            int gene_id = gene_rev_map[gene_name];
             gene_rxn_channel_struct rxn_ = reactions[gene_id];
             gene_type_struct gene_info = gene_type_info[rxn_.gene_type];
-            for (auto const &rxns : it.second) {
-                reactions[gene_id].molecule_count_cur[gene_info.species_rev_map[rxns.first]] =
-                    rxns.second;
+            for (std::size_t i = 0; i < species_name.size(); ++i) {
+                reactions[gene_id].molecule_count_cur[gene_info.species_rev_map[species_name[i]]] =
+                    species_count[i];
             }
 
         }

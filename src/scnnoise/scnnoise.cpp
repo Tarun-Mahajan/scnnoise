@@ -113,6 +113,20 @@ namespace ScnnoiseInterface {
             }
     }
 
+    void scNNoiSE::init_molecule_count (std::map<std::string,
+        std::map<std::String, int>> molecule_count_init) {
+        for (auto const &it : molecule_count_init) {
+            int gene_id = gene_rev_map[it.first];
+            gene_rxn_channel_struct rxn_ = reactions[gene_id];
+            gene_type_struct gene_info = gene_type_info[rxn_.gene_type];
+            for (auto const &rxns : it.second) {
+                reactions[gene_id].molecule_count_cur[gene_info.species_rev_map[rxns.first]] =
+                    rxns.second;
+            }
+
+        }
+    }
+
     std::string scNNoiSE::match_and_return_gene_type (std::string in_gene_type) {
         std::string gene_return_type;
         bool is_found = false;

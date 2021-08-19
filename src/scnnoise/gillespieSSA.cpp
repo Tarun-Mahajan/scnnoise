@@ -36,7 +36,7 @@ namespace ScnnoiseInterface {
     double selector = total_propensity * (double(1.0) - rand_num);
     int rxn_selected = -1;
 
-    for (int i = 0; i < num_rxns; ++i) {
+    for (std::size_t i = 0; i < rxn_order.size(); ++i) {
       selector -= rxn_order[i].propensity_val;
       if (selector <= 0) {
         rxn_selected = i;

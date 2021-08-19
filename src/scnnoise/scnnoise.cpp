@@ -14,62 +14,59 @@
 
 namespace ScnnoiseInterface {
     // Constructor
-    scNNoiSE::scNNoiSE (int num_rxns, int num_genes,
-        std::vector<int> num_species_gene_type,
-        std::vector<int> num_rxns_gene_type, double max_time,
-        bool save_timeseries, int num_timepoints_save,
-        std::string count_save_file) {
-            this->num_rxns = num_rxns;
-            this->num_genes = num_genes;
-            rxn_order.reserve(num_rxns);
-            network.reserve(1);
-            network.push_back(GraphSpace::GRN(num_genes));
-            reactions.reserve(num_genes);
-            total_propensity = 0;
+    scNNoiSE::scNNoiSE (int num_genes, std::string gene_filepath,
+        std::string GRN_filepath, std::string molecule_count_filepath) {
+        // this->num_rxns = num_rxns;
+        this->num_genes = num_genes;
+        rxn_order.reserve(num_rxns);
+        network.reserve(1);
+        network.push_back(GraphSpace::GRN(num_genes));
+        reactions.reserve(num_genes);
+        total_propensity = 0;
 
-            // num_species_gene_type.resize(num_gene_types);
-            // num_species_gene_type.assign({4, 5, 4, 7});
-            //
-            // num_rxn_gene_type.resize(num_gene_types);
-            // num_rxn_gene_type.assign({6, 7, 5, 9});
-            this->max_time = max_time;
-            this->save_timeseries = save_timeseries;
-            this->num_timepoints_save = num_timepoints_save;
-            this->num_species_gene_type.reserve(num_species_gene_type.size());
-            this->num_species_gene_type = num_species_gene_type;
-            this->num_rxns_gene_type.reserve(num_rxns_gene_type.size());
-            this->num_rxns_gene_type = num_rxns_gene_type;
-            this->count_save_file = count_save_file;
+        // num_species_gene_type.resize(num_gene_types);
+        // num_species_gene_type.assign({4, 5, 4, 7});
+        //
+        // num_rxn_gene_type.resize(num_gene_types);
+        // num_rxn_gene_type.assign({6, 7, 5, 9});
+        this->max_time = max_time;
+        this->save_timeseries = save_timeseries;
+        this->num_timepoints_save = num_timepoints_save;
+        this->num_species_gene_type.reserve(num_species_gene_type.size());
+        this->num_species_gene_type = num_species_gene_type;
+        this->num_rxns_gene_type.reserve(num_rxns_gene_type.size());
+        this->num_rxns_gene_type = num_rxns_gene_type;
+        this->count_save_file = count_save_file;
 
-            /********************************************//**
-             \brief Initialize dependency graph for different gene types.
-             ***********************************************/
-            gene_rxn_dependency.reserve(num_rxns_gene_type.size());
-            int count = 0;
-            for (auto &n : num_rxns_gene_type) {
-              gene_rxn_dependency.push_back(GraphSpace::GraphDependency(n));
-            }
+        /********************************************//**
+         \brief Initialize dependency graph for different gene types.
+         ***********************************************/
+        gene_rxn_dependency.reserve(num_rxns_gene_type.size());
+        int count = 0;
+        for (auto &n : num_rxns_gene_type) {
+          gene_rxn_dependency.push_back(GraphSpace::GraphDependency(n));
+        }
 
 
-            time_history.push_back(0);
+        time_history.push_back(0);
 
-            // Create dependency graphs
-            create_init_gene_type_info();
+        // Create dependency graphs
+        create_init_gene_type_info();
 
-            // Initialize gene states from file
-            init_gene_states_from_file(gene_filepath);
+        // Initialize gene states from file
+        init_gene_states_from_file(gene_filepath);
 
-            // Create GRN from input file
-            create_GRN(GRN_filepath);
+        // Create GRN from input file
+        create_GRN(GRN_filepath);
 
-            // Initialize max_rxn_rate_change
-            init_max_rxn_rate_change();
+        // Initialize max_rxn_rate_change
+        init_max_rxn_rate_change();
 
-            // Initialize molecule count
-            init_molecule_count (molecule_count_filepath);
+        // Initialize molecule count
+        init_molecule_count (molecule_count_filepath);
 
-            // Initialize rxn order
-            init_rxn_order();
+        // Initialize rxn order
+        init_rxn_order();
     }
 
 
@@ -349,12 +346,12 @@ namespace ScnnoiseInterface {
         unsigned int gene_count = 0;
         unsigned int order_count = 0;
         for (auto const &it : reactions) {
-            for (std::size_t i = 0; i < it.rxn_names.size(); i++) {
+            for (auto const &rxns_ : it.rxn_rates) {
                 rxn_order_struct rxn_order_temp;
                 rxn_order_temp.gene_id = gene_rev_map[it.gene_name];
-                rxn_order_temp.rxn_name = it.rxn_names[i];
+                rxn_order_temp.rxn_name = rxns_.first;
                 rxn_order_temp.propensity_val = compute_propensity(it.gene_name,
-                    it.rxn_names[i]);
+                    rxns_.first);
                 rxn_order.push_back(rxn_order_temp);
             }
         }

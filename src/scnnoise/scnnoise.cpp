@@ -76,11 +76,11 @@ namespace ScnnoiseInterface {
             // Initialize max_rxn_rate_change
             init_max_rxn_rate_change();
 
+            // Initialize molecule count
+            init_molecule_count (molecule_count_filepath);
+
             // Initialize rxn order
             init_rxn_order();
-
-            // Initialize molecule count
-            init_molecule_count (molecule_count_filepath)
     }
 
 

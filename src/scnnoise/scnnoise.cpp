@@ -163,7 +163,7 @@ namespace ScnnoiseInterface {
         }
     }
 
-    void init_molecule_count_history () {
+    void scNNoiSE::init_molecule_count_history () {
         molecule_count_history.resize(num_genes);
         for (int gene; gene < num_genes; ++gene) {
           std::vector<std::vector<int>> count_gene;

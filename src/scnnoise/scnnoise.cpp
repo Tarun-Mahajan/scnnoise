@@ -299,17 +299,17 @@ namespace ScnnoiseInterface {
                 for (auto const &src : parents) {
                     for (std::size_t dest = 0; dest < adj_list[src].size(); ++dest) {
                         if ((adj_list[src][dest] == gene_id) &&
-                            (edge_rxn_params[src][dest].rxn_IN == rxn_name)) {
-                                std::string species_out = edge_rxn_params[src][dest].species_OUT;
+                            (network[0].edge_rxn_params[src][dest].rxn_IN == rxn_name)) {
+                                std::string species_out = network[0].edge_rxn_params[src][dest].species_OUT;
                                 int species_out_id =
                                     gene_type_info[reactions[src].gene_type].species_rev_map[species_out];
                                 int mol_count = reactions[src].molecule_count_cur[species_out_id];
                                 regulation_function_factor +=
                                     hill_function(mol_count,
-                                        edge_rxn_params[src][dest].hill_coeff,
-                                        edge_rxn_params[src][dest].half_maximal,
-                                        edge_rxn_params[src][dest].activator,
-                                        edge_rxn_params[src][dest].prob_contr);
+                                        network[0].edge_rxn_params[src][dest].hill_coeff,
+                                        network[0].edge_rxn_params[src][dest].half_maximal,
+                                        network[0].edge_rxn_params[src][dest].activator,
+                                        network[0].edge_rxn_params[src][dest].prob_contr);
                         }
                     }
                 }

@@ -295,7 +295,7 @@ namespace ScnnoiseInterface {
 
             if (it != reactions[gene_id].GRN_rxn_IN.end()) {
                 std::vector<int> parents;
-                    find_parents(gene_id, parents);
+                network[0].find_parents(gene_id, parents);
                 for (auto const &src : parents) {
                     for (std::size_t dest = 0; dest < adj_list[src].size(); ++dest) {
                         if ((adj_list[src][dest] == gene_id) &&

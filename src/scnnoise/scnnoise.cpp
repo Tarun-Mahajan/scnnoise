@@ -340,7 +340,6 @@ namespace ScnnoiseInterface {
     }
 
     void scNNoiSE::init_rxn_order () {
-        unsigned int gene_count = 0;
         unsigned int order_count = 0;
         for (auto &it : reactions) {
             for (auto const &rxns_ : it.rxn_rates) {
@@ -351,6 +350,7 @@ namespace ScnnoiseInterface {
                     rxns_.first);
                 it.propensity_vals[rxns_.first] = rxn_order_temp.propensity_val;
                 rxn_order.push_back(rxn_order_temp);
+                rxn_order_map[it.gene_name][rxns_.first] = order_count;
             }
         }
     }

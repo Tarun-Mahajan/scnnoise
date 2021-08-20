@@ -271,6 +271,8 @@ namespace ScnnoiseInterface {
         ***********************************************/
         std::vector<rxn_order_struct> rxn_order;
 
+        std::map<std::string, std::map<std::string, unsigned int>> rxn_order_map;
+
         /********************************************//**
         \brief Gene regulatory network.
 

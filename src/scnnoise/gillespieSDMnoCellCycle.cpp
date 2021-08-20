@@ -34,7 +34,7 @@ namespace ScnnoiseInterface {
       std::string gene_name = gene_map[rxn_order[rxn_selected - 1].gene_id];
       stdd::string rxn_name = rxn_order[rxn_selected - 1].rxn_name;
       rxn_order_map[gene_name][rxn_name] += 1;
-      
+
       rxn_selected -= 1;
     }
   }

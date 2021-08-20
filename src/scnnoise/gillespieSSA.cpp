@@ -169,7 +169,6 @@ namespace ScnnoiseInterface {
         int rxn_index = gene_info.rxn_rev_map[rxn_name];
         std::vector<int> rxn_selected_children;
         gene_info.gene_rxn_dependency[0].find_children(rxn_index, rxn_selected_children);
-        std::vector<int> rxn_selected_reactants;
         std::vector<int> rxn_selected_children_GRN;
         network[0].find_children(gene_selected, rxn_selected_children_GRN);
         // rxn_selected_reactants.reserve(reactions[gene_selected].molecule_count_cur.size());

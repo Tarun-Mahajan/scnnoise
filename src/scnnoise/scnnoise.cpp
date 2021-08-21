@@ -322,18 +322,6 @@ namespace ScnnoiseInterface {
         }
     }
 
-
-    void scNNoiSE::add_GRN_edge (int src, int dest, double prob_contr,
-        double hill_coeff, double half_maximal, int rxn_IN, int species_OUT,
-        bool activator) {
-        network[0].add_edge_kinetics(src, dest,
-                                  prob_contr,
-                                  hill_coeff,
-                                  half_maximal,
-                                  rxn_IN, species_OUT,
-                                  activator);
-    }
-
     void scNNoiSE::create_GRN (std::string filepath) {
         this->create_GRN_from_file(filepath);
     }

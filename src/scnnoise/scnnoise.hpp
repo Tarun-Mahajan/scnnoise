@@ -498,16 +498,6 @@ namespace ScnnoiseInterface {
 
         void init_max_rxn_rate_change ();
 
-        /********************************************//**
-        \brief Add GRN edge.
-
-        \param[in] src source gene for the edge.
-        \param[in] dest destination gene for the edge.
-        ***********************************************/
-        void add_GRN_edge (int src, int dest, double prob_contr,
-                      double hill_coeff, double half_maximal, int rxn_IN,
-                      int species_OUT, bool activator);
-
         void create_GRN (std::string filepath);
 
         void create_GRN_from_file (std::string filepath);

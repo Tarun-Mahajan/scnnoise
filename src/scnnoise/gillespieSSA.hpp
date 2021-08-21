@@ -40,7 +40,7 @@ namespace ScnnoiseInterface {
 
     // Update propensity for reactions dependent via the GRN
     void update_dependent_count_propensity (int rxn_selected,
-                                           std::vector<bool> &GRN_out_changed);
+                                           std::vector<std::string> &GRN_out_changed);
 
     // Simulate.
     void simulate () override;

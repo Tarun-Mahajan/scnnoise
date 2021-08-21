@@ -242,8 +242,25 @@ namespace ScnnoiseInterface {
                     outfile << '\n';
                 }
                 outfile.close();
+            }else{
+                if (simulation_ended) {
+                    std::ofstream outfile;
+                    outfile.open(count_save_file, std::ios_base::app);
+                    for (int gene = 0; gene < num_genes; ++gene) {
+                        for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+                            if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                                outfile << reactions[gene].molecule_count_cur[species];
+                            }else{
+                                outfile << reactions[gene].molecule_count_cur[species] << ',';
+                            }
+                        }
+                    }
+                    outfile << '\n';
+                    outfile.close();
+                }
             }
         }else{
+
         }
 
         for (int gene; gene < num_genes; ++gene) {

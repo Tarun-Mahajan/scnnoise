@@ -222,11 +222,30 @@ namespace ScnnoiseInterface {
       if (save_timeseries) {
         std::ofstream outfile;
         outfile.open(count_save_file, std::ios_base::app);
+        outfile << "time" << ",";
+        for (int gene = 0; gene < num_genes; ++gene) {
+          for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+              std::string gene_type = reactions[gene].gene_type;
+              std::string connector = ":";
+              std::string gene_species_name = gene_map[gene] + connector +
+                gene_type_info[gene_type].species_map[species];
+            if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                outfile << gene_species_name;
+            }else{
+                outfile << gene_species_name << ",";
+            }
+          }
+        }
+        outfile << '\n';
         for (int id_time = 0; id_time < num_timepoints_save; ++id_time) {
           outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
           for (int gene = 0; gene < num_genes; ++gene) {
-            for (int species = 0; species < num_species_gene_type[gene]; ++species) {
-              outfile << molecule_count_history[gene][species][id_time] << ',';
+            for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+              if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                  outfile << molecule_count_history[gene][species][id_time];
+              }else{
+                  outfile << molecule_count_history[gene][species][id_time] << ',';
+              }
             }
           }
           outfile << '\n';
@@ -235,7 +254,7 @@ namespace ScnnoiseInterface {
       }
     }
     for (int gene; gene < num_genes; ++gene) {
-      for (int species; species < num_species_gene_type[gene]; ++species) {
+      for (int species; species < reactions[gene].molecule_count_cur.size(); ++species) {
         molecule_count_history[gene][species][num_history] =
           reactions[gene].molecule_count_cur[species];
       }

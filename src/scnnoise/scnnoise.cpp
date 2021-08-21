@@ -15,7 +15,8 @@
 namespace ScnnoiseInterface {
     // Constructor
     scNNoiSE::scNNoiSE (int num_genes, std::string gene_filepath,
-        std::string GRN_filepath, std::string molecule_count_filepath) {
+        std::string GRN_filepath, std::string molecule_count_filepath,
+        std::string count_save_file) {
         // this->num_rxns = num_rxns;
         this->num_genes = num_genes;
         // rxn_order.reserve(num_rxns);

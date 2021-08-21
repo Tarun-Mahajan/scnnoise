@@ -262,26 +262,24 @@ namespace ScnnoiseInterface {
   }
 
     void start_molecule_count_history_file () {
-        if (save_timeseries) {
-            std::ofstream outfile;
-            outfile.open(count_save_file, std::ios_base::app);
-            outfile << "time" << ",";
-            for (int gene = 0; gene < num_genes; ++gene) {
-              for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
-                  std::string gene_type = reactions[gene].gene_type;
-                  std::string connector = ":";
-                  std::string gene_species_name = gene_map[gene] + connector +
-                    gene_type_info[gene_type].species_map[species];
-                if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
-                    outfile << gene_species_name;
-                }else{
-                    outfile << gene_species_name << ",";
-                }
-              }
+        std::ofstream outfile;
+        outfile.open(count_save_file, std::ios_base::app);
+        outfile << "time" << ",";
+        for (int gene = 0; gene < num_genes; ++gene) {
+          for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+              std::string gene_type = reactions[gene].gene_type;
+              std::string connector = ":";
+              std::string gene_species_name = gene_map[gene] + connector +
+                gene_type_info[gene_type].species_map[species];
+            if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                outfile << gene_species_name;
+            }else{
+                outfile << gene_species_name << ",";
             }
-            outfile << '\n';
-            outfile.close();
+          }
         }
+        outfile << '\n';
+        outfile.close();
     }
 
   void GillespieSSA::simulate () {

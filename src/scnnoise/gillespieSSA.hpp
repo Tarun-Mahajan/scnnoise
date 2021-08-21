@@ -51,14 +51,14 @@ namespace ScnnoiseInterface {
 
     // Update molecule count for reactants belonging to the fired reaction
     // channel
-    void update_fired_reaction_reactants(int gene_selected,
-      int rxn_index, int &count_not_changed_reactants,
-      std::vector<bool> &flag_changed_product_count,
-      std::vector<bool> &GRN_out_changed,
-      std::vector<int> &rxn_selected_reactants,
-      std::vector<int> &rxn_selected_products,
-      std::vector<int> &rxn_selected_reactants_stoichio,
-      std::vector<int> &rxn_selected_products_stoichio);
+    // void update_fired_reaction_reactants(int gene_selected,
+    //   int rxn_index, int &count_not_changed_reactants,
+    //   std::vector<bool> &flag_changed_product_count,
+    //   std::vector<bool> &GRN_out_changed,
+    //   std::vector<int> &rxn_selected_reactants,
+    //   std::vector<int> &rxn_selected_products,
+    //   std::vector<int> &rxn_selected_reactants_stoichio,
+    //   std::vector<int> &rxn_selected_products_stoichio);
 
     // Update molecule count history
     void update_molecule_count_history (int &num_history, int &num_save_loop);

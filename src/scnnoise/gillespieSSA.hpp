@@ -36,7 +36,7 @@ namespace ScnnoiseInterface {
     int sample_next_rxn (RNG &generator);
 
     // Update molecule counts by firing the selected reaction
-    std::vector<bool> update_fired_Reaction (int rxn_selected);
+    std::vector<bool> update_fired_reaction (int rxn_selected);
 
     // Update propensity for reactions dependent via the GRN
     void update_dependent_count_propensity (int rxn_selected,

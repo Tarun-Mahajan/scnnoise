@@ -100,7 +100,7 @@ namespace ScnnoiseInterface {
   //     }
   //   }
 
-    std::vector<std::string> GillespieSSA::update_fired_Reaction (int rxn_selected) {
+    std::vector<std::string> GillespieSSA::update_fired_reaction (int rxn_selected) {
         /*
         Find the gene and reaction type for the selected reaction channel. Extract the reactants,
         products and their stoichiometric coefficients for the selected reaction channel.
@@ -262,7 +262,7 @@ namespace ScnnoiseInterface {
         decltype(time_history)::value_type(0)) + next_time_step;
       if (total_time < max_time) {
           update_cell_cycle_state(total_time);
-          GRN_out_changed = update_fired_Reaction(next_rxn);
+          GRN_out_changed = update_fired_reaction(next_rxn);
           update_dependent_count_propensity(next_rxn, GRN_out_changed);
           time_history.push_back(next_time_step);
           update_molecule_count_history(num_history, num_save_loop);

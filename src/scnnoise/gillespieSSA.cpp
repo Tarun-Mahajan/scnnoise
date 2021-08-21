@@ -257,7 +257,7 @@ namespace ScnnoiseInterface {
       num_history += 1;
       double next_time_step = sample_time_step(generator);
       int next_rxn = sample_next_rxn(generator);
-      std::vector<bool> GRN_out_changed;
+      std::vector<std::string> GRN_out_changed;
       double total_time = std::accumulate(time_history.begin(), time_history.end(),
         decltype(time_history)::value_type(0)) + next_time_step;
       if (total_time < max_time) {

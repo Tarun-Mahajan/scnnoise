@@ -214,37 +214,45 @@ namespace ScnnoiseInterface {
         }
     }
 
-  void GillespieSSA::update_molecule_count_history (int &num_history, int &num_save_loop) {
-    if (num_history < num_timepoints_save) {
-    }else{
-      num_history = 0;
-      num_save_loop += 1;
-      if (save_timeseries) {
-        std::ofstream outfile;
-        outfile.open(count_save_file, std::ios_base::app);
-        for (int id_time = 0; id_time < num_timepoints_save; ++id_time) {
-          outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
-          for (int gene = 0; gene < num_genes; ++gene) {
-            for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
-              if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
-                  outfile << molecule_count_history[gene][species][id_time];
-              }else{
-                  outfile << molecule_count_history[gene][species][id_time] << ',';
-              }
+    void GillespieSSA::update_molecule_count_history (int &num_history, int &num_save_loop,
+        bool simulation_ended) {
+        if ((num_history == num_timepoints_save) || simulation_ended) {
+            int num_timepoints_save_cur;
+            if (simulation_ended) {
+                num_timepoints_save_cur = num_history;
+            }else{
+                num_timepoints_save_cur = num_timepoints_save;
             }
-          }
-          outfile << '\n';
+            num_history = 0;
+            num_save_loop += 1;
+            if (save_timeseries) {
+                std::ofstream outfile;
+                outfile.open(count_save_file, std::ios_base::app);
+                for (int id_time = 0; id_time < num_timepoints_save_cur; ++id_time) {
+                    outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
+                    for (int gene = 0; gene < num_genes; ++gene) {
+                        for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+                            if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                                outfile << molecule_count_history[gene][species][id_time];
+                            }else{
+                                outfile << molecule_count_history[gene][species][id_time] << ',';
+                            }
+                        }
+                    }
+                    outfile << '\n';
+                }
+                outfile.close();
+            }
+        }else{
         }
-        outfile.close();
-      }
+
+        for (int gene; gene < num_genes; ++gene) {
+          for (int species; species < reactions[gene].molecule_count_cur.size(); ++species) {
+            molecule_count_history[gene][species][num_history] =
+              reactions[gene].molecule_count_cur[species];
+          }
+        }
     }
-    for (int gene; gene < num_genes; ++gene) {
-      for (int species; species < reactions[gene].molecule_count_cur.size(); ++species) {
-        molecule_count_history[gene][species][num_history] =
-          reactions[gene].molecule_count_cur[species];
-      }
-    }
-  }
 
     void start_molecule_count_history_file () {
         std::ofstream outfile;

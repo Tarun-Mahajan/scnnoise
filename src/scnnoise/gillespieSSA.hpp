@@ -64,7 +64,8 @@ namespace ScnnoiseInterface {
     void start_molecule_count_history_file ()
 
     // Update molecule count history
-    void update_molecule_count_history (int &num_history, int &num_save_loop);
+    void GillespieSSA::update_molecule_count_history (int &num_history, int &num_save_loop,
+        bool simulation_ended);
   };
 }
 

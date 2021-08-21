@@ -254,7 +254,6 @@ namespace ScnnoiseInterface {
     int num_save_loop = 0;
 
     while (!stop_sim) {
-      num_history += 1;
       double next_time_step = sample_time_step(generator);
       int next_rxn = sample_next_rxn(generator);
       std::vector<std::string> GRN_out_changed;
@@ -269,6 +268,7 @@ namespace ScnnoiseInterface {
       }else{
         stop_sim = true;
       }
+      num_history += 1;
     }
   }
 }

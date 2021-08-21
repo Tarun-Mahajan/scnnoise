@@ -252,6 +252,7 @@ namespace ScnnoiseInterface {
               reactions[gene].molecule_count_cur[species];
           }
         }
+        ++num_history;
     }
 
     void start_molecule_count_history_file () {
@@ -275,34 +276,40 @@ namespace ScnnoiseInterface {
         outfile.close();
     }
 
-  void GillespieSSA::simulate () {
-    compute_total_propensity();
-    start_molecule_count_history_file();
+    void GillespieSSA::simulate () {
+        compute_total_propensity();
+        start_molecule_count_history_file();
 
-    std::random_device rd;
-    std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};
-    std::seed_seq sd(rd_seeds.begin(), rd_seeds.end());
-    thread_local static RNG generator{sd};
-    bool stop_sim = false;
-    int num_history = 0;
-    int num_save_loop = 0;
+        std::random_device rd;
+        std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};
+        std::seed_seq sd(rd_seeds.begin(), rd_seeds.end());
+        thread_local static RNG generator{sd};
+        bool stop_sim = false;
+        bool simulation_ended = false;
+        int num_history = 0;
+        int num_save_loop = 0;
+        update_molecule_count_history(num_history, num_save_loop,
+            simulation_ended);
 
-    while (!stop_sim) {
-      double next_time_step = sample_time_step(generator);
-      int next_rxn = sample_next_rxn(generator);
-      std::vector<std::string> GRN_out_changed;
-      double total_time = std::accumulate(time_history.begin(), time_history.end(),
-        decltype(time_history)::value_type(0)) + next_time_step;
-      if (total_time < max_time) {
-          update_cell_cycle_state(total_time);
-          GRN_out_changed = update_fired_reaction(next_rxn);
-          update_dependent_count_propensity(next_rxn, GRN_out_changed);
-          time_history.push_back(next_time_step);
-          update_molecule_count_history(num_history, num_save_loop);
-      }else{
-        stop_sim = true;
-      }
-      num_history += 1;
+        while (!stop_sim) {
+            double next_time_step = sample_time_step(generator);
+            int next_rxn = sample_next_rxn(generator);
+            std::vector<std::string> GRN_out_changed;
+            double total_time = std::accumulate(time_history.begin(), time_history.end(),
+                decltype(time_history)::value_type(0)) + next_time_step;
+            if (total_time < max_time) {
+                update_cell_cycle_state(total_time);
+                GRN_out_changed = update_fired_reaction(next_rxn);
+                update_dependent_count_propensity(next_rxn, GRN_out_changed);
+                time_history.push_back(next_time_step);
+                update_molecule_count_history(num_history, num_save_loop,
+                    simulation_ended);
+            }else{
+                simulation_ended = true;
+                update_molecule_count_history(num_history, num_save_loop,
+                    simulation_ended);
+                stop_sim = true;
+            }
+        }
     }
-  }
 }

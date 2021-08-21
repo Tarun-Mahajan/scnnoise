@@ -473,14 +473,6 @@ namespace ScnnoiseInterface {
      \param[in] num_splice_variants number of AS variants for the gene identified by
                 gene_id.
      ***********************************************/
-        void add_gene_state (int gene_id, int gene_type,
-            std::vector<int> GRN_rxn_IN, std::vector<int> GRN_species_OUT,
-            std::vector<int> molecule_count_cur,
-            std::vector<std::vector<int>> reactants,
-            std::vector<std::vector<int>> products,
-            std::vector<std::vector<int>> reactants_stoichio,
-            std::vector<std::vector<int>> products_stoichio,
-            std::vector<double> rxn_rate, std::vector<double> propensity_val);
 
         std::string match_and_return_gene_type (std::string in_gene_type);
 

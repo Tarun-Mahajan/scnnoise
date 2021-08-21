@@ -65,39 +65,6 @@ namespace ScnnoiseInterface {
         init_rxn_order();
     }
 
-
-    void scNNoiSE::add_gene_state (int gene_id, int gene_type,
-        std::vector<int> GRN_rxn_IN, std::vector<int> GRN_species_OUT,
-        std::vector<int> molecule_count_cur,
-        std::vector<std::vector<int>> reactants,
-        std::vector<std::vector<int>> products,
-        std::vector<std::vector<int>> reactants_stoichio,
-        std::vector<std::vector<int>> products_stoichio,
-        std::vector<double> rxn_rate, std::vector<double> propensity_val) {
-            gene_rxn_channel_struct gene_state; // struct for gene state info
-            std::vector<rxn_struct> rxns(num_rxns_gene_type[gene_id]); // struct for all rxns for a gene
-            gene_state.gene_type = gene_type;
-            gene_state.GRN_rxn_IN = GRN_rxn_IN;
-            gene_state.GRN_species_OUT = GRN_species_OUT;
-            gene_state.molecule_count_cur = molecule_count_cur;
-            int rxn_index = 0;
-            for (auto &rxn: rxns) {
-                rxn.reactants = reactants[rxn_index];
-                rxn.products = products[rxn_index];
-                rxn.reactants_stoichio = reactants_stoichio[rxn_index];
-                rxn.products_stoichio = products_stoichio[rxn_index];
-                rxn.rxn_rate = rxn_rate[rxn_index];
-                rxn.propensity_val = propensity_val[rxn_index];
-                rxn_index += 1;
-            }
-            gene_state.rxns = rxns;
-            reactions.push_back(gene_state);
-
-            for (int id = 0; id < num_species_gene_type[gene_id]; ++id) {
-                molecule_count_history[gene_id][id][0] = molecule_count_cur[id];
-            }
-    }
-
     void scNNoiSE::init_molecule_count (std::string filepath) {
         // for (auto const &it : molecule_count_init) {
         //     int gene_id = gene_rev_map[it.first];

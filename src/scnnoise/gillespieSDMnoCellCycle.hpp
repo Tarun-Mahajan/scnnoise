@@ -21,11 +21,8 @@ namespace ScnnoiseInterface {
   public:
     /* Member functions */
     // Constructor
-    gillespieSDMnoCellCycle (int num_rxns, int num_genes,
-      std::vector<int> num_species_gene_type,
-      std::vector<int> num_rxns_gene_type, double max_time,
-      bool save_timeseries, int num_timepoints_save,
-      std::string count_save_file);
+    gillespieSDMnoCellCycle (int num_genes, std::string gene_filepath,
+        std::string GRN_filepath, std::string molecule_count_filepath);
 
     void sort_reaction (int &rxn_selected) override;
     void update_cell_cycle_state (double cur_time) override;

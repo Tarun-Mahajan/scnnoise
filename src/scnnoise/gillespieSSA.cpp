@@ -15,9 +15,10 @@ namespace ScnnoiseInterface {
   /* function definitions */
   // Constructor
   GillespieSSA::GillespieSSA (int num_genes, std::string gene_filepath,
-      std::string GRN_filepath, std::string molecule_count_filepath):
+      std::string GRN_filepath, std::string molecule_count_filepath,
+      std::string count_save_file):
     scNNoiSE (num_genes, gene_filepath,
-      GRN_filepath, molecule_count_filepath) {
+      GRN_filepath, molecule_count_filepath, count_save_file) {
   }
 
   inline double GillespieSSA::sample_time_step (RNG &generator) {

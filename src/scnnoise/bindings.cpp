@@ -15,13 +15,16 @@ namespace py = pybind11;
 PYBIND11_MODULE(_scnnoise, m) {
     // py::bind_vector<std::vector<int>>(m, "VectorInt", py::buffer_protocol());
     py::class_<ScnnoiseInterface::scNNoiSE>(m, "scNNoiSE")
+        .def("add_new_dependency_graph",
+            &ScnnoiseInterface::scNNoiSE::add_new_dependency_graph);
     py::class_<ScnnoiseInterface::GillespieSSA,
               ScnnoiseInterface::scNNoiSE>(m, "GillespieSSA")
         .def("simulate", &ScnnoiseInterface::GillespieSSA::simulate);
     py::class_<ScnnoiseInterface::gillespieSDMnoCellCycle,
               ScnnoiseInterface::GillespieSSA>(m, "gillespieSDMnoCellCycle")
-        .def(py::init<int, int, std::vector<int>, std::vector<int>,
-             double, bool, int, std::string>());
+        .def(py::init<int, std::string,
+            std::string, std::string,
+            std::string>());
 
 #ifdef VERSION_INFO
  m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);

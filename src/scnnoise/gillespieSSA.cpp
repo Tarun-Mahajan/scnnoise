@@ -195,7 +195,7 @@ namespace ScnnoiseInterface {
                 std::string gene_type_cur = reactions[dest].gene_type;
                 gene_type_struct gene_info_cur = gene_type_info[gene_type_cur];
                 std::string rxn_IN =
-                    gene_info_cur.rxn_map(network[0].edge_rxn_params[gene_selected][children_counter].rxn_IN);
+                    gene_info_cur.rxn_map[network[0].edge_rxn_params[gene_selected][children_counter].rxn_IN];
                 auto it = std::find(GRN_out_changed.begin(),
                     GRN_out_changed.end(),
                     species_OUT);

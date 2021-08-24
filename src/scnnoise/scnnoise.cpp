@@ -710,7 +710,7 @@ namespace ScnnoiseInterface {
                 network[0].adj_list[src].end(),
                 gene_selected);
             int gene_selected_id = std::distance(network[0].adj_list[src].begin(),
-                gene_selected);
+                it);
             if (network[0].edge_rxn_params[src][gene_selected_id].rxn_IN == rxn) {
                 int out_species =
                     network[0].edge_rxn_params[src][gene_selected_id].species_OUT;

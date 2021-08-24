@@ -205,7 +205,8 @@ namespace ScnnoiseInterface {
                         rxn_IN);
                     total_propensity += new_propensity;
                     reactions[dest].propensity_vals[rxn_IN] = new_propensity;
-                    rxn_order[rxn_order_map[gene_map[dest]][rxn_IN]] = new_propensity;
+                    rxn_order[rxn_order_map[gene_map[dest]][rxn_IN]].propensity_val =
+                        new_propensity;
                 }
                 ++children_counter;
             }

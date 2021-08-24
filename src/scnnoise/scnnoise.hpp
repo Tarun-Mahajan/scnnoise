@@ -543,7 +543,7 @@ namespace ScnnoiseInterface {
         /********************************************//**
         \brief Function to compute gene expression regulation by transcription factors
         ***********************************************/
-        double regulation_function (int gene_selected, int rxn);
+        // double regulation_function (int gene_selected, int rxn);
 
         /********************************************//**
         \brief Hill function for regulation

@@ -495,7 +495,7 @@ namespace ScnnoiseInterface {
 
         gene_type_struct create_two_state_nascent_type ();
 
-        gene_type_struct scNNoiSE::create_two_state_reduced_type ();
+        gene_type_struct create_two_state_reduced_type ();
 
         void init_max_rxn_rate_change ();
 

@@ -143,18 +143,18 @@ namespace ScnnoiseInterface {
         std::string gene_return_type;
         bool is_found = false;
         for (auto const & it : gene_type_info) {
-            in_gene_type_lower = in_gene_type;
+            std::string in_gene_type_lower = in_gene_type;
             std::transform(in_gene_type_lower.begin(), in_gene_type_lower.end(),
                 in_gene_type_lower.begin(), ::tolower);
-            in_gene_type_lower_nospace =
+            std::string in_gene_type_lower_nospace =
                 in_gene_type_lower.erase(std::remove_if(in_gene_type_lower.begin(),
                 in_gene_type_lower.end(), ::isspace), in_gene_type_lower.end());
 
-            gene_type = it.first;
-            gene_type_lower = gene_type;
+            std::string gene_type = it.first;
+            std::string gene_type_lower = gene_type;
             std::transform(gene_type_lower.begin(), gene_type_lower.end(),
                 gene_type_lower.begin(), ::tolower);
-            gene_type_lower_nospace =
+            std::string gene_type_lower_nospace =
                 gene_type_lower.erase(std::remove_if(gene_type_lower.begin(),
                 gene_type_lower.end(), ::isspace), gene_type_lower.end());
             if ((gene_type == in_gene_type) ||

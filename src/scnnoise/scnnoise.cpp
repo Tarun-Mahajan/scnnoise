@@ -201,7 +201,6 @@ namespace ScnnoiseInterface {
             GRN_species_OUT.clear();
             rxn_names.clear();
             rxn_rates.clear();
-            GRN_activation.clear();
             std::istringstream str_stream(row_text);
 
             unsigned int id_counter = 0;

@@ -59,7 +59,7 @@ namespace ScnnoiseInterface {
     //   std::vector<int> &rxn_selected_products_stoichio);
 
     // Write column names for count_save_file
-    void start_molecule_count_history_file ()
+    void start_molecule_count_history_file ();
 
     // Update molecule count history
     void GillespieSSA::update_molecule_count_history (int &num_history, int &num_save_loop,

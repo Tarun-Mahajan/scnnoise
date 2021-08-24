@@ -487,7 +487,7 @@ namespace ScnnoiseInterface {
 
         void create_init_gene_type_info ();
 
-        gene_type_struct create_constitutive_exp_type ();
+        gene_type_struct create_constitutive_type ();
 
         gene_type_struct create_constitutive_nascent_type ();
 

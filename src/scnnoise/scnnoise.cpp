@@ -396,15 +396,15 @@ namespace ScnnoiseInterface {
         rxns_[str_].products_stoichio["gene"] = 1;
         rxns_[str_].products_stoichio["mRNA"] = 1;
         // mRNA decay
-        std::string str_ = "mRNA decay";
+        str_ = "mRNA decay";
         rxns_[str_].reactants_stoichio["mRNA"] = 1;
         // Translation rxn
-        std::string str_ = "translation";
+        str_ = "translation";
         rxns_[str_].reactants_stoichio["mRNA"] = 1;
         rxns_[str_].products_stoichio["mRNA"] = 1;
         rxns_[str_].products_stoichio["protein"] = 1;
         // protein decay
-        std::string str_ = "protein decay";
+        str_ = "protein decay";
         rxns_[str_].reactants_stoichio["protein"] = 1;
         gene_info.rxns = rxns_;
         gene_info.gene_rxn_dependency.push_back(
@@ -447,19 +447,19 @@ namespace ScnnoiseInterface {
         rxns_[str_].products_stoichio["gene"] = 1;
         rxns_[str_].products_stoichio["nascent mRNA"] = 1;
         // mRNA maturation
-        std::string str_ = "mRNA maturation";
+        str_ = "mRNA maturation";
         rxns_[str_].reactants_stoichio["nascent mRNA"] = 1;
         rxns_[str_].products_stoichio["mature mRNA"] = 1;
         // mRNA decay
-        std::string str_ = "mRNA decay";
+        str_ = "mRNA decay";
         rxns_[str_].reactants_stoichio["mature mRNA"] = 1;
         // Translation rxn
-        std::string str_ = "translation";
+        str_ = "translation";
         rxns_[str_].reactants_stoichio["mature mRNA"] = 1;
         rxns_[str_].products_stoichio["mature mRNA"] = 1;
         rxns_[str_].products_stoichio["protein"] = 1;
         // protein decay
-        std::string str_ = "protein decay";
+        str_ = "protein decay";
         rxns_[str_].reactants_stoichio["protein"] = 1;
         gene_info.rxns = rxns_;
         gene_info.gene_rxn_dependency.push_back(
@@ -508,12 +508,12 @@ namespace ScnnoiseInterface {
         rxns_[str_].reactants_stoichio["gene on"] = 1;
         rxns_[str_].products_stoichio["gene off"] = 1;
         // Transcription
-        std::string str_ = "transcription";
+        str_ = "transcription";
         rxns_[str_].reactants_stoichio["gene on"] = 1;
         rxns_[str_].products_stoichio["gene on"] = 1;
         rxns_[str_].products_stoichio["mRNA"] = 1;
         // mRNA decay
-        std::string str_ = "mRNA decay";
+        str_ = "mRNA decay";
         rxns_[str_].reactants_stoichio["mRNA"] = 1;
         // Translation rxn
         std::string str_ = "translation";
@@ -521,7 +521,7 @@ namespace ScnnoiseInterface {
         rxns_[str_].products_stoichio["mRNA"] = 1;
         rxns_[str_].products_stoichio["protein"] = 1;
         // protein decay
-        std::string str_ = "protein decay";
+        str_ = "protein decay";
         rxns_[str_].reactants_stoichio["protein"] = 1;
         gene_info.rxns = rxns_;
         gene_info.gene_rxn_dependency.push_back(
@@ -572,28 +572,28 @@ namespace ScnnoiseInterface {
         rxns_[str_].reactants_stoichio["gene off"] = 1;
         rxns_[str_].products_stoichio["gene on"] = 1;
         // Gene off
-        std::string str_ = "gene off";
+        str_ = "gene off";
         rxns_[str_].reactants_stoichio["gene on"] = 1;
         rxns_[str_].products_stoichio["gene off"] = 1;
         // Transcription
-        std::string str_ = "transcription";
+        str_ = "transcription";
         rxns_[str_].reactants_stoichio["gene on"] = 1;
         rxns_[str_].products_stoichio["gene on"] = 1;
         rxns_[str_].products_stoichio["nascent mRNA"] = 1;
         // mRNA maturation
-        std::string str_ = "mRNA maturation";
+        str_ = "mRNA maturation";
         rxns_[str_].reactants_stoichio["nascent mRNA"] = 1;
         rxns_[str_].products_stoichio["mature mRNA"] = 1;
         // mRNA decay
-        std::string str_ = "mRNA decay";
+        str_ = "mRNA decay";
         rxns_[str_].reactants_stoichio["mature mRNA"] = 1;
         // Translation rxn
-        std::string str_ = "translation";
+        str_ = "translation";
         rxns_[str_].reactants_stoichio["mature mRNA"] = 1;
         rxns_[str_].products_stoichio["mature mRNA"] = 1;
         rxns_[str_].products_stoichio["protein"] = 1;
         // protein decay
-        std::string str_ = "protein decay";
+        str_ = "protein decay";
         rxns_[str_].reactants_stoichio["protein"] = 1;
         gene_info.rxns = rxns_;
         gene_info.gene_rxn_dependency.push_back(
@@ -639,15 +639,15 @@ namespace ScnnoiseInterface {
         std::string str_ = "transcription";
         rxns_[str_].products_stoichio["mRNA"] = 1;
         // mRNA decay
-        std::string str_ = "mRNA decay";
+        str_ = "mRNA decay";
         rxns_[str_].reactants_stoichio["mRNA"] = 1;
         // Translation rxn
-        std::string str_ = "translation";
+        str_ = "translation";
         rxns_[str_].reactants_stoichio["mRNA"] = 1;
         rxns_[str_].products_stoichio["mRNA"] = 1;
         rxns_[str_].products_stoichio["protein"] = 1;
         // protein decay
-        std::string str_ = "protein decay";
+        str_ = "protein decay";
         rxns_[str_].reactants_stoichio["protein"] = 1;
         gene_info.rxns = rxns_;
         gene_info.gene_rxn_dependency.push_back(

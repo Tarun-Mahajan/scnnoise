@@ -679,6 +679,7 @@ namespace ScnnoiseInterface {
     }
 
     void scNNoiSE::compute_total_propensity () {
+        total_propensity = 0;
         for (auto const &rxn : rxn_order) {
             total_propensity += rxn.propensity_val;
         }

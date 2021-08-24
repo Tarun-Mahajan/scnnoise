@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <cctype>
+#include <sstream>
 #include <string>
 #include <math.h>
 // #include "graph.hpp"

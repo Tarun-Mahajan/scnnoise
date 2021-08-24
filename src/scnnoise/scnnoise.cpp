@@ -753,9 +753,13 @@ namespace ScnnoiseInterface {
                         GRN_int_param.push_back(gene_rev_map[word]);
                     }else {
                         if (id_counter == 5) {
-                            GRN_int_param.push_back(rxn_rev_map[word]);
+                            gene_type_struct gene_info =
+                                gene_type_info[gene_map[GRN_int_param[1]]];
+                            GRN_int_param.push_back(gene_info.rxn_rev_map[word]);
                         }else {
-                            GRN_int_param.push_back(species_rev_map[word]);
+                            gene_type_struct gene_info =
+                                gene_type_info[gene_map[GRN_int_param[0]]];
+                            GRN_int_param.push_back(gene_info.species_rev_map[word]);
                         }
                     }
                 }else{

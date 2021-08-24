@@ -270,8 +270,8 @@ namespace ScnnoiseInterface {
                 std::vector<int> parents;
                 network[0].find_parents(gene_id, parents);
                 for (auto const &src : parents) {
-                    for (std::size_t dest = 0; dest < adj_list[src].size(); ++dest) {
-                        if ((adj_list[src][dest] == gene_id) &&
+                    for (std::size_t dest = 0; dest < network[0].adj_list[src].size(); ++dest) {
+                        if ((network[0].adj_list[src][dest] == gene_id) &&
                             (network[0].edge_rxn_params[src][dest].rxn_IN == rxn_name)) {
                                 std::string species_out = network[0].edge_rxn_params[src][dest].species_OUT;
                                 int species_out_id =

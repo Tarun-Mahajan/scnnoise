@@ -178,7 +178,7 @@ namespace ScnnoiseInterface {
                 rxn_name_cur);
             total_propensity += new_propensity;
             reactions[gene_selected].propensity_vals[rxn_name_cur] = new_propensity;
-            rxn_order[rxn_order_map[gene_selected][rxn_name_cur]] = new_propensity;
+            rxn_order[rxn_order_map[gene_map[gene_selected]][rxn_name_cur]] = new_propensity;
         }
 
 

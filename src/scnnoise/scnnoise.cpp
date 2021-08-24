@@ -516,7 +516,7 @@ namespace ScnnoiseInterface {
         str_ = "mRNA decay";
         rxns_[str_].reactants_stoichio["mRNA"] = 1;
         // Translation rxn
-        std::string str_ = "translation";
+        str_ = "translation";
         rxns_[str_].reactants_stoichio["mRNA"] = 1;
         rxns_[str_].products_stoichio["mRNA"] = 1;
         rxns_[str_].products_stoichio["protein"] = 1;

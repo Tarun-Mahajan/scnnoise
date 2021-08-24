@@ -275,9 +275,7 @@ namespace ScnnoiseInterface {
                     for (std::size_t dest = 0; dest < network[0].adj_list[src].size(); ++dest) {
                         if ((network[0].adj_list[src][dest] == gene_id) &&
                             (network[0].edge_rxn_params[src][dest].rxn_IN == rxn_id)) {
-                                std::string species_out = network[0].edge_rxn_params[src][dest].species_OUT;
-                                int species_out_id =
-                                    gene_type_info[reactions[src].gene_type].species_rev_map[species_out];
+                                int species_out_id = network[0].edge_rxn_params[src][dest].species_OUT;
                                 int mol_count = reactions[src].molecule_count_cur[species_out_id];
                                 regulation_function_factor +=
                                     hill_function(mol_count,

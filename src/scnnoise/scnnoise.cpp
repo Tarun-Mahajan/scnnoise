@@ -366,19 +366,19 @@ namespace ScnnoiseInterface {
     gene_type_struct scNNoiSE::create_constitutive_type () {
         gene_type_struct gene_info;
         // Species are 0:gene, 1:mRNA, 2:protein
-        gene_info.species_rev_map['gene'] = 0;
-        gene_info.species_rev_map['mRNA'] = 1;
-        gene_info.species_rev_map['protein'] = 2;
+        gene_info.species_rev_map["gene"] = 0;
+        gene_info.species_rev_map["mRNA"] = 1;
+        gene_info.species_rev_map["protein"] = 2;
         for (auto const &it : gene_info.species_rev_map) {
             gene_info.species_map[it.second] = it.first;
         }
         gene_info.num_species = gene_info.species_map.size();
         // Reactions are 0:transcription, 1:mRNA decay, 2:translation,
         // 3:protein decay
-        gene_info.rxn_map[0] = 'transcription';
-        gene_info.rxn_map[1] = 'mRNA decay';
-        gene_info.rxn_map[2] = 'translation';
-        gene_info.rxn_map[3] = 'protein decay';
+        gene_info.rxn_map[0] = "transcription";
+        gene_info.rxn_map[1] = "mRNA decay";
+        gene_info.rxn_map[2] = "translation";
+        gene_info.rxn_map[3] = "protein decay";
         for (auto const &it : gene_info.rxn_map) {
             gene_info.rxn_rev_map[it.second] = it.first;
         }
@@ -415,21 +415,21 @@ namespace ScnnoiseInterface {
     gene_type_struct scNNoiSE::create_constitutive_nascent_type () {
         gene_type_struct gene_info;
         // Species are 0:gene, 1:nascent mRNA, 2:mature mRNA, 3:protein
-        gene_info.species_rev_map['gene'] = 0;
-        gene_info.species_rev_map['nascent mRNA'] = 1;
-        gene_info.species_rev_map['mature mRNA'] = 2;
-        gene_info.species_rev_map['protein'] = 3;
+        gene_info.species_rev_map["gene"] = 0;
+        gene_info.species_rev_map["nascent mRNA"] = 1;
+        gene_info.species_rev_map["mature mRNA"] = 2;
+        gene_info.species_rev_map["protein"] = 3;
         for (auto const &it : gene_info.species_rev_map) {
             gene_info.species_map[it.second] = it.first;
         }
         gene_info.num_species = gene_info.species_map.size();
         // Reactions are 0:transcription, 1:mRNA maturation, 2:mRNA decay, 3:translation,
         // 4:protein decay
-        gene_info.rxn_map[0] = 'transcription';
-        gene_info.rxn_map[1] = 'mRNA maturation';
-        gene_info.rxn_map[2] = 'mRNA decay';
-        gene_info.rxn_map[3] = 'translation';
-        gene_info.rxn_map[4] = 'protein decay';
+        gene_info.rxn_map[0] = "transcription";
+        gene_info.rxn_map[1] = "mRNA maturation";
+        gene_info.rxn_map[2] = "mRNA decay";
+        gene_info.rxn_map[3] = "translation";
+        gene_info.rxn_map[4] = "protein decay";
         for (auto const &it : gene_info.rxn_map) {
             gene_info.rxn_rev_map[it.second] = it.first;
         }
@@ -472,22 +472,22 @@ namespace ScnnoiseInterface {
     gene_type_struct scNNoiSE::create_two_state_type () {
         gene_type_struct gene_info;
         // Species are 0:gene off, 1:gene on, 2:mRNA, 3:protein
-        gene_info.species_rev_map['gene off'] = 0;
-        gene_info.species_rev_map['gene on'] = 1;
-        gene_info.species_rev_map['mRNA'] = 2;
-        gene_info.species_rev_map['protein'] = 3;
+        gene_info.species_rev_map["gene off"] = 0;
+        gene_info.species_rev_map["gene on"] = 1;
+        gene_info.species_rev_map["mRNA"] = 2;
+        gene_info.species_rev_map["protein"] = 3;
         for (auto const &it : gene_info.species_rev_map) {
             gene_info.species_map[it.second] = it.first;
         }
         gene_info.num_species = gene_info.species_map.size();
         // Reactions are 0:gene on, 1:gene off 2:transcription, 3:mRNA decay,
         // 4:translation, 5:protein decay
-        gene_info.rxn_map[0] = 'gene on';
-        gene_info.rxn_map[1] = 'gene off';
-        gene_info.rxn_map[2] = 'transcription';
-        gene_info.rxn_map[3] = 'mRNA decay';
-        gene_info.rxn_map[4] = 'translation';
-        gene_info.rxn_map[5] = 'protein decay';
+        gene_info.rxn_map[0] = "gene on";
+        gene_info.rxn_map[1] = "gene off";
+        gene_info.rxn_map[2] = "transcription";
+        gene_info.rxn_map[3] = "mRNA decay";
+        gene_info.rxn_map[4] = "translation";
+        gene_info.rxn_map[5] = "protein decay";
         for (auto const &it : gene_info.rxn_map) {
             gene_info.rxn_rev_map[it.second] = it.first;
         }
@@ -538,24 +538,24 @@ namespace ScnnoiseInterface {
     gene_type_struct scNNoiSE::create_two_state_nascent_type () {
         gene_type_struct gene_info;
         // Species are 0:gene off, 1:gene on, 2:mRNA, 3:protein
-        gene_info.species_rev_map['gene off'] = 0;
-        gene_info.species_rev_map['gene on'] = 1;
-        gene_info.species_rev_map['nascent mRNA'] = 2;
-        gene_info.species_rev_map['mature mRNA'] = 3;
-        gene_info.species_rev_map['protein'] = 4;
+        gene_info.species_rev_map["gene off"] = 0;
+        gene_info.species_rev_map["gene on"] = 1;
+        gene_info.species_rev_map["nascent mRNA"] = 2;
+        gene_info.species_rev_map["mature mRNA"] = 3;
+        gene_info.species_rev_map["protein"] = 4;
         for (auto const &it : gene_info.species_rev_map) {
             gene_info.species_map[it.second] = it.first;
         }
         gene_info.num_species = gene_info.species_map.size();
         // Reactions are 0:gene on, 1:gene off 2:transcription, 3:mRNA decay,
         // 4:translation, 5:protein decay
-        gene_info.rxn_map[0] = 'gene on';
-        gene_info.rxn_map[1] = 'gene off';
-        gene_info.rxn_map[2] = 'transcription';
-        gene_info.rxn_map[3] = 'mRNA maturation';
-        gene_info.rxn_map[4] = 'mRNA decay';
-        gene_info.rxn_map[5] = 'translation';
-        gene_info.rxn_map[6] = 'protein decay';
+        gene_info.rxn_map[0] = "gene on";
+        gene_info.rxn_map[1] = "gene off";
+        gene_info.rxn_map[2] = "transcription";
+        gene_info.rxn_map[3] = "mRNA maturation";
+        gene_info.rxn_map[4] = "mRNA decay";
+        gene_info.rxn_map[5] = "translation";
+        gene_info.rxn_map[6] = "protein decay";
         for (auto const &it : gene_info.rxn_map) {
             gene_info.rxn_rev_map[it.second] = it.first;
         }
@@ -612,18 +612,18 @@ namespace ScnnoiseInterface {
     gene_type_struct scNNoiSE::create_two_state_reduced_type () {
         gene_type_struct gene_info;
         // Species are 0:gene off, 1:gene on, 2:mRNA, 3:protein
-        gene_info.species_rev_map['mRNA'] = 0;
-        gene_info.species_rev_map['protein'] = 1;
+        gene_info.species_rev_map["mRNA"] = 0;
+        gene_info.species_rev_map["protein"] = 1;
         for (auto const &it : gene_info.species_rev_map) {
             gene_info.species_map[it.second] = it.first;
         }
         gene_info.num_species = gene_info.species_map.size();
         // Reactions are 0:gene on, 1:gene off 2:transcription, 3:mRNA decay,
         // 4:translation, 5:protein decay
-        gene_info.rxn_map[0] = 'transcription';
-        gene_info.rxn_map[1] = 'mRNA decay';
-        gene_info.rxn_map[2] = 'translation';
-        gene_info.rxn_map[3] = 'protein decay';
+        gene_info.rxn_map[0] = "transcription";
+        gene_info.rxn_map[1] = "mRNA decay";
+        gene_info.rxn_map[2] = "translation";
+        gene_info.rxn_map[3] = "protein decay";
         for (auto const &it : gene_info.rxn_map) {
             gene_info.rxn_rev_map[it.second] = it.first;
         }
@@ -656,10 +656,10 @@ namespace ScnnoiseInterface {
     }
 
     void scNNoiSE::create_init_gene_type_info () {
-        gene_type_info['constitutive'] = create_constitutive_type();
-        gene_type_info['constitutive nascent'] = create_constitutive_type();
-        gene_type_info['two-state'] = create_two_state_type();
-        gene_type_info['two-state nascent'] = create_two_state_nascent_type();
+        gene_type_info["constitutive"] = create_constitutive_type();
+        gene_type_info["constitutive nascent"] = create_constitutive_type();
+        gene_type_info["two-state"] = create_two_state_type();
+        gene_type_info["two-state nascent"] = create_two_state_nascent_type();
     }
 
     int scNNoiSE::factorial (int num) {

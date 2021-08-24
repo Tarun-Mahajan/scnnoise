@@ -271,7 +271,7 @@ namespace ScnnoiseInterface {
         ++num_history;
     }
 
-    void start_molecule_count_history_file () {
+    void GillespieSSA::start_molecule_count_history_file () {
         std::ofstream outfile;
         outfile.open(count_save_file, std::ios_base::app);
         outfile << "time" << ",";

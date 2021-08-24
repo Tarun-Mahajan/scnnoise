@@ -191,7 +191,7 @@ namespace ScnnoiseInterface {
             unsigned int children_counter = 0;
             for (auto const &dest : rxn_selected_children_GRN) {
                 std::string species_OUT =
-                    gene_info.species_map(network[0].edge_rxn_params[gene_selected][children_counter].species_OUT);
+                    gene_info.species_map[network[0].edge_rxn_params[gene_selected][children_counter].species_OUT];
                 std::string gene_type_cur = reactions[dest].gene_type;
                 gene_type_struct gene_info_cur = gene_type_info[gene_type_cur];
                 std::string rxn_IN =

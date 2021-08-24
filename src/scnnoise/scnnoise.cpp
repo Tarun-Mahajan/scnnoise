@@ -261,6 +261,8 @@ namespace ScnnoiseInterface {
 
     double scNNoiSE::compute_regulation_function (int gene_id, std::string rxn_name) {
         double regulation_function_factor = 0;
+        gene_type_struct gene_info = gene_type_info[gene_map[gene_id]];
+        int rxn_id = gene_info.rxn_rev_map[rxn_name];
         if (reactions[gene_id].GRN_rxn_IN.size() != 0){
             auto it = std::find(reactions[gene_id].GRN_rxn_IN.begin(),
                 reactions[gene_id].GRN_rxn_IN.end(),
@@ -272,7 +274,7 @@ namespace ScnnoiseInterface {
                 for (auto const &src : parents) {
                     for (std::size_t dest = 0; dest < network[0].adj_list[src].size(); ++dest) {
                         if ((network[0].adj_list[src][dest] == gene_id) &&
-                            (network[0].edge_rxn_params[src][dest].rxn_IN == rxn_name)) {
+                            (network[0].edge_rxn_params[src][dest].rxn_IN == rxn_id)) {
                                 std::string species_out = network[0].edge_rxn_params[src][dest].species_OUT;
                                 int species_out_id =
                                     gene_type_info[reactions[src].gene_type].species_rev_map[species_out];

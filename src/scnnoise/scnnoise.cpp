@@ -504,7 +504,7 @@ namespace ScnnoiseInterface {
         rxns_[str_].reactants_stoichio["gene off"] = 1;
         rxns_[str_].products_stoichio["gene on"] = 1;
         // Gene off
-        std::string str_ = "gene off";
+        str_ = "gene off";
         rxns_[str_].reactants_stoichio["gene on"] = 1;
         rxns_[str_].products_stoichio["gene off"] = 1;
         // Transcription

@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <math.h>
 // #include "graph.hpp"

@@ -11,7 +11,7 @@ class CellType:
         self.rxn_rates = rxn_rates
         self.children = children
 
-    def sim_cell_type(num_samples, simulator):
+    def sim_cell_type(num_samples, simulator, count_csv, sample_csv):
         """
         Params
             num_samples - number of sample reads to output for this cell type
@@ -27,7 +27,10 @@ class CellType:
             #for steady state check sergio method
         
         #Step 2: Sample num_samples reads for each gene
+        sim_out = pd.read_csv(count_csv)
+
         #Step 3: Recusively run sim_transition() on all children (this could be parallelized)
+        
         
         #recursive case
         if len(children) != 0:
@@ -35,7 +38,7 @@ class CellType:
                 cell_type.sim_transition(num_samples, simulator)
                 
         
-    def sim_transition(num_samples, simulator):
+    def sim_transition(num_samples, simulator, count_save_file):
         """
         Params
             num_samples - number of sample reads to output for this cell type

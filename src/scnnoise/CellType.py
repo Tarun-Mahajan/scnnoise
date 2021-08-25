@@ -1,5 +1,6 @@
 from scnnoise import _scnnoise
 import pandas as pd
+import numpy as np
 
 class CellType:
     def __init__(self, lineageName,rxn_rates, children):
@@ -23,9 +24,13 @@ class CellType:
         and outputs num_samples x genes Matrix of raw mRNA counts
         """
         #Recursive function (careful with passing by reference/by copy)
-        #Step 1: simulate gene expression to steady state
+        #Step 1: simulate gene expression at steady state
             #a. it would be nice to be able to pass the 4 to simulate for into the simulate function
-        simulator.simulate()
+        f = open(self.count_csv, "w")
+        f.truncate()
+        f.close()
+        simulator.simulate(1000)
+        pd.read_csv(self.count_csv)
             #for steady state check sergio method
         
         #Step 2: Sample num_samples reads for each gene
@@ -62,7 +67,13 @@ class CellType:
             #b. if steady states are similar mbe set simulation time?
             
         #try t-test for mean for all genes (for each thousand timepoints) compared to calculated steady state for current cell_type
-        simulator.simulate()
+        f = open(self.count_csv, "w")
+        f.truncate()
+        f.close()        
+        simulator.simulate(1000)
+        pd.read_csv(self.count_csv)
+
+
         
         #Step 3: Sample num_sample transition cells and store to output and run sim_cell_type
         self.sim_cell_type(num_samples, simulator)

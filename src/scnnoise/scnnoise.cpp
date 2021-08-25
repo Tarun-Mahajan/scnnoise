@@ -782,7 +782,7 @@ namespace ScnnoiseInterface {
         }
     }
 
-    void set_simulation_params (double max_time, bool save_timeseries,
+    void scNNoiSE::set_simulation_params (double max_time, bool save_timeseries,
         int save_timeseries) {
         this->max_time = max_time;
         this->save_timeseries = save_timeseries;

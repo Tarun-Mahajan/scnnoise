@@ -10,8 +10,10 @@ class CellType:
         self.lineageName = lineageName
         self.rxn_rates = rxn_rates
         self.children = children
+        self.count_csv = count_csv
+        self.sample_csv = sample_csv
 
-    def sim_cell_type(num_samples, simulator, count_csv, sample_csv):
+    def sim_cell_type(num_samples, simulator):
         """
         Params
             num_samples - number of sample reads to output for this cell type
@@ -22,12 +24,13 @@ class CellType:
         """
         #Recursive function (careful with passing by reference/by copy)
         #Step 1: simulate gene expression to steady state
-            #a. it would be nice to be able to pass the time to simulate for into the simulate function
+            #a. it would be nice to be able to pass the 4 to simulate for into the simulate function
         simulator.simulate()
             #for steady state check sergio method
         
         #Step 2: Sample num_samples reads for each gene
-        sim_out = pd.read_csv(count_csv)
+        sim_out = pd.read_csv(self.count_csv)
+        
 
         #Step 3: Recusively run sim_transition() on all children (this could be parallelized)
         
@@ -38,7 +41,7 @@ class CellType:
                 cell_type.sim_transition(num_samples, simulator)
                 
         
-    def sim_transition(num_samples, simulator, count_save_file):
+    def sim_transition(num_samples, simulator):
         """
         Params
             num_samples - number of sample reads to output for this cell type

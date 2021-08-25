@@ -306,6 +306,7 @@ namespace ScnnoiseInterface {
         int num_save_loop = 0;
         update_molecule_count_history(num_history, num_save_loop,
             simulation_ended);
+        init_cell_cycle_state (generator);
 
         while (!stop_sim) {
             double next_time_step = sample_time_step(generator);

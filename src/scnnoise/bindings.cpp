@@ -16,6 +16,8 @@ PYBIND11_MODULE(_scnnoise, m) {
     // py::bind_vector<std::vector<int>>(m, "VectorInt", py::buffer_protocol());
     py::class_<ScnnoiseInterface::scNNoiSE>(m, "scNNoiSE")
         .def("add_new_dependency_graph",
+            &ScnnoiseInterface::scNNoiSE::add_new_dependency_graph)
+        .def("set_simulation_params",
             &ScnnoiseInterface::scNNoiSE::add_new_dependency_graph);
     py::class_<ScnnoiseInterface::GillespieSSA,
               ScnnoiseInterface::scNNoiSE>(m, "GillespieSSA")

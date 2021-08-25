@@ -493,7 +493,7 @@ namespace ScnnoiseInterface {
      A pure virtual function for simulating stochastic gene
      expression. Needs to be overridden in any derived class.
      ***********************************************/
-    virtual void simulate () = 0;
+    virtual void simulate (int sim_time) = 0;
 
     /********************************************//**
      \brief Function to compute gene expression regulation by transcription factors

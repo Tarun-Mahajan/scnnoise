@@ -112,20 +112,26 @@ namespace ScnnoiseInterface {
 
         // Update fired reaction reactants
         for (auto const &reactants_ : gene_info.rxns[rxn_name].reactants_stoichio) {
+            double reactant_factor =
+                stoichio_factors[gene_selected].rxns[rxn_name].reactants_factors[reactants_.first];
             int reactant_id = gene_info.species_rev_map[reactants_.first];
             auto it = gene_info.rxns[rxn_name].products_stoichio.find(reactants_.first);
             if (it == gene_info.rxns[rxn_name].products_stoichio.end()) {
                 reactions[gene_selected].molecule_count_cur[reactant_id] -=
-                    reactants_.second;
+                    int (reactants_.second * reactant_factor);
                 auto it_out = std::find(GRN_species_OUT.begin(), GRN_species_OUT.end(),
                     reactants_.first);
                 if (it_out != GRN_species_OUT.end()) {
                     GRN_out_changed.push_back(reactants_.first);
                 }
             }else{
-                if (it->second - reactants_.second != 0) {
+                double product_factor =
+                    stoichio_factors[gene_selected].rxns[rxn_name].products_factors[reactants_.first];
+                int stoichio_diff = int (it->second * product_factor -
+                    reactants_.second * reactant_factor);
+                if (stoichio_diff != 0) {
                     reactions[gene_selected].molecule_count_cur[reactant_id] +=
-                        it->second - reactants_.second;
+                        stoichio_diff;
                     auto it_out = std::find(GRN_species_OUT.begin(), GRN_species_OUT.end(),
                         reactants_.first);
                     if (it_out != GRN_species_OUT.end()) {
@@ -137,11 +143,13 @@ namespace ScnnoiseInterface {
 
         // Update fired reaction products
         for (auto const &products_ : gene_info.rxns[rxn_name].products_stoichio) {
+            double product_factor =
+                stoichio_factors[gene_selected].rxns[rxn_name].products_factors[products_.first];
             int product_id = gene_info.species_rev_map[products_.first];
             auto it = gene_info.rxns[rxn_name].reactants_stoichio.find(products_.first);
             if (it == gene_info.rxns[rxn_name].reactants_stoichio.end()) {
                 reactions[gene_selected].molecule_count_cur[product_id] +=
-                    products_.second;
+                    int (products_.second * product_factor);
                 auto it_out = std::find(GRN_species_OUT.begin(), GRN_species_OUT.end(),
                     products_.first);
                 if (it_out != GRN_species_OUT.end()) {

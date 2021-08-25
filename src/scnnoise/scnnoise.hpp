@@ -42,6 +42,23 @@ namespace ScnnoiseInterface {
         std::vector<GraphSpace::GraphDependency> gene_rxn_dependency;
     };
 
+    struct stoichio_factor_species_struct {
+        // std::vector<int> reactants;
+        // std::vector<int> products;
+        std::map<std::string, double> reactants_factors;
+        std::map<std::string, double> products_factors;
+        // double rxn_rate;
+        // double propensity_val;
+    };
+
+    struct stoichio_factor_struct {
+        // std::vector<int> reactants;
+        // std::vector<int> products;
+        std::map<std::string, stoichio_factor_species_struct> rxns;
+        // double rxn_rate;
+        // double propensity_val;
+    };
+
   /********************************************//**
    \brief Struct to store information for all reaction
           channels for a gene.
@@ -356,6 +373,8 @@ namespace ScnnoiseInterface {
         // std::vector<std::map<int, std::map<std:string, std::vector<int>>>> reactions;
         std::vector<gene_rxn_channel_struct> reactions;
 
+        std::vector<stoichio_factor_struct> stoichio_factors;
+
         std::map<int, std::map<std::string, double>> max_rxn_rate_change;
 
 
@@ -553,7 +572,11 @@ namespace ScnnoiseInterface {
         \brief Hill function for regulation
         ***********************************************/
         double hill_function (int tf_count, double hill_coeff, double half_maximal,
-                         bool activator, double prob_contr);
+            bool activator, double prob_contr);
+
+        void init_stoichio_factors();
+
+
 
 
     };

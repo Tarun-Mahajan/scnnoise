@@ -66,6 +66,26 @@ namespace ScnnoiseInterface {
 
         // Initialize rxn order
         init_rxn_order();
+
+        // Initialize stoichio factors
+        init_stoichio_factors();
+    }
+
+    void init_stoichio_factors() {
+        for (std::size_t gene = 0; gene < num_genes; ++gene) {
+            gene_type_struct gene_info = gene_type_info[reactions[gene].gene_type];
+            for (auto rxn_ : gene_info.rxns) {
+                stoichio_factor_species_struct species_factors;
+                for (auto reactant_ : rxn_.second.reactants_stoichio) {
+                    species_factors.reactants_factors[reactant_.first] = 1;
+                }
+                for (auto product_ : rxn_.second.products_stoichio) {
+                    species_factors.products_factors[product_.first] = 1;
+                }
+                stoichio_factors[gene].rxns[rxn_.first] =
+                    reactant_factors;
+            }
+        }
     }
 
     void scNNoiSE::init_molecule_count (std::string filepath) {
@@ -301,10 +321,12 @@ namespace ScnnoiseInterface {
             gene_type_info[reactions[gene_id].gene_type].rxns[rxn_name].reactants_stoichio;
         if (rxn_stoi_map.size() > 0) {
             for (auto const &it : rxn_stoi_map) {
+                double reactant_factor =
+                    stoichio_factors[gene_id].rxns[rxn_name].reactants_factors[it.first];
                 int species_id = gene_type_info[reactions[gene_id].gene_type].species_rev_map[it.first];
                 new_propensity *=
                     factorial_ratio_propensity_func(reactions[gene_id].molecule_count_cur[species_id],
-                    it.second);
+                    int (it.second * reactant_factor));
             }
         }
 

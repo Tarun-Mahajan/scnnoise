@@ -35,11 +35,12 @@ class CellType:
         
         #Step 2: Sample num_samples reads for each gene
         sim_out = pd.read_csv(self.count_csv)
-        
+        samples = np.random.randint(0,len(sim_out.index), size = num_samples)
+        sample_out = sim_out.iloc[samples]
+        sample_out['Cell Type'] = [str(self.LineageName)] * num_samples
+        sample_out.to_csv(self.sample_csv, mode = 'a')
 
         #Step 3: Recusively run sim_transition() on all children (this could be parallelized)
-        
-        
         #recursive case
         if len(children) != 0:
             for cell_type in self.children:
@@ -72,8 +73,15 @@ class CellType:
         f.close()        
         simulator.simulate(1000)
         sim_out = pd.read_csv(self.count_csv)
+        #identify molecules of interest in csv
 
+        #steady state detection
 
+        #collect Traisition samples
+        samples = np.random.randint(0,len(sim_out.index), size = num_samples)
+        sample_out = sim_out.iloc[samples]
+        sample_out['Cell Type'] = [str(self.LineageName)+'T'] * num_samples
+        sample_out.to_csv(self.sample_csv, mode = 'a')
         
         #Step 3: Sample num_sample transition cells and store to output and run sim_cell_type
         self.sim_cell_type(num_samples, simulator)

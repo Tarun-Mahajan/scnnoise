@@ -30,7 +30,7 @@ class CellType:
         f.truncate()
         f.close()
         simulator.simulate(1000)
-        pd.read_csv(self.count_csv)
+
             #for steady state check sergio method
         
         #Step 2: Sample num_samples reads for each gene
@@ -71,7 +71,7 @@ class CellType:
         f.truncate()
         f.close()        
         simulator.simulate(1000)
-        pd.read_csv(self.count_csv)
+        sim_out = pd.read_csv(self.count_csv)
 
 
         

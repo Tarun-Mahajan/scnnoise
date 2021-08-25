@@ -43,7 +43,7 @@ namespace ScnnoiseInterface {
                                            std::vector<bool> &GRN_out_changed);
 
     // Simulate.
-    void simulate () override;
+    void simulate (int sim_time) override;
 
     virtual void sort_reaction (int &rxn_selected) = 0;
 

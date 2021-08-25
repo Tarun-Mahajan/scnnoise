@@ -356,7 +356,8 @@ namespace ScnnoiseInterface {
     }
   }
 
-  void GillespieSSA::simulate () {
+  void GillespieSSA::simulate (int sim_time) {
+    total_propensity = 0;
     compute_total_propensity();
     std::random_device rd;
     std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};
@@ -377,7 +378,7 @@ namespace ScnnoiseInterface {
       double total_time = std::accumulate(time_history.begin(), time_history.end(),
         decltype(time_history)::value_type(0)) + next_time_step;
       
-      if (total_time < max_time) {
+      if (total_time < sim_time) {
           update_cell_cycle_state(total_time);
           
           GRN_out_changed = update_fired_Reaction(next_rxn);
@@ -387,6 +388,32 @@ namespace ScnnoiseInterface {
         
       }else{
         stop_sim = true;
+        num_history = 0;
+        num_save_loop += 1;
+        if (save_timeseries) {
+          std::ofstream outfile;
+          outfile.open(count_save_file, std::ios_base::app);
+          for (int id_time = 0; id_time < time_history.size()-(num_save_loop - 1)*num_timepoints_save; ++id_time) {
+            outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
+            for (int gene = 0; gene < num_genes; ++gene) {
+              for (int species = 0; species < num_species_gene_type[gene]; ++species) {
+                outfile << molecule_count_history[gene][species][id_time] << ',';
+              }
+            }
+            outfile << '\n';
+          }
+          outfile.close();
+        }
+        time_history.clear();
+        time_history.push_back(0);
+        std::cout<<time_history.size()<<std::endl;
+        /**for (int gene = 0; gene < num_genes; ++gene) {
+          for (int species = 0; species < num_species_gene_type[gene]; ++species) {
+            molecule_count_history[gene][species].clear();
+            molecule_count_history[gene][species].push_back(reactions[gene].molecule_count_cur[species]);
+          }
+        }*/
+
       }
     }
   }

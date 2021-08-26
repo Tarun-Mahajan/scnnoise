@@ -17,13 +17,13 @@
 namespace ScnnoiseInterface {
     // Constructor
     scNNoiSE::scNNoiSE (int num_genes, std::string gene_filepath,
-        std::string GRN_filepath, std::string molecule_count_filepath,
-        std::string count_save_file) {
+        std::string molecule_count_filepath,
+        std::string count_save_file, bool keep_GRN = false,
+        std::string GRN_filepath = "dummy") {
         // this->num_rxns = num_rxns;
         this->num_genes = num_genes;
+        this->keep_GRN = keep_GRN;
         // rxn_order.reserve(num_rxns);
-        network.reserve(1);
-        network.push_back(GraphSpace::GRN(num_genes));
         reactions.reserve(num_genes);
         total_propensity = 0;
 
@@ -330,7 +330,9 @@ namespace ScnnoiseInterface {
             }
         }
 
-        new_propensity *= compute_regulation_function(gene_id, rxn_name);
+        if (keep_GRN) {
+            new_propensity *= compute_regulation_function(gene_id, rxn_name);
+        }
         return new_propensity;
     }
 
@@ -351,7 +353,11 @@ namespace ScnnoiseInterface {
     }
 
     void scNNoiSE::create_GRN (std::string filepath) {
-        this->create_GRN_from_file(filepath);
+        if (keep_GRN) {
+            network.reserve(1);
+            network.push_back(GraphSpace::GRN(num_genes));
+            this->create_GRN_from_file(filepath);
+        }
     }
 
     // void scNNoiSE::add_dependency_edge (int gene_type, int src, int dest) {

@@ -119,10 +119,12 @@ namespace ScnnoiseInterface {
             if (it == gene_info.rxns[rxn_name].products_stoichio.end()) {
                 reactions[gene_selected].molecule_count_cur[reactant_id] -=
                     int (reactants_.second * reactant_factor);
-                auto it_out = std::find(GRN_species_OUT.begin(), GRN_species_OUT.end(),
-                    reactants_.first);
-                if (it_out != GRN_species_OUT.end()) {
-                    GRN_out_changed.push_back(reactants_.first);
+                if (keep_GRN) {
+                    auto it_out = std::find(GRN_species_OUT.begin(), GRN_species_OUT.end(),
+                        reactants_.first);
+                    if (it_out != GRN_species_OUT.end()) {
+                        GRN_out_changed.push_back(reactants_.first);
+                    }
                 }
             }else{
                 double product_factor =
@@ -132,10 +134,12 @@ namespace ScnnoiseInterface {
                 if (stoichio_diff != 0) {
                     reactions[gene_selected].molecule_count_cur[reactant_id] +=
                         stoichio_diff;
-                    auto it_out = std::find(GRN_species_OUT.begin(), GRN_species_OUT.end(),
-                        reactants_.first);
-                    if (it_out != GRN_species_OUT.end()) {
-                        GRN_out_changed.push_back(reactants_.first);
+                    if (keep_GRN) {
+                        auto it_out = std::find(GRN_species_OUT.begin(), GRN_species_OUT.end(),
+                            reactants_.first);
+                        if (it_out != GRN_species_OUT.end()) {
+                            GRN_out_changed.push_back(reactants_.first);
+                        }
                     }
                 }
             }
@@ -150,10 +154,12 @@ namespace ScnnoiseInterface {
             if (it == gene_info.rxns[rxn_name].reactants_stoichio.end()) {
                 reactions[gene_selected].molecule_count_cur[product_id] +=
                     int (products_.second * product_factor);
-                auto it_out = std::find(GRN_species_OUT.begin(), GRN_species_OUT.end(),
-                    products_.first);
-                if (it_out != GRN_species_OUT.end()) {
-                    GRN_out_changed.push_back(products_.first);
+                if (keep_GRN) {
+                    auto it_out = std::find(GRN_species_OUT.begin(), GRN_species_OUT.end(),
+                        products_.first);
+                    if (it_out != GRN_species_OUT.end()) {
+                        GRN_out_changed.push_back(products_.first);
+                    }
                 }
             }
         }
@@ -195,7 +201,7 @@ namespace ScnnoiseInterface {
         Update propensity for dependent reactions belonging to genes
         downstream of the gene related to the reaction selected for firing
         */
-        if (GRN_out_changed.size() != 0) {
+        if (GRN_out_changed.size() != 0 && keep_GRN) {
             unsigned int children_counter = 0;
             for (auto const &dest : rxn_selected_children_GRN) {
                 std::string species_OUT =

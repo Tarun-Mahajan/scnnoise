@@ -59,7 +59,7 @@ class LTSim:
     #bool activator)
         
         # Use file name for this
-        edge_list = pd.read_csv(edge_list_csv)
+        edge_list = pd.read_csv(self.edge_list_csv)
         for edge in edge_list.values:
             simulator.add_GRN_edge(edge[0], edge[1], edge[2], edge[3], edge[4], edge[5],edge[6], edge[7])
     

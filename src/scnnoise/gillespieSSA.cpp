@@ -276,8 +276,8 @@ namespace ScnnoiseInterface {
 
         }
 
-        for (int gene; gene < num_genes; ++gene) {
-          for (int species; species < reactions[gene].molecule_count_cur.size(); ++species) {
+        for (int gene = 0; gene < num_genes; ++gene) {
+          for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
             molecule_count_history[gene][species][num_history] =
               reactions[gene].molecule_count_cur[species];
           }

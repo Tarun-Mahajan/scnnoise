@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 class CellType:
-    def __init__(self, lineageName,rxn_rates, children, count_csv, sample_csv, sample_species):
+    def __init__(self, lineageName,rxn_rates, children, count_csv, sample_csv, sample_species, num_genes):
         """
         Takes in rxn_rates and children and constructs a cellType node
         """
@@ -14,6 +14,7 @@ class CellType:
         self.count_csv = count_csv
         self.sample_csv = sample_csv
         self.sample_species = sample_species
+        self.num_genes = num_genes
 
     def sim_cell_type(num_samples, simulator):
         """
@@ -37,7 +38,8 @@ class CellType:
         #Step 2: Sample num_samples reads for each gene
         sim_out = pd.read_csv(self.count_csv)
         samples = np.random.randint(0,len(sim_out.index), size = num_samples)
-        sample_out = sim_out.iloc[samples]
+        molecules = [gene * self.sample_species for gene in self.num_genes]
+        sample_out = sim_out.iloc[samples][sim_out.columns[molecules]]
         sample_out['Cell Type'] = [str(self.LineageName)] * num_samples
         sample_out.to_csv(self.sample_csv, mode = 'a')
 
@@ -81,7 +83,8 @@ class CellType:
         #collect Traisition samples
         if collect_samples:
             samples = np.random.randint(0,len(sim_out.index), size = num_samples)
-            sample_out = sim_out.iloc[samples]
+            molecules = [gene * self.sample_species for gene in self.num_genes]
+            sample_out = sim_out.iloc[samples][sim_out.columns[molecules]]
             sample_out['Cell Type'] = [str(self.LineageName)+'T'] * num_samples
             sample_out.to_csv(self.sample_csv, mode = 'a')
         

@@ -83,7 +83,7 @@ namespace ScnnoiseInterface {
                     species_factors.products_factors[product_.first] = 1;
                 }
                 stoichio_factors[gene].rxns[rxn_.first] =
-                    reactant_factors;
+                    species_factors;
             }
         }
     }

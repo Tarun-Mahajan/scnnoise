@@ -45,7 +45,7 @@ class CellType:
 
         #Step 3: Recusively run sim_transition() on all children (this could be parallelized)
         #recursive case
-        if len(children) != 0:
+        if len(self.children) != 0:
             for cell_type in self.children:
                 cell_type.sim_transition(num_samples, simulator, True)
                 

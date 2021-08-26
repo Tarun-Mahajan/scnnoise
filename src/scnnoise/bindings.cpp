@@ -6,6 +6,7 @@
 #include "scnnoise.hpp"
 #include "gillespieSSA.hpp"
 #include "gillespieSDMnoCellCycle.hpp"
+#include "gillespieSDMCellCycle.hpp"
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
@@ -25,8 +26,17 @@ PYBIND11_MODULE(_scnnoise, m) {
     py::class_<ScnnoiseInterface::gillespieSDMnoCellCycle,
               ScnnoiseInterface::GillespieSSA>(m, "gillespieSDMnoCellCycle")
         .def(py::init<int, std::string,
-            std::string, std::string,
+            std::string, std::string, bool,
             std::string>());
+    py::class_<ScnnoiseInterface::gillespieSDMCellCycle,
+              ScnnoiseInterface::GillespieSSA>(m, "gillespieSDMCellCycle")
+        .def(py::init<int, std::string,
+            std::string, std::string, bool,
+            std::string>())
+        .def("set_cell_cycle_params",
+            &ScnnoiseInterface::gillespieSDMCellCycle::set_cell_cycle_params)
+        .def("set_dosage_compensation",
+            &ScnnoiseInterface::gillespieSDMCellCycle::set_dosage_compensation);
 
 #ifdef VERSION_INFO
  m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);

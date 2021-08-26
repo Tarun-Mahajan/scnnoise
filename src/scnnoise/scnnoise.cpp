@@ -71,7 +71,7 @@ namespace ScnnoiseInterface {
         init_stoichio_factors();
     }
 
-    void init_stoichio_factors() {
+    void scNNoiSE::init_stoichio_factors() {
         for (std::size_t gene = 0; gene < num_genes; ++gene) {
             gene_type_struct gene_info = gene_type_info[reactions[gene].gene_type];
             for (auto rxn_ : gene_info.rxns) {

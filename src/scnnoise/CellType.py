@@ -38,9 +38,9 @@ class CellType:
         #Step 2: Sample num_samples reads for each gene
         sim_out = pd.read_csv(self.count_csv)
         samples = np.random.randint(0,len(sim_out.index), size = num_samples)
-        molecules = [gene * self.sample_species for gene in self.num_genes]
+        molecules = [gene * self.sample_species for gene in range(self.num_genes)]
         sample_out = sim_out.iloc[samples][sim_out.columns[molecules]]
-        sample_out['Cell Type'] = [str(self.LineageName)] * num_samples
+        sample_out['Cell Type'] = [str(self.lineageName)] * num_samples
         sample_out.to_csv(self.sample_csv, mode = 'a')
 
         #Step 3: Recusively run sim_transition() on all children (this could be parallelized)
@@ -83,9 +83,9 @@ class CellType:
         #collect Traisition samples
         if collect_samples:
             samples = np.random.randint(0,len(sim_out.index), size = num_samples)
-            molecules = [gene * self.sample_species for gene in self.num_genes]
+            molecules = [gene * self.sample_species for gene in range(self.num_genes)]
             sample_out = sim_out.iloc[samples][sim_out.columns[molecules]]
-            sample_out['Cell Type'] = [str(self.LineageName)+'T'] * num_samples
+            sample_out['Cell Type'] = [str(self.lineageName)+'T'] * num_samples
             sample_out.to_csv(self.sample_csv, mode = 'a')
         
         #Step 3: Sample num_sample transition cells and store to output and run sim_cell_type

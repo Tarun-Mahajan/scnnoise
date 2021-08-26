@@ -480,8 +480,9 @@ namespace ScnnoiseInterface {
                 gene type.
         ***********************************************/
         scNNoiSE (int num_genes, std::string gene_filepath,
-            std::string GRN_filepath, std::string molecule_count_filepath,
-            std::string count_save_file);
+            std::string molecule_count_filepath,
+            std::string count_save_file, bool keep_GRN,
+            std::string GRN_filepath);
 
     /********************************************//**
      \brief Add state for a gene.

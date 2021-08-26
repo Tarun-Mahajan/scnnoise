@@ -1,6 +1,6 @@
 // Optimized gillespie header file
-#ifndef SDM_H
-#define SDM_H
+#ifndef SDMnoCellCycle_H
+#define SDMnoCellCycle_H
 
 #include <vector>
 #include <string>

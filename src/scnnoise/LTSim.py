@@ -36,7 +36,7 @@ class LTSim:
     #std::vector<double> rxn_rate, std::vector<double> propensity_val)
         
         gene_type = [0,0] 
-        molecule_count_cur = [0,2,0,0] #initialize based on self.rxn_rate
+        molecule_count_cur = [[0,2,0,0],[0,2,0,0]] #initialize based on self.rxn_rate
 
         GRN_rxn_IN = [[], [2]] #Initialize w/ csv?
         GRN_species_OUT = [[3], []] #Initialize w/ csv?
@@ -52,14 +52,14 @@ class LTSim:
 
 
         for gene_id in range(self.num_genes):
-            simulator.add_gene_state(gene_id, gene_type[gene_id] ,GRN_rxn_IN[gene_id], GRN_species_OUT[gene_id], molecule_count_cur[gene_id], reactants[gene_id], products[gene_id], reactants_stoichio[gene_id], products_stoichio[gene_id], self.root.rxn_rate[gene_id], products_stoichio[gene_id], rxn_rate[gene_id], propensity_val[gene_id])
+            simulator.add_gene_state(gene_id, gene_type[gene_id] ,GRN_rxn_IN[gene_id], GRN_species_OUT[gene_id], molecule_count_cur[gene_id], reactants[gene_id], products[gene_id], reactants_stoichio[gene_id], products_stoichio[gene_id], self.root.rxn_rate[gene_id], propensity_val[gene_id])
         
     #void scNNoiSE::add_GRN_edge (int src, int dest, double prob_contr,
     #double hill_coeff, double half_maximal, int rxn_IN, int species_OUT,
     #bool activator)
         
         # Use file name for this
-        edge_list = pd.import_csv(edge_list_csv)
+        edge_list = pd.read_csv(edge_list_csv)
         for edge in edge_list.values:
             simulator.add_GRN_edge(edge[0], edge[1], edge[2], edge[3], edge[4], edge[5],edge[6], edge[7])
     

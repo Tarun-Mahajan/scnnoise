@@ -299,6 +299,8 @@ namespace ScnnoiseInterface {
         ***********************************************/
         std::vector<GraphSpace::GRN> network;
 
+        bool keep_GRN;
+
         /********************************************//**
         \brief Map to store all the reaction channels
 

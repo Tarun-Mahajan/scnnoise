@@ -2,7 +2,7 @@ from scnnoise import _scnnoise
 import pandas as pd
 
 class LTSim:
-    def __init__(self, root, num_rxns, num_genes, num_species_genes, num_rxns_gene_type, max_time, count_save_file, edge_list_csv, ):
+    def __init__(self, root, num_rxns, num_genes, num_species_genes, num_rxns_gene_type, max_time, sample_csv, edge_list_csv, sample_species):
         """
         Constructor for the LTSim object
         Takes in the root of the LineageTree in the simulation
@@ -15,8 +15,9 @@ class LTSim:
         self.num_species_genes = num_species_genes
         self.num_rxns_gene_type = num_rxns_gene_type
         self.max_time = max_time
-        self.count_save_file = count_save_file
+        self.sample_csv= sample_csv
         self.edge_list_csv = edge_list_csv
+        self.sample_species = sample_species
         
     def sim_LT(num_samples):
         """
@@ -72,7 +73,7 @@ class LTSim:
     
         
         #Step 2: Run sim_cell_type() on root
-        self.root.sim_cell_type(num_samples, simulator)
+        self.root.sim_transition(num_samples, simulator, False)
         
         
         #Step 3: return result file, or data structure

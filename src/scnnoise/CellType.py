@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 class CellType:
-    def __init__(self, lineageName,rxn_rates, children):
+    def __init__(self, lineageName,rxn_rates, children, count_csv, sample_csv, sample_species):
         """
         Takes in rxn_rates and children and constructs a cellType node
         """
@@ -13,6 +13,7 @@ class CellType:
         self.children = children
         self.count_csv = count_csv
         self.sample_csv = sample_csv
+        self.sample_species = sample_species
 
     def sim_cell_type(num_samples, simulator):
         """
@@ -44,10 +45,10 @@ class CellType:
         #recursive case
         if len(children) != 0:
             for cell_type in self.children:
-                cell_type.sim_transition(num_samples, simulator)
+                cell_type.sim_transition(num_samples, simulator, True)
                 
         
-    def sim_transition(num_samples, simulator):
+    def sim_transition(num_samples, simulator, collect_samples):
         """
         Params
             num_samples - number of sample reads to output for this cell type
@@ -78,10 +79,11 @@ class CellType:
         #steady state detection
 
         #collect Traisition samples
-        samples = np.random.randint(0,len(sim_out.index), size = num_samples)
-        sample_out = sim_out.iloc[samples]
-        sample_out['Cell Type'] = [str(self.LineageName)+'T'] * num_samples
-        sample_out.to_csv(self.sample_csv, mode = 'a')
+        if collect_samples:
+            samples = np.random.randint(0,len(sim_out.index), size = num_samples)
+            sample_out = sim_out.iloc[samples]
+            sample_out['Cell Type'] = [str(self.LineageName)+'T'] * num_samples
+            sample_out.to_csv(self.sample_csv, mode = 'a')
         
         #Step 3: Sample num_sample transition cells and store to output and run sim_cell_type
         self.sim_cell_type(num_samples, simulator)

@@ -13,11 +13,15 @@
 namespace ScnnoiseInterface {
     /* function definitions */
     // Constructor
-    gillespieSDMnoCellCycle::gillespieSDMnoCellCycle (int num_genes, std::string gene_filepath,
-        std::string GRN_filepath, std::string molecule_count_filepath,
-        std::string count_save_file):
+    gillespieSDMnoCellCycle::gillespieSDMnoCellCycle (int num_genes,
+        std::string gene_filepath,
+        std::string molecule_count_filepath,
+        std::string count_save_file, bool keep_GRN,
+        std::string GRN_filepath):
     GillespieSSA (num_genes, gene_filepath,
-        GRN_filepath, molecule_count_filepath, count_save_file) {
+        molecule_count_filepath,
+        count_save_file, keep_GRN,
+        GRN_filepath) {
     }
 
     void gillespieSDMnoCellCycle::sort_reaction (int &rxn_selected) {

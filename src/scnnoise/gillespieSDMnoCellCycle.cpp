@@ -35,7 +35,8 @@ namespace ScnnoiseInterface {
         }
     }
 
-    inline void gillespieSDMnoCellCycle::update_cell_cycle_state (double cur_time) {
+    inline void gillespieSDMnoCellCycle::update_cell_cycle_state (double cur_time,
+        RNG &generator) {
 
     }
 }

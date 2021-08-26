@@ -20,7 +20,7 @@ class LTSim:
         self.sample_species = sample_species
         self.count_save_file = count_save_file
         
-    def sim_LT(num_samples):
+    def sim_LT(self, num_samples):
         """
         Outputs a n x g Matrix (n cells by g Genes) of raw mRNA counts
         """

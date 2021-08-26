@@ -16,7 +16,7 @@ class CellType:
         self.sample_species = sample_species
         self.num_genes = num_genes
 
-    def sim_cell_type(num_samples, simulator):
+    def sim_cell_type(self, num_samples, simulator):
         """
         Params
             num_samples - number of sample reads to output for this cell type
@@ -50,7 +50,7 @@ class CellType:
                 cell_type.sim_transition(num_samples, simulator, True)
                 
         
-    def sim_transition(num_samples, simulator, collect_samples):
+    def sim_transition(self, num_samples, simulator, collect_samples):
         """
         Params
             num_samples - number of sample reads to output for this cell type

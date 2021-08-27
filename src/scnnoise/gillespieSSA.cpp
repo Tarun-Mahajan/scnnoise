@@ -341,7 +341,7 @@ namespace ScnnoiseInterface {
         double cur_time = 0;
         update_molecule_count_history(num_history, num_save_loop,
             simulation_ended);
-        init_cell_cycle_state (generator);
+        init_cell_cycle_state (generator, cur_time);
 
         while (!stop_sim) {
             double next_time_step = sample_time_step(generator);
@@ -350,7 +350,7 @@ namespace ScnnoiseInterface {
             cur_time = total_time;
             double total_time += next_time_step;
             if (total_time < max_time) {
-                update_cell_cycle_state(total_time, generator);
+                update_cell_cycle_state(total_time, cur_time, generator);
                 GRN_out_changed = update_fired_reaction(next_rxn);
                 update_dependent_count_propensity(next_rxn, GRN_out_changed);
                 time_history.push_back(next_time_step);

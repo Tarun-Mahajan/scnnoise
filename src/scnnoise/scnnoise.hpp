@@ -579,7 +579,7 @@ namespace ScnnoiseInterface {
 
         void init_stoichio_factors();
 
-
+        void change_output_filepath (std::string new_filepath);
 
 
     };

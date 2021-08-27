@@ -834,4 +834,8 @@ namespace ScnnoiseInterface {
         this->save_timeseries = save_timeseries;
         this->num_timepoints_save = num_timepoints_save;
     }
+
+    void change_output_filepath (std::string new_filepath) {
+        this->count_save_file = new_filepath
+    }
 }

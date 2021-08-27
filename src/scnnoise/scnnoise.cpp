@@ -282,6 +282,7 @@ namespace ScnnoiseInterface {
               gene_rxns.rxn_rates[rxn_names[i]] = rxn_rates[i];
             }
             gene_rxns.molecule_count_cur.resize(gene_type_info[gene_rxns.gene_type].num_species, 0);
+            reactions[gene_count] = gene_rxns;
             ++gene_count;
         }
     }

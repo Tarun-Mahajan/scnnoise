@@ -313,7 +313,7 @@ namespace ScnnoiseInterface {
                 }
             }else{
                 if (current_cell_cycle_state == "G1") {
-                    if (frozen_state = "G2") {
+                    if (frozen_state == "G2") {
                         move_to_G2();
                     }
                 }else{

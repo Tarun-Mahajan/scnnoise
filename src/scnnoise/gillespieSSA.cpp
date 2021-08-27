@@ -184,7 +184,9 @@ namespace ScnnoiseInterface {
         std::vector<int> rxn_selected_children;
         gene_info.gene_rxn_dependency[0].find_children(rxn_index, rxn_selected_children);
         std::vector<int> rxn_selected_children_GRN;
-        network[0].find_children(gene_selected, rxn_selected_children_GRN);
+        if (keep_GRN) {
+            network[0].find_children(gene_selected, rxn_selected_children_GRN);
+        }
         // rxn_selected_reactants.reserve(reactions[gene_selected].molecule_count_cur.size());
         // std::vector<int> rxn_selected_reactants_stoichio;
         // rxn_selected_reactants_stoichio.reserve(reactions[gene_selected].molecule_count_cur.size());
@@ -349,8 +351,10 @@ namespace ScnnoiseInterface {
             std::vector<std::string> GRN_out_changed;
             cur_time = total_time;
             total_time += next_time_step;
+            std::cout << "reached here 1 = " << std::endl;
             if (total_time < max_time) {
                 update_cell_cycle_state(total_time, cur_time, generator);
+                std::cout << "reached here 2 = " << std::endl;
                 GRN_out_changed = update_fired_reaction(next_rxn);
                 update_dependent_count_propensity(next_rxn, GRN_out_changed);
                 time_history.push_back(next_time_step);

@@ -328,6 +328,8 @@ namespace ScnnoiseInterface {
     }
 
     void GillespieSSA::simulate () {
+        time_history.clear();
+        time_history.push_back(0);
         compute_total_propensity();
         start_molecule_count_history_file();
 

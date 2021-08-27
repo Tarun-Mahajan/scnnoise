@@ -719,8 +719,13 @@ namespace ScnnoiseInterface {
 
     int scNNoiSE::factorial_ratio_propensity_func (int N, int r) {
         int propensity_factor = 1;
-        for (int i = 0; i < r; ++i) {
-            propensity_factor *= propensity_factor * (N - i);
+        if (N > 0) {
+            propensity_factor = 1;
+            for (int i = 0; i < r; ++i) {
+                propensity_factor *= propensity_factor * (N - i);
+            }
+        }else{
+            propensity_factor = 0;
         }
         return propensity_factor;
     }

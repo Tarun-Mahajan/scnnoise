@@ -337,6 +337,7 @@ namespace ScnnoiseInterface {
         bool simulation_ended = false;
         int num_history = 0;
         int num_save_loop = 0;
+        double total_time = 0;
         update_molecule_count_history(num_history, num_save_loop,
             simulation_ended);
         init_cell_cycle_state (generator);
@@ -345,8 +346,7 @@ namespace ScnnoiseInterface {
             double next_time_step = sample_time_step(generator);
             int next_rxn = sample_next_rxn(generator);
             std::vector<std::string> GRN_out_changed;
-            double total_time = std::accumulate(time_history.begin(), time_history.end(),
-                decltype(time_history)::value_type(0)) + next_time_step;
+            double total_time += next_time_step;
             if (total_time < max_time) {
                 update_cell_cycle_state(total_time, generator);
                 GRN_out_changed = update_fired_reaction(next_rxn);

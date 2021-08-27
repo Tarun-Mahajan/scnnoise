@@ -278,7 +278,7 @@ namespace ScnnoiseInterface {
         this->cell_cycle_start_time = this->cur_time;
     }
 
-    void move_to_G1 () {
+    void gillespieSDMCellCycle::move_to_G1 () {
         cell_division(generator);
         remove_dosage_compensation();
         update_propensity_cell_cycle();
@@ -286,7 +286,7 @@ namespace ScnnoiseInterface {
         current_cell_cycle_state = "G1";
     }
 
-    void move_to_G2 () {
+    void gillespieSDMCellCycle::move_to_G2 () {
         replicate_genes();
         perform_dosage_compensation();
         update_propensity_cell_cycle();
@@ -328,7 +328,7 @@ namespace ScnnoiseInterface {
         set_cell_cycle_start_time ();
     }
 
-    void set_cell_cycle_frozen_state (bool is_frozen_cell_cycle,
+    void gillespieSDMCellCycle::set_cell_cycle_frozen_state (bool is_frozen_cell_cycle,
         std::string frozen_state) {
         this->is_frozen_cell_cycle = is_frozen_cell_cycle;
         this->frozen_state = frozen_state;

@@ -835,7 +835,7 @@ namespace ScnnoiseInterface {
         this->num_timepoints_save = num_timepoints_save;
     }
 
-    void change_output_filepath (std::string new_filepath) {
+    void scNNoiSE::change_output_filepath (std::string new_filepath) {
         this->count_save_file = new_filepath
     }
 }

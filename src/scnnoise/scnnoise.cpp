@@ -217,7 +217,7 @@ namespace ScnnoiseInterface {
         std::vector<std::string>  GRN_rxn_IN;
         std::vector<std::string>  GRN_species_OUT;
         std::vector<std::string> rxn_names;
-        std::vector<int> rxn_rates;
+        std::vector<double> rxn_rates;
         std::string word;
         unsigned int num_rxn_IN = 1;
         unsigned int num_species_OUT = 0;

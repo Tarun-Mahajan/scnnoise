@@ -38,6 +38,8 @@ namespace ScnnoiseInterface {
         generate_cell_cycle_time_struct cell_cycle_params;
         std::vector<double> dosage_compensation;
         double replication_time_factor;
+        bool is_frozen_cell_cycle;
+        std::string frozen_state;
         /* Member functions */
         // Constructor
         gillespieSDMCellCycle (int num_genes, std::string gene_filepath,
@@ -72,6 +74,8 @@ namespace ScnnoiseInterface {
         void replicate_genes ();
         void perform_dosage_compensation ();
         void swap_rxn_order (rxn_order_struct &A, rxn_order_struct &B);
+        void set_cell_cycle_frozen_state (bool is_frozen_cell_cycle,
+            std::string frozen_state);
     };
 }
 

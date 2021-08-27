@@ -262,8 +262,7 @@ namespace ScnnoiseInterface {
                 if (simulation_ended) {
                     std::ofstream outfile;
                     outfile.open(count_save_file, std::ios_base::app);
-                    outfile << std::accumulate(time_history.begin(), time_history.end(),
-                        decltype(time_history)::value_type(0)) << ",";
+                    outfile << time_history.back() << ",";
                     for (int gene = 0; gene < num_genes; ++gene) {
                         for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
                             if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
@@ -308,8 +307,7 @@ namespace ScnnoiseInterface {
           }
         }
         outfile << '\n';
-        outfile << std::accumulate(time_history.begin(), time_history.end(),
-            decltype(time_history)::value_type(0)) << ",";
+        outfile << time_history.back() << ",";
         for (int gene = 0; gene < num_genes; ++gene) {
           for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
               std::string gene_type = reactions[gene].gene_type;

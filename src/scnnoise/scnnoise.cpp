@@ -65,11 +65,11 @@ namespace ScnnoiseInterface {
         // Initialize molecule count
         init_molecule_count (molecule_count_filepath);
 
-        // Initialize rxn order
-        init_rxn_order();
-
         // Initialize stoichio factors
         init_stoichio_factors();
+
+        // Initialize rxn order
+        init_rxn_order();
     }
 
     void scNNoiSE::init_stoichio_factors() {

@@ -102,7 +102,7 @@ namespace ScnnoiseInterface {
         //
         // }
 
-
+        molecule_count_history.resize(num_genes);
         std::ifstream count_state_file(filepath);
         std::string row_text;
         std::string gene_name;
@@ -143,7 +143,9 @@ namespace ScnnoiseInterface {
             int gene_id = gene_rev_map[gene_name];
             gene_rxn_channel_struct rxn_ = reactions[gene_id];
             gene_type_struct gene_info = gene_type_info[rxn_.gene_type];
+            molecule_count_history[gene_id].resize(gene_info.num_species);
             for (std::size_t i = 0; i < species_name.size(); ++i) {
+                molecule_count_history[gene_id][gene_info.species_rev_map[species_name[i]]].resize(num_timepoints_save, 0);
                 reactions[gene_id].molecule_count_cur[gene_info.species_rev_map[species_name[i]]] =
                     species_count[i];
             }

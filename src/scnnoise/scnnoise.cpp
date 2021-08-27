@@ -119,10 +119,12 @@ namespace ScnnoiseInterface {
                     case 0:
                         {
                             gene_name = word;
+                            break;
                         }
                     case 1:
                         {
                             gene_type = word;
+                            break;
                         }
                     default:
                         {
@@ -131,6 +133,7 @@ namespace ScnnoiseInterface {
                             }else{
                                 species_count.push_back(std::stoi(word));
                             }
+                            break;
                         }
                 }
                 ++id_counter;
@@ -229,14 +232,17 @@ namespace ScnnoiseInterface {
                     case 0:
                         {
                             gene_name = word;
+                            break;
                         }
                     case 1:
                         {
                             gene_type = word;
+                            break;
                         }
                     case 2:
                         {
                             num_rxn_IN = (unsigned int) std::stoi(word);
+                            break;
                         }
                     default:
                         {
@@ -261,6 +267,7 @@ namespace ScnnoiseInterface {
                                     }
                                 }
                             }
+                            break;
                         }
                 }
                 ++id_counter;

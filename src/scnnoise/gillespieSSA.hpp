@@ -46,7 +46,8 @@ namespace ScnnoiseInterface {
 
         virtual void sort_reaction (int &rxn_selected) = 0;
 
-        virtual void update_cell_cycle_state (double cur_time, RNG &generator) = 0;
+        virtual void update_cell_cycle_state (double next_time,
+            double cur_time, RNG &generator) = 0;
 
         virtual void init_cell_cycle_state (RNG &generator) = 0;
 

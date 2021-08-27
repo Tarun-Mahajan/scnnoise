@@ -49,7 +49,7 @@ namespace ScnnoiseInterface {
         virtual void update_cell_cycle_state (double next_time,
             double cur_time, RNG &generator) = 0;
 
-        virtual void init_cell_cycle_state (RNG &generator) = 0;
+        virtual void init_cell_cycle_state (RNG &generator, double cur_time) = 0;
 
         // Update molecule count for reactants belonging to the fired reaction
         // channel

@@ -306,6 +306,22 @@ namespace ScnnoiseInterface {
           }
         }
         outfile << '\n';
+        outfile << std::accumulate(time_history.begin(), time_history.end(),
+            decltype(time_history)::value_type(0)) << ",";
+        for (int gene = 0; gene < num_genes; ++gene) {
+          for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+              std::string gene_type = reactions[gene].gene_type;
+              std::string connector = ":";
+              std::string gene_species_name = gene_map[gene] + connector +
+                gene_type_info[gene_type].species_map[species];
+            if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                outfile << reactions[gene].molecule_count_cur[species];
+            }else{
+                outfile << reactions[gene].molecule_count_cur[species] << ",";
+            }
+          }
+        }
+        outfile << '\n';
         outfile.close();
     }
 

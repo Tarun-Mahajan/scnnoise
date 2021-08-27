@@ -27,7 +27,8 @@ namespace ScnnoiseInterface {
             std::string GRN_filepath);
 
         void sort_reaction (int &rxn_selected) override;
-        void update_cell_cycle_state (double cur_time, RNG &generator) override;
+        void update_cell_cycle_state (double next_time,
+            double cur_time, RNG &generator) override;
         void init_cell_cycle_state (RNG &generator) override;
     };
 }

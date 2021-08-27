@@ -278,7 +278,7 @@ namespace ScnnoiseInterface {
         this->cell_cycle_start_time = this->cur_time;
     }
 
-    void gillespieSDMCellCycle::move_to_G1 () {
+    void gillespieSDMCellCycle::move_to_G1 (RNG &generator) {
         cell_division(generator);
         remove_dosage_compensation();
         update_propensity_cell_cycle();
@@ -301,7 +301,7 @@ namespace ScnnoiseInterface {
                 current_cell_cycle_state = "G1";
             }else{
                 if (current_cell_cycle_state == "G2") {
-                    move_to_G1();
+                    move_to_G1(generator);
                 }
             }
         }else{
@@ -318,7 +318,7 @@ namespace ScnnoiseInterface {
                     }
                 }else{
                     if (frozen_state == "G1") {
-                        move_to_G1();
+                        move_to_G1(generator);
                     }
                 }
             }

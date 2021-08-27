@@ -74,8 +74,10 @@ namespace ScnnoiseInterface {
         void replicate_genes ();
         void perform_dosage_compensation ();
         void swap_rxn_order (rxn_order_struct &A, rxn_order_struct &B);
-        void set_cell_cycle_frozen_state (bool is_frozen_cell_cycle,
-            std::string frozen_state);
+        void set_cell_cycle_frozen_state (bool is_frozen_cell_cycle = false,
+            std::string frozen_state = "G2");
+        void move_to_G1 ();
+        void move_to_G2 ();
     };
 }
 

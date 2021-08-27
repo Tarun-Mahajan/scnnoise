@@ -234,8 +234,10 @@ namespace ScnnoiseInterface {
         RNG& generator) {
         this->next_time = next_time;
         this->cur_time = cur_time;
-        check_if_replication();
-        check_if_division(generator);
+        if (!is_frozen_cell_cycle) {
+            check_if_replication();
+            check_if_division(generator);
+        }
     }
 
     void gillespieSDMCellCycle::set_cell_cycle_params (std::string mechanism,
@@ -276,21 +278,59 @@ namespace ScnnoiseInterface {
         this->cell_cycle_start_time = this->cur_time;
     }
 
+    void move_to_G1 () {
+        cell_division(generator);
+        remove_dosage_compensation();
+        update_propensity_cell_cycle();
+        compute_total_propensity();
+        current_cell_cycle_state = "G1";
+    }
+
+    void move_to_G2 () {
+        replicate_genes();
+        perform_dosage_compensation();
+        update_propensity_cell_cycle();
+        compute_total_propensity();
+        current_cell_cycle_state = "G2";
+    }
+
     void gillespieSDMCellCycle::init_cell_cycle_state (RNG &generator,
         double cur_time) {
-        if (current_cell_cycle_state.empty()) {
-            current_cell_cycle_state = "G1";
-        }else{
-            if (current_cell_cycle_state == "G2") {
-                cell_division(generator);
-                remove_dosage_compensation();
-                update_propensity_cell_cycle();
-                compute_total_propensity();
+        if (!is_frozen_cell_cycle) {
+            if (current_cell_cycle_state.empty()) {
                 current_cell_cycle_state = "G1";
+            }else{
+                if (current_cell_cycle_state == "G2") {
+                    move_to_G1();
+                }
+            }
+        }else{
+            if (current_cell_cycle_state.empty()) {
+                if (frozen_state == "G1") {
+                    current_cell_cycle_state = "G1";
+                }else{
+                    move_to_G2();
+                }
+            }else{
+                if (current_cell_cycle_state == "G1") {
+                    if (frozen_state = "G2") {
+                        move_to_G2();
+                    }
+                }else{
+                    if (frozen_state == "G1") {
+                        move_to_G1();
+                    }
+                }
             }
         }
         sample_cell_cycle_time (generator);
         set_cur_time (cur_time);
         set_cell_cycle_start_time ();
+    }
+
+    void set_cell_cycle_frozen_state (bool is_frozen_cell_cycle,
+        std::string frozen_state) {
+        this->is_frozen_cell_cycle = is_frozen_cell_cycle;
+        this->frozen_state = frozen_state;
     }
 }

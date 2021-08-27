@@ -360,6 +360,7 @@ namespace ScnnoiseInterface {
                 it.propensity_vals[rxns_.first] = rxn_order_temp.propensity_val;
                 rxn_order.push_back(rxn_order_temp);
                 rxn_order_map[it.gene_name][rxns_.first] = order_count;
+                ++order_count;
             }
         }
     }

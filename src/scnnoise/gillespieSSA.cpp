@@ -348,7 +348,7 @@ namespace ScnnoiseInterface {
             int next_rxn = sample_next_rxn(generator);
             std::vector<std::string> GRN_out_changed;
             cur_time = total_time;
-            double total_time += next_time_step;
+            total_time += next_time_step;
             if (total_time < max_time) {
                 update_cell_cycle_state(total_time, cur_time, generator);
                 GRN_out_changed = update_fired_reaction(next_rxn);

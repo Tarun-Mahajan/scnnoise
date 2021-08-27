@@ -51,29 +51,35 @@ namespace ScnnoiseInterface {
             auto it_on = gene_type_info[gene_type].species_rev_map.find("gene on");
             if (it_on != gene_type_info[gene_type].species_rev_map.end()) {
                 // Update propensity for gene on reactions
+                total_propensity -= reactions[gene].propensity_vals["gene on"];
                 double new_propensity =
                     compute_propensity(gene_map[gene], "gene on");
                 reactions[gene].propensity_vals["gene on"] = new_propensity;
                 unsigned int rxn_order_id =
                     rxn_order_map[gene_map[gene]]["gene on"];
                 rxn_order[rxn_order_id].propensity_val = new_propensity;
+                total_propensity += new_propensity;
 
                 // Update propensity for gene off reactions
+                total_propensity -= reactions[gene].propensity_vals["gene off"];
                 new_propensity =
                     compute_propensity(gene_map[gene], "gene off");
                 reactions[gene].propensity_vals["gene off"] = new_propensity;
                 rxn_order_id =
                     rxn_order_map[gene_map[gene]]["gene off"];
                 rxn_order[rxn_order_id].propensity_val = new_propensity;
+                total_propensity += new_propensity;
             }else {
             }
             // Update propensity for transcription reactions
+            total_propensity -= reactions[gene].propensity_vals["transcription"];
             double new_propensity =
                 compute_propensity(gene_map[gene], "transcription");
             reactions[gene].propensity_vals["transcription"] = new_propensity;
             unsigned int rxn_order_id =
                 rxn_order_map[gene_map[gene]]["transcription"];
             rxn_order[rxn_order_id].propensity_val = new_propensity;
+            total_propensity += new_propensity;
         }
     }
 
@@ -211,7 +217,7 @@ namespace ScnnoiseInterface {
                 replicate_genes();
                 perform_dosage_compensation();
                 update_propensity_cell_cycle();
-                compute_total_propensity();
+                // compute_total_propensity();
                 current_cell_cycle_state = "G2";
             }
     }
@@ -222,7 +228,7 @@ namespace ScnnoiseInterface {
                 cell_division(generator);
                 remove_dosage_compensation();
                 update_propensity_cell_cycle();
-                compute_total_propensity();
+                // compute_total_propensity();
                 cell_cycle_start_time = cell_cycle_start_time + cell_cycle_length;
                 sample_cell_cycle_time(generator);
                 current_cell_cycle_state = "G1";

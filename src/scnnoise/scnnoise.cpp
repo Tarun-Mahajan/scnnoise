@@ -35,6 +35,7 @@ namespace ScnnoiseInterface {
         this->max_time = 10000;
         this->save_timeseries = false;
         this->num_timepoints_save = 1000;
+        this->count_save_file = count_save_file;
         // this->count_save_file = count_save_file;
 
         /********************************************//**

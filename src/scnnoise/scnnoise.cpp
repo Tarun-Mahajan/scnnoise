@@ -836,6 +836,6 @@ namespace ScnnoiseInterface {
     }
 
     void scNNoiSE::change_output_filepath (std::string new_filepath) {
-        this->count_save_file = new_filepath
+        this->count_save_file = new_filepath;
     }
 }

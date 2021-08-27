@@ -24,7 +24,7 @@ namespace ScnnoiseInterface {
         this->num_genes = num_genes;
         this->keep_GRN = keep_GRN;
         // rxn_order.reserve(num_rxns);
-        reactions.reserve(num_genes);
+        reactions.resize(num_genes);
         total_propensity = 0;
 
         // num_species_gene_type.resize(num_gene_types);

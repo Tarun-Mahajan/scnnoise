@@ -656,6 +656,42 @@ namespace ScnnoiseInterface {
         return gene_info;
     }
 
+    void scNNoiSE::set_reduced_model_stoichio_factor (std::string filepath) {
+        std::ifstream gene_burst_size(filepath);
+        std::string row_text;
+        std::string gene_name;
+        double burst_size;
+        std::string word;
+        while (std::getline(gene_burst_size, row_text)) {
+            std::istringstream str_stream(row_text);
+
+            unsigned int id_counter = 0;
+            while (std::getline(str_stream, word, ',')) {
+                switch(id_counter) {
+                    case 0:
+                        {
+                            gene_name = word;
+                            break;
+                        }
+                    case 1:
+                        {
+                            burst_size = std::stod(word);
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+                ++id_counter;
+            }
+            stoichio_factor_struct &stoichio_factor_gene =
+                stoichio_factors[gene_rev_map[gene_name]];
+            stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
+                burst_size;
+        }
+    }
+
     gene_type_struct scNNoiSE::create_two_state_reduced_type () {
         gene_type_struct gene_info;
         // Species are 0:gene off, 1:gene on, 2:mRNA, 3:protein

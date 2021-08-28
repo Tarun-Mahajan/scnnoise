@@ -517,6 +517,8 @@ namespace ScnnoiseInterface {
 
         gene_type_struct create_two_state_nascent_type ();
 
+        void set_reduced_model_stoichio_factor (std::string filepath)
+
         gene_type_struct create_two_state_reduced_type ();
 
         void init_max_rxn_rate_change ();

@@ -743,6 +743,7 @@ namespace ScnnoiseInterface {
         gene_type_info["constitutive nascent"] = create_constitutive_type();
         gene_type_info["two-state"] = create_two_state_type();
         gene_type_info["two-state nascent"] = create_two_state_nascent_type();
+        gene_type_info["two-state reduced"] = create_two_state_reduced_type();
     }
 
     int scNNoiSE::factorial (int num) {

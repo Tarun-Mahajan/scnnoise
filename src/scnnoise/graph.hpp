@@ -110,6 +110,8 @@ namespace GraphSpace {
      \param[in] children vector to store the children nodes.
      ***********************************************/
     void find_children (int vert, std::vector<int> &children);
+
+    void find_parents (int vert, std::vector<int> &parents);
   };
 }
 

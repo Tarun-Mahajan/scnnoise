@@ -14,14 +14,14 @@
 namespace ScnnoiseInterface {
   /* function definitions */
   // Constructor
-  GillespieSSA::GillespieSSA (int num_rxns, int num_genes,
-    std::vector<int> num_species_gene_type,
-    std::vector<int> num_rxns_gene_type, double max_time,
-    bool save_timeseries, int num_timepoints_save,
-    std::string count_save_file):
-    scNNoiSE (num_rxns, num_genes, num_species_gene_type,
-      num_rxns_gene_type, max_time, save_timeseries, num_timepoints_save,
-      count_save_file) {
+  GillespieSSA::GillespieSSA (int num_genes, std::string gene_filepath,
+      std::string molecule_count_filepath,
+      std::string count_save_file, bool keep_GRN,
+      std::string GRN_filepath):
+    scNNoiSE (num_genes, gene_filepath,
+        molecule_count_filepath,
+        count_save_file, keep_GRN,
+        GRN_filepath) {
   }
 
   inline double GillespieSSA::sample_time_step (RNG &generator) {
@@ -36,7 +36,7 @@ namespace ScnnoiseInterface {
     double selector = total_propensity * (double(1.0) - rand_num);
     int rxn_selected = -1;
 
-    for (int i = 0; i < num_rxns; ++i) {
+    for (std::size_t i = 0; i < rxn_order.size(); ++i) {
       selector -= rxn_order[i].propensity_val;
       if (selector <= 0) {
         rxn_selected = i;
@@ -51,158 +51,188 @@ namespace ScnnoiseInterface {
     return rxn_selected;
   }
 
-  void GillespieSSA::update_fired_reaction_reactants(int gene_selected,
-    int rxn_index, int &count_not_changed_reactants,
-    std::vector<bool> &flag_changed_product_count,
-    std::vector<bool> &GRN_out_changed,
-    std::vector<int> &rxn_selected_reactants,
-    std::vector<int> &rxn_selected_products,
-    std::vector<int> &rxn_selected_reactants_stoichio,
-    std::vector<int> &rxn_selected_products_stoichio) {
-      for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
-        int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
-        std::vector<int>::iterator it =
-        std::find(rxn_selected_products.begin(), rxn_selected_products.end(),
-        *r);
-        if (it != rxn_selected_products.end()) {
-          //reactant and product
-          int product_index = std::distance(rxn_selected_products.begin(), it);
-          flag_changed_product_count[product_index] = true;
-          int count_change = rxn_selected_products_stoichio[product_index] -
-            rxn_selected_reactants_stoichio[reactant_index];
-          if (count_change) {
-            reactions[gene_selected].molecule_count_cur[*r] += count_change;
-            std::vector<int>::iterator it1 =
-            std::find(reactions[gene_selected].GRN_species_OUT.begin(),
-            reactions[gene_selected].GRN_species_OUT.end(),
-            *r);
-            if (it1 != reactions[gene_selected].GRN_species_OUT.end()) {
-              int out_index = std::distance(reactions[gene_selected].GRN_species_OUT.begin(), it1);
-              GRN_out_changed[out_index] = true;
+  // void GillespieSSA::update_fired_reaction_reactants(int gene_selected,
+  //   int rxn_index, int &count_not_changed_reactants,
+  //   std::vector<bool> &flag_changed_product_count,
+  //   std::vector<bool> &GRN_out_changed,
+  //   std::vector<int> &rxn_selected_reactants,
+  //   std::vector<int> &rxn_selected_products,
+  //   std::vector<int> &rxn_selected_reactants_stoichio,
+  //   std::vector<int> &rxn_selected_products_stoichio) {
+  //     for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
+  //       int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
+  //       std::vector<int>::iterator it =
+  //       std::find(rxn_selected_products.begin(), rxn_selected_products.end(),
+  //       *r);
+  //       if (it != rxn_selected_products.end()) {
+  //         int product_index = std::distance(rxn_selected_products.begin(), it);
+  //         flag_changed_product_count[product_index] = true;
+  //         int count_change = rxn_selected_products_stoichio[product_index] -
+  //           rxn_selected_reactants_stoichio[reactant_index];
+  //         if (count_change) {
+  //           reactions[gene_selected].molecule_count_cur[*r] += count_change;
+  //           std::vector<int>::iterator it1 =
+  //           std::find(reactions[gene_selected].GRN_species_OUT.begin(),
+  //           reactions[gene_selected].GRN_species_OUT.end(),
+  //           *r);
+  //           if (it1 != reactions[gene_selected].GRN_species_OUT.end()) {
+  //             int out_index = std::distance(reactions[gene_selected].GRN_species_OUT.begin(), it1);
+  //             GRN_out_changed[out_index] = true;
+  //           }
+  //           // if (*r == reactions[gene_selected].GRN_rxn_OUT) {
+  //           //   GRN_out_changed = true;
+  //           // }
+  //         }else{
+  //           count_not_changed_reactants += 1;
+  //         }
+  //       }else{
+  //         reactions[gene_selected].molecule_count_cur[*r] -=
+  //           rxn_selected_reactants_stoichio[reactant_index];
+  //         std::vector<int>::iterator it1 =
+  //         std::find(reactions[gene_selected].GRN_species_OUT.begin(),
+  //         reactions[gene_selected].GRN_species_OUT.end(),
+  //         *r);
+  //         if (it1 != reactions[gene_selected].GRN_species_OUT.end()) {
+  //           int out_index = std::distance(reactions[gene_selected].GRN_species_OUT.begin(), it1);
+  //           GRN_out_changed[out_index] = true;
+  //         }
+  //       }
+  //     }
+  //   }
+
+    std::vector<std::string> GillespieSSA::update_fired_reaction (int rxn_selected) {
+        /*
+        Find the gene and reaction type for the selected reaction channel. Extract the reactants,
+        products and their stoichiometric coefficients for the selected reaction channel.
+        */
+        int gene_selected = rxn_order[rxn_selected].gene_id;
+        std::string rxn_name = rxn_order[rxn_selected].rxn_name;
+        std::string gene_type = reactions[gene_selected].gene_type;
+        gene_type_struct gene_info = gene_type_info[gene_type];
+        int rxn_index = gene_info.rxn_rev_map[rxn_name];
+        std::vector<std::string> GRN_species_OUT = reactions[gene_selected].GRN_species_OUT;
+        std::vector<std::string> GRN_out_changed;
+
+        // Update fired reaction reactants
+        for (auto const &reactants_ : gene_info.rxns[rxn_name].reactants_stoichio) {
+            double reactant_factor =
+                stoichio_factors[gene_selected].rxns[rxn_name].reactants_factors[reactants_.first];
+            int reactant_id = gene_info.species_rev_map[reactants_.first];
+            auto it = gene_info.rxns[rxn_name].products_stoichio.find(reactants_.first);
+            if (it == gene_info.rxns[rxn_name].products_stoichio.end()) {
+                reactions[gene_selected].molecule_count_cur[reactant_id] -=
+                    int (reactants_.second * reactant_factor);
+                if (keep_GRN) {
+                    auto it_out = std::find(GRN_species_OUT.begin(), GRN_species_OUT.end(),
+                        reactants_.first);
+                    if (it_out != GRN_species_OUT.end()) {
+                        GRN_out_changed.push_back(reactants_.first);
+                    }
+                }
+            }else{
+                double product_factor =
+                    stoichio_factors[gene_selected].rxns[rxn_name].products_factors[reactants_.first];
+                int stoichio_diff = int (it->second * product_factor -
+                    reactants_.second * reactant_factor);
+                if (stoichio_diff != 0) {
+                    reactions[gene_selected].molecule_count_cur[reactant_id] +=
+                        stoichio_diff;
+                    if (keep_GRN) {
+                        auto it_out = std::find(GRN_species_OUT.begin(), GRN_species_OUT.end(),
+                            reactants_.first);
+                        if (it_out != GRN_species_OUT.end()) {
+                            GRN_out_changed.push_back(reactants_.first);
+                        }
+                    }
+                }
             }
-            // if (*r == reactions[gene_selected].GRN_rxn_OUT) {
-            //   GRN_out_changed = true;
-            // }
-          }else{
-            count_not_changed_reactants += 1;
-          }
-        }else{
-          //only reactant
-          reactions[gene_selected].molecule_count_cur[*r] -=
-            rxn_selected_reactants_stoichio[reactant_index];
-          std::vector<int>::iterator it1 =
-          std::find(reactions[gene_selected].GRN_species_OUT.begin(),
-          reactions[gene_selected].GRN_species_OUT.end(),
-          *r);
-          if (it1 != reactions[gene_selected].GRN_species_OUT.end()) {
-            int out_index = std::distance(reactions[gene_selected].GRN_species_OUT.begin(), it1);
-            GRN_out_changed[out_index] = true;
-          }
         }
-      }
-    }
 
-  std::vector<bool> GillespieSSA::update_fired_Reaction (int rxn_selected) {
-    /*
-    Find the gene and reaction type for the selected reaction channel. Extract the reactants,
-    products and their stoichiometric coefficients for the selected reaction channel.
-    */
-    int gene_selected = rxn_order[rxn_selected].gene_id;
-    // int rxn_type_selected = rxn_order[rxn_selected].rxn_type;
-    int rxn_index = rxn_order[rxn_selected].rxn_type;
-    // std::vector<int> rxn_temp = reactions[gene_selected].rxn_type;
-    // std::vector<int>::iterator it = std::find(rxn_temp.begin(), rxn_temp.end(),
-    //   rxn_type_selected);
-    // int rxn_index = std::distance(rxn_temp.begin(), it);
-    std::vector<int> rxn_selected_reactants =
-      reactions[gene_selected].rxns[rxn_index].reactants;
-    std::vector<int> rxn_selected_products =
-      reactions[gene_selected].rxns[rxn_index].products;
-    std::vector<int> rxn_selected_reactants_stoichio =
-      reactions[gene_selected].rxns[rxn_index].reactants_stoichio;
-    std::vector<int> rxn_selected_products_stoichio =
-      reactions[gene_selected].rxns[rxn_index].products_stoichio;
-
-
-    std::vector<bool> GRN_out_changed(reactions[gene_selected].GRN_species_OUT.size(), false);
-    /*
-    Subtract current reaction propensity from total reaction propensity for
-    computing updated total propensity later.
-    */
-    total_propensity -= reactions[gene_selected].rxns[rxn_index].propensity_val;
-
-    /*
-    Update molecular count for reactants which change by firing the selected
-    reaction channel.
-    */
-    int count_not_changed_reactants = 0;
-    std::vector<bool> flag_changed_product_count(rxn_selected_products.size(), false);
-    update_fired_reaction_reactants(gene_selected, rxn_index,
-      count_not_changed_reactants, flag_changed_product_count,
-      GRN_out_changed, rxn_selected_reactants, rxn_selected_products,
-      rxn_selected_reactants_stoichio, rxn_selected_products_stoichio);
-
-    /*
-    Update molecular count for products which change by firing the selected
-    reaction channel.
-    */
-    for (auto r = rxn_selected_products.begin(); r != rxn_selected_products.end(); ++r) {
-      int product_index = std::distance(rxn_selected_products.begin(), r);
-      if (!flag_changed_product_count[product_index]) {
-        reactions[gene_selected].molecule_count_cur[*r] +=
-          rxn_selected_products_stoichio[product_index];
-          // if (*r == reactions[gene_selected].GRN_rxn_OUT) {
-          //   GRN_out_changed = true;
-          // }
-
-          std::vector<int>::iterator it1 =
-          std::find(reactions[gene_selected].GRN_species_OUT.begin(),
-          reactions[gene_selected].GRN_species_OUT.end(),
-          *r);
-          if (it1 != reactions[gene_selected].GRN_species_OUT.end()) {
-            int out_index = std::distance(reactions[gene_selected].GRN_species_OUT.begin(), it1);
-            GRN_out_changed[out_index] = true;
-          }
-      }
-    }
-    /*
-    Update propensity for the selected reaction channel.
-    */
-    if (count_not_changed_reactants < rxn_selected_reactants.size()) {
-      double new_propensity = reactions[gene_selected].rxns[rxn_index].rxn_rate;
-
-      for (auto r = rxn_selected_reactants.begin(); r != rxn_selected_reactants.end(); ++r) {
-        int reactant_index = std::distance(rxn_selected_reactants.begin(), r);
-        int reactant_stoichio = rxn_selected_reactants_stoichio[reactant_index];
-
-        if (reactions[gene_selected].molecule_count_cur[*r] < reactant_stoichio){
-          new_propensity *= 0;
-        }else{
-          for(int rs = 0; rs<reactant_stoichio; ++rs)
-              new_propensity *= (reactions[gene_selected].molecule_count_cur[*r]-rs);
+        // Update fired reaction products
+        for (auto const &products_ : gene_info.rxns[rxn_name].products_stoichio) {
+            double product_factor =
+                stoichio_factors[gene_selected].rxns[rxn_name].products_factors[products_.first];
+            int product_id = gene_info.species_rev_map[products_.first];
+            auto it = gene_info.rxns[rxn_name].reactants_stoichio.find(products_.first);
+            if (it == gene_info.rxns[rxn_name].reactants_stoichio.end()) {
+                reactions[gene_selected].molecule_count_cur[product_id] +=
+                    int (products_.second * product_factor);
+                if (keep_GRN) {
+                    auto it_out = std::find(GRN_species_OUT.begin(), GRN_species_OUT.end(),
+                        products_.first);
+                    if (it_out != GRN_species_OUT.end()) {
+                        GRN_out_changed.push_back(products_.first);
+                    }
+                }
+            }
         }
-      }
-      std::vector<int>::iterator it1 =
-      std::find(reactions[gene_selected].GRN_rxn_IN.begin(),
-      reactions[gene_selected].GRN_rxn_IN.end(),
-      rxn_index);
-      if (it1 != reactions[gene_selected].GRN_rxn_IN.end()) {
-        
-        new_propensity *= regulation_function(gene_selected, rxn_index);
-      }
-      
-
-      // if (rxn_index == reactions[gene_selected].GRN_rxn_IN) {
-      //   new_propensity *= regulation_function(gene_selected);
-      // }
-      reactions[gene_selected].rxns[rxn_index].propensity_val = new_propensity;
-      rxn_order[rxn_selected].propensity_val = new_propensity;
-
+        return GRN_out_changed;
     }
-    total_propensity += reactions[gene_selected].rxns[rxn_index].propensity_val;
-    return GRN_out_changed;
-  }
 
+    void GillespieSSA::update_dependent_count_propensity (int rxn_selected,
+        std::vector<std::string> &GRN_out_changed) {
+
+        /*
+        Update propensity for dependent reactions belonging to the same gene as the
+        reaction selected for firing
+        */
+        int gene_selected = rxn_order[rxn_selected].gene_id;
+        std::string rxn_name = rxn_order[rxn_selected].rxn_name;
+        std::string gene_type = reactions[gene_selected].gene_type;
+        gene_type_struct gene_info = gene_type_info[gene_type];
+        int rxn_index = gene_info.rxn_rev_map[rxn_name];
+        std::vector<int> rxn_selected_children;
+        gene_info.gene_rxn_dependency[0].find_children(rxn_index, rxn_selected_children);
+        std::vector<int> rxn_selected_children_GRN;
+        if (keep_GRN) {
+            network[0].find_children(gene_selected, rxn_selected_children_GRN);
+        }
+        // rxn_selected_reactants.reserve(reactions[gene_selected].molecule_count_cur.size());
+        // std::vector<int> rxn_selected_reactants_stoichio;
+        // rxn_selected_reactants_stoichio.reserve(reactions[gene_selected].molecule_count_cur.size());
+        for (auto const &rxn : rxn_selected_children) {
+            std::string rxn_name_cur = gene_info.rxn_map[rxn];
+            total_propensity -= reactions[gene_selected].propensity_vals[rxn_name_cur];
+            double new_propensity = compute_propensity (gene_map[gene_selected],
+                rxn_name_cur);
+            total_propensity += new_propensity;
+            reactions[gene_selected].propensity_vals[rxn_name_cur] = new_propensity;
+            rxn_order[rxn_order_map[gene_map[gene_selected]][rxn_name_cur]].propensity_val =
+                new_propensity;
+        }
+
+
+        /*
+        Update propensity for dependent reactions belonging to genes
+        downstream of the gene related to the reaction selected for firing
+        */
+        if (GRN_out_changed.size() != 0 && keep_GRN) {
+            unsigned int children_counter = 0;
+            for (auto const &dest : rxn_selected_children_GRN) {
+                std::string species_OUT =
+                    gene_info.species_map[network[0].edge_rxn_params[gene_selected][children_counter].species_OUT];
+                std::string gene_type_cur = reactions[dest].gene_type;
+                gene_type_struct gene_info_cur = gene_type_info[gene_type_cur];
+                std::string rxn_IN =
+                    gene_info_cur.rxn_map[network[0].edge_rxn_params[gene_selected][children_counter].rxn_IN];
+                auto it = std::find(GRN_out_changed.begin(),
+                    GRN_out_changed.end(),
+                    species_OUT);
+                if (it != GRN_out_changed.end()) {
+                    total_propensity -= reactions[dest].propensity_vals[rxn_IN];
+                    double new_propensity = compute_propensity (gene_map[dest],
+                        rxn_IN);
+                    total_propensity += new_propensity;
+                    reactions[dest].propensity_vals[rxn_IN] = new_propensity;
+                    rxn_order[rxn_order_map[gene_map[dest]][rxn_IN]].propensity_val =
+                        new_propensity;
+                }
+                ++children_counter;
+            }
+        }
+    }
+
+<<<<<<< HEAD
   void GillespieSSA::update_dependent_count_propensity (int rxn_selected,
     std::vector<bool> &GRN_out_changed) {
 
@@ -321,31 +351,102 @@ namespace ScnnoiseInterface {
               }
  
               total_propensity += reactions[gene_children[g]].rxns[rxn].propensity_val;
+=======
+    void GillespieSSA::update_molecule_count_history (int &num_history, int &num_save_loop,
+        bool simulation_ended) {
+        if ((num_history == num_timepoints_save) || simulation_ended) {
+            int num_timepoints_save_cur;
+            if (simulation_ended) {
+                num_timepoints_save_cur = num_history;
+            }else{
+                num_timepoints_save_cur = num_timepoints_save;
             }
+            num_history = 0;
+            num_save_loop += 1;
+            if (save_timeseries) {
+                std::ofstream outfile;
+                outfile.open(count_save_file, std::ios_base::app);
+                for (int id_time = 0; id_time < num_timepoints_save_cur; ++id_time) {
+                    outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
+                    for (int gene = 0; gene < num_genes; ++gene) {
+                        for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+                            if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                                outfile << molecule_count_history[gene][species][id_time];
+                            }else{
+                                outfile << molecule_count_history[gene][species][id_time] << ',';
+                            }
+                        }
+                    }
+                    outfile << '\n';
+                }
+                outfile.close();
+            }else{
+                if (simulation_ended) {
+                    std::ofstream outfile;
+                    outfile.open(count_save_file, std::ios_base::app);
+                    outfile << time_history.back() << ",";
+                    for (int gene = 0; gene < num_genes; ++gene) {
+                        for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+                            if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                                outfile << reactions[gene].molecule_count_cur[species];
+                            }else{
+                                outfile << reactions[gene].molecule_count_cur[species] << ',';
+                            }
+                        }
+                    }
+                    outfile << '\n';
+                    outfile.close();
+                }
+            }
+        }else{
 
+        }
+
+        for (int gene = 0; gene < num_genes; ++gene) {
+          for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+            molecule_count_history[gene][species][num_history] =
+              reactions[gene].molecule_count_cur[species];
           }
         }
-      }
-  }
+        ++num_history;
+    }
 
-  void GillespieSSA::update_molecule_count_history (int &num_history, int &num_save_loop) {
-    if (num_history < num_timepoints_save) {
-    }else{
-      num_history = 0;
-      num_save_loop += 1;
-      if (save_timeseries) {
+    void GillespieSSA::start_molecule_count_history_file () {
         std::ofstream outfile;
-        outfile.open(count_save_file, std::ios_base::app);
-        for (int id_time = 0; id_time < num_timepoints_save; ++id_time) {
-          outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
-          for (int gene = 0; gene < num_genes; ++gene) {
-            for (int species = 0; species < num_species_gene_type[gene]; ++species) {
-              outfile << molecule_count_history[gene][species][id_time] << ',';
+        outfile.open(count_save_file);
+        outfile << "time" << ",";
+        for (int gene = 0; gene < num_genes; ++gene) {
+          for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+              std::string gene_type = reactions[gene].gene_type;
+              std::string connector = ":";
+              std::string gene_species_name = gene_map[gene] + connector +
+                gene_type_info[gene_type].species_map[species];
+            if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                outfile << gene_species_name;
+            }else{
+                outfile << gene_species_name << ",";
+>>>>>>> origin/develop
             }
           }
-          outfile << '\n';
         }
+        outfile << '\n';
+        outfile << time_history.back() << ",";
+        for (int gene = 0; gene < num_genes; ++gene) {
+          for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+              std::string gene_type = reactions[gene].gene_type;
+              std::string connector = ":";
+              std::string gene_species_name = gene_map[gene] + connector +
+                gene_type_info[gene_type].species_map[species];
+            if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                outfile << reactions[gene].molecule_count_cur[species];
+            }else{
+                outfile << reactions[gene].molecule_count_cur[species] << ",";
+            }
+          }
+        }
+        outfile << '\n';
         outfile.close();
+<<<<<<< HEAD
       }
     }
     for (int gene=0; gene < num_genes; ++gene) {
@@ -415,6 +516,51 @@ namespace ScnnoiseInterface {
         }*/
 
       }
+=======
     }
-  }
+
+    void GillespieSSA::simulate () {
+        time_history.clear();
+        time_history.push_back(0);
+        compute_total_propensity();
+        start_molecule_count_history_file();
+
+        std::random_device rd;
+        std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};
+        std::seed_seq sd(rd_seeds.begin(), rd_seeds.end());
+        thread_local static RNG generator{sd};
+        bool stop_sim = false;
+        bool simulation_ended = false;
+        int num_history = 0;
+        int num_save_loop = 0;
+        double total_time = 0;
+        double cur_time = 0;
+        update_molecule_count_history(num_history, num_save_loop,
+            simulation_ended);
+        init_cell_cycle_state (generator, cur_time);
+
+        while (!stop_sim) {
+            double next_time_step = sample_time_step(generator);
+            int next_rxn = sample_next_rxn(generator);
+            std::vector<std::string> GRN_out_changed;
+            cur_time = total_time;
+            total_time += next_time_step;
+            // std::cout << "reached here 1 = " << std::endl;
+            if (total_time < max_time) {
+                update_cell_cycle_state(total_time, cur_time, generator);
+                // std::cout << "reached here 2 = " << std::endl;
+                GRN_out_changed = update_fired_reaction(next_rxn);
+                update_dependent_count_propensity(next_rxn, GRN_out_changed);
+                time_history.push_back(next_time_step);
+                update_molecule_count_history(num_history, num_save_loop,
+                    simulation_ended);
+            }else{
+                simulation_ended = true;
+                update_molecule_count_history(num_history, num_save_loop,
+                    simulation_ended);
+                stop_sim = true;
+            }
+        }
+>>>>>>> origin/develop
+    }
 }

@@ -3,7 +3,31 @@
 #include "gillespieSSA.hpp"
 #include "gillespieSDMnoCellCycle.hpp"
 
-// Add functions to create GRNs of sizes 2 and 3
+// Add class to setup params for GRNs
+class SetupGRNParams {
+private:
+    /* data */
+    int num_rxns;
+    int num_genes;
+    double max_time;
+    bool save_timeseries;
+    int num_timepoints_save;
+    std::string count_save_file;
+    std::vector<int> num_species_gene_type;
+    std::vector<int> num_rxns_gene_type;
+
+public:
+    SetupGRNParams (std::vector<std::string> gene_type) {
+        num_rxns = 0;
+        num_genes = gene_type.size();
+        max_time = 10000;
+        save_timeseries = true;
+        num_timepoints_save = 100;
+        count_save_file = "data/testing_temp.two_gene_test.csv";
+        num_species_gene_type.reserve(num_genes);
+        num_rxns_gene_type.reserve(num_genes);
+    }
+};
 
 TEST_CASE("Test constructor for gillespieSDMnoCellCycle")
 {

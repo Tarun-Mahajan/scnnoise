@@ -66,7 +66,7 @@ namespace ScnnoiseInterface {
         void cell_division (RNG& generator);
         void remove_dosage_compensation ();
         void update_propensity_cell_cycle ();
-        void update_propensity_cell_division ()
+        void update_propensity_cell_division ();
         void sample_cell_cycle_time (RNG &generator);
         void set_cur_time (double cur_time);
         void set_cell_cycle_start_time ();

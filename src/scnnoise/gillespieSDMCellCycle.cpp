@@ -101,7 +101,7 @@ namespace ScnnoiseInterface {
                 if (found != std::string::npos) {
                     double &stoichio_ =
                         stoichio_factors[gene].rxns["transcription"].products_factors["mRNA"];
-                    stoichio_ = 2;
+                    stoichio_ *= 2;
                 }else{
                     search_string = "constitutive";
                     found = gene_type.find(search_string);
@@ -149,7 +149,7 @@ namespace ScnnoiseInterface {
                 if (found != std::string::npos) {
                     double &stoichio_ =
                         stoichio_factors[gene].rxns["transcription"].products_factors["mRNA"];
-                    stoichio_ = 1;
+                    stoichio_ /= 2;
                 }else{
                     search_string = "constitutive";
                     found = gene_type.find(search_string);

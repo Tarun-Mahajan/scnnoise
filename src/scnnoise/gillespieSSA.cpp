@@ -349,13 +349,13 @@ namespace ScnnoiseInterface {
 
         while (!stop_sim) {
             double next_time_step = sample_time_step(generator);
-            int next_rxn = sample_next_rxn(generator);
             std::vector<std::string> GRN_out_changed;
             cur_time = total_time;
             total_time += next_time_step;
             // std::cout << "reached here 1 = " << std::endl;
             if (total_time < max_time) {
                 update_cell_cycle_state(total_time, cur_time, generator);
+                int next_rxn = sample_next_rxn(generator);
                 // std::cout << "reached here 2 = " << std::endl;
                 GRN_out_changed = update_fired_reaction(next_rxn);
                 update_dependent_count_propensity(next_rxn, GRN_out_changed);

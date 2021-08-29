@@ -175,6 +175,48 @@ namespace ScnnoiseInterface {
         }
     }
 
+    void gillespieSDMCellCycle::update_propensity_cell_division () {
+        for (std::size_t gene = 0; gene < num_genes; ++gene) {
+            std::string gene_type = reactions[gene].gene_type;
+            auto it_on = gene_type_info[gene_type].species_rev_map.find("gene on");
+            if (it_on != gene_type_info[gene_type].species_rev_map.end()) {
+                // Update propensity for gene on reactions
+                total_propensity -= reactions[gene].propensity_vals["gene on"];
+                double new_propensity =
+                    compute_propensity(gene_map[gene], "gene on");
+                reactions[gene].propensity_vals["gene on"] = new_propensity;
+                unsigned int rxn_order_id =
+                    rxn_order_map[gene_map[gene]]["gene on"];
+                rxn_order[rxn_order_id].propensity_val = new_propensity;
+                total_propensity += new_propensity;
+
+                // Update propensity for gene off reactions
+                total_propensity -= reactions[gene].propensity_vals["gene off"];
+                new_propensity =
+                    compute_propensity(gene_map[gene], "gene off");
+                reactions[gene].propensity_vals["gene off"] = new_propensity;
+                rxn_order_id =
+                    rxn_order_map[gene_map[gene]]["gene off"];
+                rxn_order[rxn_order_id].propensity_val = new_propensity;
+                total_propensity += new_propensity;
+            }else {
+            }
+            // Update propensity for all other reactions
+            for (auto &it : reactions[gene].propensity_vals) {
+                if (it.first != "gene off"  && it.first != "gene on") {
+                    total_propensity -= it.second;
+                    double new_propensity =
+                        compute_propensity(gene_map[gene], it.first);
+                    it.second = new_propensity;
+                    unsigned int rxn_order_id =
+                        rxn_order_map[gene_map[gene]][it.first];
+                    rxn_order[rxn_order_id].propensity_val = new_propensity;
+                    total_propensity += new_propensity;
+                }
+            }
+        }
+    }
+
     void gillespieSDMCellCycle::perform_dosage_compensation () {
         for (std::size_t gene = 0; gene < num_genes; ++gene) {
             std::string gene_type = reactions[gene].gene_type;
@@ -227,7 +269,7 @@ namespace ScnnoiseInterface {
             next_time > cell_cycle_start_time + cell_cycle_length) {
                 cell_division(generator);
                 remove_dosage_compensation();
-                update_propensity_cell_cycle();
+                update_propensity_cell_division();
                 // compute_total_propensity();
                 cell_cycle_start_time = cell_cycle_start_time + cell_cycle_length;
                 sample_cell_cycle_time(generator);

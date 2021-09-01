@@ -2,7 +2,7 @@ from scnnoise import _scnnoise
 import pandas as pd
 
 class LTSim:
-    def __init__(self, root, num_rxns, num_genes, num_species_genes, num_rxns_gene_type, max_time, count_save_file, sample_csv, edge_list_csv, sample_species):
+    def __init__(self, root, num_genes, max_time, count_csv, gene_csv, mol_csv, GRN_csv, sample_csv):
         """
         Constructor for the LTSim object
         Takes in the root of the LineageTree in the simulation
@@ -10,15 +10,13 @@ class LTSim:
         self.root = root    #cell Type
         
         #write set functions for each instead of in constructor
-        self.num_rxns = num_rxns
         self.num_genes = num_genes
-        self.num_species_genes = num_species_genes
-        self.num_rxns_gene_type = num_rxns_gene_type
-        self.max_time = max_time
+        self.max_time = max_time 
+        self.count_csv= count_csv
+        self.gene_csv = gene_csv
+        self.mol_csv = mol_csv
+        self.GRN_csv = GRN_csv
         self.sample_csv= sample_csv
-        self.edge_list_csv = edge_list_csv
-        self.sample_species = sample_species
-        self.count_save_file = count_save_file
         
     def sim_LT(self, num_samples):
         """
@@ -27,14 +25,12 @@ class LTSim:
         #Step 1: Construct simulator object
         #a. build GRN from params
         #b. define intragene interactions
-        simulator = _scnnoise.gillespieSDMnoCellCycle(self.num_rxns, self.num_genes, self.num_species_genes, self.num_rxns_gene_type, self.max_time, True, 10000, self.count_save_file)
+        if self.GRN_csv == "":
+            simulator = _scnnoise.gillespieSDMnoCellCycle(self.num_genes, self.gene_csv, self.mol_csv, self.count_csv)
+        else:
+            simulator = _scnnoise.gillespieSDMnoCellCycle(self.num_genes, self.gene_csv, self.mol_csv, self.count_csv, True, self.GRN_csv)
         
-    #add_gene_state (int gene_id, int gene_type, std::vector<int> GRN_rxn_IN,
-    #std::vector<int> GRN_species_OUT, std::vector<int> molecule_count_cur,
-    #std::vector<std::vector<int>> reactants, std::vector<std::vector<int>> products,
-    #std::vector<std::vector<int>> reactants_stoichio, std::vector<std::vector<int>> products_stoichio,
-    #std::vector<double> rxn_rate, std::vector<double> propensity_val)
-        
+        """
         gene_type = [0,0] 
         molecule_count_cur = [[0,2,0,0],[0,2,0,0]] #initialize based on self.rxn_rate
 
@@ -71,7 +67,7 @@ class LTSim:
         simulator.add_dependency_edge(0,2,3)
         simulator.add_dependency_edge(0,3,4)
         simulator.add_dependency_edge(0,4,5)
-    
+        """
         
         #Step 2: Run sim_cell_type() on root
         self.root.sim_transition(num_samples, simulator, False)

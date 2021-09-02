@@ -19,7 +19,7 @@ namespace ScnnoiseInterface {
     scNNoiSE::scNNoiSE (int num_genes, std::string gene_filepath,
         std::string molecule_count_filepath,
         std::string count_save_file, bool keep_GRN = false,
-        std::string GRN_filepath = "dummy", int num_timepoints_save) {
+        std::string GRN_filepath = "dummy", int num_timepoints_save = 1000) {
         // this->num_rxns = num_rxns;
         this->num_genes = num_genes;
         this->keep_GRN = keep_GRN;

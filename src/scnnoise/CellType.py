@@ -83,7 +83,8 @@ class CellType:
         #collect Traisition samples
         if collect_samples:
             samples = np.random.randint(0,len(sim_out.index), size = num_samples)
-            molecules = [gene * self.sample_species for gene in range(self.num_genes)]
+            #molecules = [gene * self.sample_species for gene in range(self.num_genes)]
+            #find a better way to get indices for mRNAs in each gene
             sample_out = sim_out.iloc[samples][sim_out.columns[molecules]]
             sample_out['Cell Type'] = [str(self.lineageName)+'T'] * num_samples
             sample_out.to_csv(self.sample_csv, mode = 'a')

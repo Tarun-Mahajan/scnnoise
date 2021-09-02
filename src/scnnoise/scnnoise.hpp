@@ -565,8 +565,7 @@ namespace ScnnoiseInterface {
         virtual void simulate () = 0;
 
         void set_simulation_params (double max_time = 10000,
-            bool save_timeseries = false,
-            int num_timepoints_save = 1000);
+            bool save_timeseries = false);
 
         /********************************************//**
         \brief Function to compute gene expression regulation by transcription factors

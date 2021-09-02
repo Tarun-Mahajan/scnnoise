@@ -865,11 +865,9 @@ namespace ScnnoiseInterface {
         }
     }
 
-    void scNNoiSE::set_simulation_params (double max_time, bool save_timeseries,
-        int num_timepoints_save) {
+    void scNNoiSE::set_simulation_params (double max_time, bool save_timeseries) {
         this->max_time = max_time;
         this->save_timeseries = save_timeseries;
-        this->num_timepoints_save = num_timepoints_save;
     }
 
     void scNNoiSE::change_output_filepath (std::string new_filepath) {

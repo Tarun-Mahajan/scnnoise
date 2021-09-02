@@ -177,4 +177,12 @@ namespace ScnnoiseInterface {
       std::vector<gene_type_struct> two_state(1);
       two_state
   }
+  void swap_rxn_rates (std::vector<std::vector<int>> rxn_rates){
+      for(int gene = 0; gene<rxn_rates.size(); ++gene){
+          for(int rxn = 0; rxn<rxn_rates[gene].size(); ++rxn){
+            reactions[gene].rxns[rxn].rxn_rate = rxn_rates[gene][rxn];
+          }
+      }
+  }
+
 }

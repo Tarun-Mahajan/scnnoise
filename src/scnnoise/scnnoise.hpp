@@ -516,6 +516,7 @@ namespace ScnnoiseInterface {
     double hill_function (int tf_count, double hill_coeff, double half_maximal,
                          bool activator);
 
+    void swap_rxn_rates (std::vector<std::vector<int>> rxn_rates);
 
   };
 }

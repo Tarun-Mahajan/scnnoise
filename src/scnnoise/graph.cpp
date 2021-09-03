@@ -164,4 +164,14 @@ namespace GraphSpace {
       }
     }
   }
+
+  // Function to return parent nodes of a given node.
+  void Graph::find_parents (int vert, std::vector<int> &parents) {
+      parents.clear();
+    if (!parent_list[vert].empty()) {
+      for (int v: parent_list[vert]) {
+        parents.push_back(v);
+      }
+    }
+  }
 }

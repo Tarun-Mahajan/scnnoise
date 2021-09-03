@@ -62,8 +62,7 @@ class CellType:
         #helper (careful with passing by reference/by copy)
         #Step 1: Save new kinetic parameters into simulator
             #a. maybe here it would be better to add options to the c++ code to make this easier 
-        for gene in range(simulator.num_genes):   
-            simulator.set_rxn_rates(self.rxn_rates)
+        simulator.swap_rxn_rates(self.rxn_rates)
             
             
         #Step 2: simluate transition from parent steady state to daughter steady state

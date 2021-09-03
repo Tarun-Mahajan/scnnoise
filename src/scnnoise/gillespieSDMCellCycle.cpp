@@ -16,11 +16,11 @@ namespace ScnnoiseInterface {
     gillespieSDMCellCycle::gillespieSDMCellCycle (int num_genes, std::string gene_filepath,
         std::string molecule_count_filepath,
         std::string count_save_file, bool keep_GRN,
-        std::string GRN_filepath):
+        std::string GRN_filepath, int num_timepoints_save):
     GillespieSSA (num_genes, gene_filepath,
         molecule_count_filepath,
         count_save_file, keep_GRN,
-        GRN_filepath) {
+        GRN_filepath, num_timepoints_save) {
     }
 
     void gillespieSDMCellCycle::swap_rxn_order (rxn_order_struct &A,
@@ -207,6 +207,13 @@ namespace ScnnoiseInterface {
                     total_propensity -= it.second;
                     double new_propensity =
                         compute_propensity(gene_map[gene], it.first);
+                    // if (it.first == "mRNA decay") {
+                    //     if (reactions[gene].molecule_count_cur[0] == 0 &&
+                    //         it.second != 0) {
+                    //         std::cout << "Error here as well = " <<
+                    //         it.second << " " << new_propensity << std::endl;
+                    //     }
+                    // }
                     it.second = new_propensity;
                     unsigned int rxn_order_id =
                         rxn_order_map[gene_map[gene]][it.first];
@@ -258,7 +265,7 @@ namespace ScnnoiseInterface {
             cell_cycle_length * cell_cycle_params.replication_time_factor) {
                 replicate_genes();
                 perform_dosage_compensation();
-                update_propensity_cell_cycle();
+                update_propensity_cell_division();
                 // compute_total_propensity();
                 current_cell_cycle_state = "G2";
             }
@@ -329,7 +336,7 @@ namespace ScnnoiseInterface {
     void gillespieSDMCellCycle::move_to_G1 (RNG &generator) {
         cell_division(generator);
         remove_dosage_compensation();
-        update_propensity_cell_cycle();
+        update_propensity_cell_division();
         compute_total_propensity();
         current_cell_cycle_state = "G1";
     }
@@ -337,7 +344,7 @@ namespace ScnnoiseInterface {
     void gillespieSDMCellCycle::move_to_G2 () {
         replicate_genes();
         perform_dosage_compensation();
-        update_propensity_cell_cycle();
+        update_propensity_cell_division();
         compute_total_propensity();
         current_cell_cycle_state = "G2";
     }

@@ -45,7 +45,7 @@ namespace ScnnoiseInterface {
         gillespieSDMCellCycle (int num_genes, std::string gene_filepath,
             std::string molecule_count_filepath,
             std::string count_save_file, bool keep_GRN,
-            std::string GRN_filepath);
+            std::string GRN_filepath, int num_timepoints_save);
 
         void sort_reaction (int &rxn_selected) override;
         void update_cell_cycle_state (double next_time, double cur_time,

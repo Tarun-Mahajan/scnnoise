@@ -295,12 +295,14 @@ namespace ScnnoiseInterface {
         double regulation_function_factor = 0;
         gene_type_struct gene_info = gene_type_info[gene_map[gene_id]];
         int rxn_id = gene_info.rxn_rev_map[rxn_name];
+        bool is_regulated = false;
         if (reactions[gene_id].GRN_rxn_IN.size() != 0){
             auto it = std::find(reactions[gene_id].GRN_rxn_IN.begin(),
                 reactions[gene_id].GRN_rxn_IN.end(),
                 rxn_name);
 
             if (it != reactions[gene_id].GRN_rxn_IN.end()) {
+                is_regulated = true;
                 std::vector<int> parents;
                 network[0].find_parents(gene_id, parents);
                 for (auto const &src : parents) {
@@ -321,7 +323,11 @@ namespace ScnnoiseInterface {
             }
         }
         regulation_function_factor *= max_rxn_rate_change[gene_id][rxn_name];
-        regulation_function_factor += 1;
+        if (is_regulated) {
+            regulation_function_factor += 1;
+        }else{
+            regulation_function_factor += 1;
+        }
         return regulation_function_factor;
     }
 
@@ -837,11 +843,11 @@ namespace ScnnoiseInterface {
                     }else {
                         if (id_counter == 5) {
                             gene_type_struct gene_info =
-                                gene_type_info[gene_map[GRN_int_param[1]]];
+                                gene_type_info[reactions[GRN_int_param[1]].gene_type];
                             GRN_int_param.push_back(gene_info.rxn_rev_map[word]);
                         }else {
                             gene_type_struct gene_info =
-                                gene_type_info[gene_map[GRN_int_param[0]]];
+                                gene_type_info[reactions[GRN_int_param[0]].gene_type];
                             GRN_int_param.push_back(gene_info.species_rev_map[word]);
                         }
                     }

@@ -350,7 +350,7 @@ namespace ScnnoiseInterface {
         outfile.close();
     }
 
-    void GillespieSSA::simulate (std::vector<double> random_seeds) {
+    void GillespieSSA::simulate (std::vector<unsigned int> random_seeds) {
         time_history.clear();
         time_history.push_back(0);
         compute_total_propensity();

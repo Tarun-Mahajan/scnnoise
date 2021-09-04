@@ -350,7 +350,7 @@ namespace ScnnoiseInterface {
         outfile.close();
     }
 
-    void GillespieSSA::simulate () {
+    void GillespieSSA::simulate (std::vector<double> random_seeds) {
         time_history.clear();
         time_history.push_back(0);
         compute_total_propensity();
@@ -358,6 +358,8 @@ namespace ScnnoiseInterface {
 
         std::random_device rd;
         std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};
+        std::vector<std::uint_least32_t> rd_seeds =
+            {random_seeds[0], random_seeds[1], random_seeds[2], random_seeds[3]};
         std::seed_seq sd(rd_seeds.begin(), rd_seeds.end());
         thread_local static RNG generator{sd};
         bool stop_sim = false;

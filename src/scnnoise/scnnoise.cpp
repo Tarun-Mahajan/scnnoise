@@ -913,11 +913,11 @@ namespace ScnnoiseInterface {
         this->count_save_file = new_filepath;
     }
 
-    void swap_rxn_rates (std::vector<std::vector<int>> rxn_rates){
+    void swap_rxn_rates (std::map<std::string, int> rxn_map, std::vector<std::vector<int>> rxn_rates){
       //mbe add exception handling for rxn_rates size
-      for(int gene = 0; gene<rxn_rates.size(); ++gene){
-          for(int rxn = 0; rxn<rxn_rates[gene].size(); ++rxn){
-            reactions[gene].rxns[rxn].rxn_rate = rxn_rates[gene][rxn];
+      for(int gene = 0; gene<reactions.size(); ++gene){
+          for(auto it = reactions[gene].rxn_rates.begin(); it != reactions[gene].rxn_rates.end(); ++it){
+            it->second = rxn_rates[gene][rxn_map[it->first]];
           }
       }
   }

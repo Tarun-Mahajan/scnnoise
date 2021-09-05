@@ -19,7 +19,7 @@ PYBIND11_MODULE(_scnnoise, m) {
         .def("add_new_dependency_graph",
             &ScnnoiseInterface::scNNoiSE::add_new_dependency_graph)
         .def("set_simulation_params",
-            &ScnnoiseInterface::scNNoiSE::add_new_dependency_graph)
+            &ScnnoiseInterface::scNNoiSE::set_simulation_params)
         .def("swap_rxn_rates",
             &ScnnoiseInterface::scNNoiSE::swap_rxn_rates);
     py::class_<ScnnoiseInterface::GillespieSSA,

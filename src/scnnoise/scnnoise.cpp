@@ -913,7 +913,7 @@ namespace ScnnoiseInterface {
         this->count_save_file = new_filepath;
     }
 
-    void scNNoiSE::swap_rxn_rates (std::map<std::string, int> rxn_map, std::vector<std::vector<int>> rxn_rates){
+    void scNNoiSE::swap_rxn_rates (std::map<std::string, int> rxn_map, std::vector<std::vector<double>> rxn_rates){
       //mbe add exception handling for rxn_rates size
       for(int gene = 0; gene<reactions.size(); ++gene){
           for(auto it = reactions[gene].rxn_rates.begin(); it != reactions[gene].rxn_rates.end(); ++it){

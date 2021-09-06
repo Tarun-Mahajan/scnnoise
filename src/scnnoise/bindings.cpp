@@ -29,12 +29,12 @@ PYBIND11_MODULE(_scnnoise, m) {
               ScnnoiseInterface::GillespieSSA>(m, "gillespieSDMnoCellCycle")
         .def(py::init<int, std::string,
             std::string, std::string, bool,
-            std::string>());
+            std::string, int>());
     py::class_<ScnnoiseInterface::gillespieSDMCellCycle,
               ScnnoiseInterface::GillespieSSA>(m, "gillespieSDMCellCycle")
         .def(py::init<int, std::string,
             std::string, std::string, bool,
-            std::string>())
+            std::string, int>())
         .def("set_cell_cycle_params",
             &ScnnoiseInterface::gillespieSDMCellCycle::set_cell_cycle_params)
         .def("set_dosage_compensation",

@@ -131,9 +131,20 @@ namespace ScnnoiseInterface {
                     default:
                         {
                             if ((id_counter - 2) % 2 == 0) {
-                                species_name.push_back(word);
+                                if (word == "") {
+                                    std::cout << "here = " << id_counter << std::endl;
+                                    break;
+                                }else{
+                                    species_name.push_back(word);
+                                }
+
                             }else{
-                                species_count.push_back(std::stoi(word));
+                                if (word == "") {
+                                    break;
+                                }else{
+                                    species_count.push_back(std::stoi(word));
+                                }
+
                             }
                             break;
                         }

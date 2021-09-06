@@ -584,6 +584,7 @@ namespace ScnnoiseInterface {
 
         void change_output_filepath (std::string new_filepath);
 
+        void swap_rxn_rates (std::map<std::string, std::map<std::string, int>> rxn_rates);
 
     };
 }

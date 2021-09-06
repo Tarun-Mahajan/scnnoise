@@ -358,8 +358,12 @@ namespace ScnnoiseInterface {
 
         std::random_device rd;
         // std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};
-        std::vector<std::uint_least32_t> rd_seeds =
-            {random_seeds[0], random_seeds[1], random_seeds[2], random_seeds[3]};
+        // std::vector<std::uint_least32_t> rd_seeds =
+        //     {random_seeds[0], random_seeds[1], random_seeds[2], random_seeds[3]};
+        std::vector<std::uint_least32_t> rd_seeds(random_seeds.size());
+        for (std::size_t b = 0; b < random_seeds.size(); ++b) {
+            rd_seeds[b] = random_seeds[b];
+        }
         std::seed_seq sd(rd_seeds.begin(), rd_seeds.end());
         thread_local static RNG generator{sd};
         bool stop_sim = false;

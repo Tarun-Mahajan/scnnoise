@@ -132,7 +132,6 @@ namespace ScnnoiseInterface {
                         {
                             if ((id_counter - 2) % 2 == 0) {
                                 if (word == "") {
-                                    std::cout << "here = " << id_counter << std::endl;
                                     break;
                                 }else{
                                     species_name.push_back(word);

@@ -264,8 +264,14 @@ namespace ScnnoiseInterface {
                                         unsigned int diff_ = id_counter -
                                             (4 + num_rxn_IN + num_species_OUT);
                                         if (diff_ % 2 == 0) {
+                                            if (word == "") {
+                                                break;
+                                            }
                                             rxn_names.push_back(word);
                                         }else{
+                                            if (word == "") {
+                                                break;
+                                            }
                                             rxn_rates.push_back(std::stod(word));
                                         }
                                     }

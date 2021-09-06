@@ -19,7 +19,7 @@ PYBIND11_MODULE(_scnnoise, m) {
         .def("add_new_dependency_graph",
             &ScnnoiseInterface::scNNoiSE::add_new_dependency_graph)
         .def("set_simulation_params",
-            &ScnnoiseInterface::scNNoiSE::add_new_dependency_graph);
+            &ScnnoiseInterface::scNNoiSE::set_simulation_params);
     py::class_<ScnnoiseInterface::GillespieSSA,
               ScnnoiseInterface::scNNoiSE>(m, "GillespieSSA")
         .def("simulate", &ScnnoiseInterface::GillespieSSA::simulate);
@@ -27,12 +27,12 @@ PYBIND11_MODULE(_scnnoise, m) {
               ScnnoiseInterface::GillespieSSA>(m, "gillespieSDMnoCellCycle")
         .def(py::init<int, std::string,
             std::string, std::string, bool,
-            std::string>());
+            std::string, int>());
     py::class_<ScnnoiseInterface::gillespieSDMCellCycle,
               ScnnoiseInterface::GillespieSSA>(m, "gillespieSDMCellCycle")
         .def(py::init<int, std::string,
             std::string, std::string, bool,
-            std::string>())
+            std::string, int>())
         .def("set_cell_cycle_params",
             &ScnnoiseInterface::gillespieSDMCellCycle::set_cell_cycle_params)
         .def("set_dosage_compensation",

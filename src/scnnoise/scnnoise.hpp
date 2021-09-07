@@ -482,7 +482,7 @@ namespace ScnnoiseInterface {
         scNNoiSE (int num_genes, std::string gene_filepath,
             std::string molecule_count_filepath,
             std::string count_save_file, bool keep_GRN,
-            std::string GRN_filepath);
+            std::string GRN_filepath, int num_timepoints_save);
 
     /********************************************//**
      \brief Add state for a gene.
@@ -517,7 +517,11 @@ namespace ScnnoiseInterface {
 
         gene_type_struct create_two_state_nascent_type ();
 
+        void set_reduced_model_stoichio_factor (std::string filepath);
+
         gene_type_struct create_two_state_reduced_type ();
+
+        gene_type_struct create_two_state_reduced_mRNA_type ();
 
         void init_max_rxn_rate_change ();
 
@@ -560,11 +564,10 @@ namespace ScnnoiseInterface {
         A pure virtual function for simulating stochastic gene
         expression. Needs to be overridden in any derived class.
         ***********************************************/
-        virtual void simulate () = 0;
+        virtual void simulate (std::vector<unsigned int> random_seeds) = 0;
 
         void set_simulation_params (double max_time = 10000,
-            bool save_timeseries = false,
-            int num_timepoints_save = 1000);
+            bool save_timeseries = false);
 
         /********************************************//**
         \brief Function to compute gene expression regulation by transcription factors
@@ -581,6 +584,7 @@ namespace ScnnoiseInterface {
 
         void change_output_filepath (std::string new_filepath);
 
+        void swap_rxn_rates (std::map<std::string, std::map<std::string, double>> rxn_rates);
 
     };
 }

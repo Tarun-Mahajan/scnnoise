@@ -17,11 +17,11 @@ namespace ScnnoiseInterface {
         std::string gene_filepath,
         std::string molecule_count_filepath,
         std::string count_save_file, bool keep_GRN,
-        std::string GRN_filepath):
+        std::string GRN_filepath, int num_timepoints_save):
     GillespieSSA (num_genes, gene_filepath,
         molecule_count_filepath,
         count_save_file, keep_GRN,
-        GRN_filepath) {
+        GRN_filepath, num_timepoints_save) {
     }
 
     void gillespieSDMnoCellCycle::sort_reaction (int &rxn_selected) {

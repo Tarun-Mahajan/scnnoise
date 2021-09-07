@@ -19,7 +19,7 @@ namespace ScnnoiseInterface {
     scNNoiSE::scNNoiSE (int num_genes, std::string gene_filepath,
         std::string molecule_count_filepath,
         std::string count_save_file, bool keep_GRN = false,
-        std::string GRN_filepath = "dummy") {
+        std::string GRN_filepath = "dummy", int num_timepoints_save = 1000) {
         // this->num_rxns = num_rxns;
         this->num_genes = num_genes;
         this->keep_GRN = keep_GRN;
@@ -34,7 +34,7 @@ namespace ScnnoiseInterface {
         // num_rxn_gene_type.assign({6, 7, 5, 9});
         this->max_time = 10000;
         this->save_timeseries = false;
-        this->num_timepoints_save = 1000;
+        this->num_timepoints_save = num_timepoints_save;
         this->count_save_file = count_save_file;
         // this->count_save_file = count_save_file;
 
@@ -131,9 +131,19 @@ namespace ScnnoiseInterface {
                     default:
                         {
                             if ((id_counter - 2) % 2 == 0) {
-                                species_name.push_back(word);
+                                if (word == "") {
+                                    break;
+                                }else{
+                                    species_name.push_back(word);
+                                }
+
                             }else{
-                                species_count.push_back(std::stoi(word));
+                                if (word == "") {
+                                    break;
+                                }else{
+                                    species_count.push_back(std::stoi(word));
+                                }
+
                             }
                             break;
                         }
@@ -264,8 +274,14 @@ namespace ScnnoiseInterface {
                                         unsigned int diff_ = id_counter -
                                             (4 + num_rxn_IN + num_species_OUT);
                                         if (diff_ % 2 == 0) {
+                                            if (word == "") {
+                                                break;
+                                            }
                                             rxn_names.push_back(word);
                                         }else{
+                                            if (word == "") {
+                                                break;
+                                            }
                                             rxn_rates.push_back(std::stod(word));
                                         }
                                     }
@@ -295,12 +311,14 @@ namespace ScnnoiseInterface {
         double regulation_function_factor = 0;
         gene_type_struct gene_info = gene_type_info[gene_map[gene_id]];
         int rxn_id = gene_info.rxn_rev_map[rxn_name];
+        bool is_regulated = false;
         if (reactions[gene_id].GRN_rxn_IN.size() != 0){
             auto it = std::find(reactions[gene_id].GRN_rxn_IN.begin(),
                 reactions[gene_id].GRN_rxn_IN.end(),
                 rxn_name);
 
             if (it != reactions[gene_id].GRN_rxn_IN.end()) {
+                is_regulated = true;
                 std::vector<int> parents;
                 network[0].find_parents(gene_id, parents);
                 for (auto const &src : parents) {
@@ -321,7 +339,11 @@ namespace ScnnoiseInterface {
             }
         }
         regulation_function_factor *= max_rxn_rate_change[gene_id][rxn_name];
-        regulation_function_factor += 1;
+        if (is_regulated) {
+            regulation_function_factor += 1;
+        }else{
+            regulation_function_factor += 1;
+        }
         return regulation_function_factor;
     }
 
@@ -656,6 +678,42 @@ namespace ScnnoiseInterface {
         return gene_info;
     }
 
+    void scNNoiSE::set_reduced_model_stoichio_factor (std::string filepath) {
+        std::ifstream gene_burst_size(filepath);
+        std::string row_text;
+        std::string gene_name;
+        double burst_size;
+        std::string word;
+        while (std::getline(gene_burst_size, row_text)) {
+            std::istringstream str_stream(row_text);
+
+            unsigned int id_counter = 0;
+            while (std::getline(str_stream, word, ',')) {
+                switch(id_counter) {
+                    case 0:
+                        {
+                            gene_name = word;
+                            break;
+                        }
+                    case 1:
+                        {
+                            burst_size = std::stod(word);
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+                ++id_counter;
+            }
+            stoichio_factor_struct &stoichio_factor_gene =
+                stoichio_factors[gene_rev_map[gene_name]];
+            stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
+                burst_size;
+        }
+    }
+
     gene_type_struct scNNoiSE::create_two_state_reduced_type () {
         gene_type_struct gene_info;
         // Species are 0:gene off, 1:gene on, 2:mRNA, 3:protein
@@ -702,11 +760,45 @@ namespace ScnnoiseInterface {
         return gene_info;
     }
 
+    gene_type_struct scNNoiSE::create_two_state_reduced_mRNA_type () {
+        gene_type_struct gene_info;
+        // Species are 0:mRNA
+        gene_info.species_rev_map["mRNA"] = 0;
+        for (auto const &it : gene_info.species_rev_map) {
+            gene_info.species_map[it.second] = it.first;
+        }
+        gene_info.num_species = gene_info.species_map.size();
+        // Reactions are 0:gene on, 1:gene off 2:transcription, 3:mRNA decay,
+        // 4:translation, 5:protein decay
+        gene_info.rxn_map[0] = "transcription";
+        gene_info.rxn_map[1] = "mRNA decay";
+        for (auto const &it : gene_info.rxn_map) {
+            gene_info.rxn_rev_map[it.second] = it.first;
+        }
+        gene_info.num_rxns = gene_info.rxn_map.size();
+        std::map<std::string, rxn_struct> rxns_;
+        // Transcription
+        std::string str_ = "transcription";
+        rxns_[str_].products_stoichio["mRNA"] = 1;
+        // mRNA decay
+        str_ = "mRNA decay";
+        rxns_[str_].reactants_stoichio["mRNA"] = 1;
+        gene_info.rxns = rxns_;
+
+        gene_info.gene_rxn_dependency.push_back(
+            GraphSpace::GraphDependency(gene_info.num_rxns));
+        gene_info.gene_rxn_dependency[0].add_edge(0, 1);
+        gene_info.gene_rxn_dependency[0].add_edge(1, 1);
+        return gene_info;
+    }
+
     void scNNoiSE::create_init_gene_type_info () {
         gene_type_info["constitutive"] = create_constitutive_type();
         gene_type_info["constitutive nascent"] = create_constitutive_type();
         gene_type_info["two-state"] = create_two_state_type();
         gene_type_info["two-state nascent"] = create_two_state_nascent_type();
+        gene_type_info["two-state reduced"] = create_two_state_reduced_type();
+        gene_type_info["two-state reduced mRNA"] = create_two_state_reduced_mRNA_type();
     }
 
     int scNNoiSE::factorial (int num) {
@@ -800,11 +892,11 @@ namespace ScnnoiseInterface {
                     }else {
                         if (id_counter == 5) {
                             gene_type_struct gene_info =
-                                gene_type_info[gene_map[GRN_int_param[1]]];
+                                gene_type_info[reactions[GRN_int_param[1]].gene_type];
                             GRN_int_param.push_back(gene_info.rxn_rev_map[word]);
                         }else {
                             gene_type_struct gene_info =
-                                gene_type_info[gene_map[GRN_int_param[0]]];
+                                gene_type_info[reactions[GRN_int_param[0]].gene_type];
                             GRN_int_param.push_back(gene_info.species_rev_map[word]);
                         }
                     }
@@ -828,14 +920,20 @@ namespace ScnnoiseInterface {
         }
     }
 
-    void scNNoiSE::set_simulation_params (double max_time, bool save_timeseries,
-        int num_timepoints_save) {
+    void scNNoiSE::set_simulation_params (double max_time, bool save_timeseries) {
         this->max_time = max_time;
         this->save_timeseries = save_timeseries;
-        this->num_timepoints_save = num_timepoints_save;
     }
 
     void scNNoiSE::change_output_filepath (std::string new_filepath) {
         this->count_save_file = new_filepath;
     }
+
+    void scNNoiSE::swap_rxn_rates (std::map<std::string, std::map<std::string, double>> rxn_rates){
+      for(int gene = 0; gene<reactions.size(); ++gene){
+          for(auto it = reactions[gene].rxn_rates.begin(); it != reactions[gene].rxn_rates.end(); ++it){
+            it->second = rxn_rates[reactions[gene].gene_name][it->first];
+          }
+      }
+  }
 }

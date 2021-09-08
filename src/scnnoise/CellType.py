@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 class CellType:
-    def __init__(self, lineageName,rxn_rate_csv, children, count_csv, sample_csv, num_genes):
+    def __init__(self, lineageName,rxn_rate_csv, children, count_csv, sample_csv):
         """
         Takes in rxn_rates and children and constructs a cellType node
         """
@@ -12,7 +12,6 @@ class CellType:
         self.children = children
         self.count_csv = count_csv
         self.sample_csv = sample_csv
-        self.num_genes = num_genes
         cell_types = pd.read_csv(rxn_rate_csv)
         curr_cell_type = cell_types[cell_types['Cell Type'] == self.lineageName]
         curr_cell_type.index = curr_cell_type['Gene']

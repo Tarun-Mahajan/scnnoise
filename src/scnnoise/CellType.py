@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 class CellType:
-    def __init__(self, lineageName,rxn_rates, children, count_csv, sample_csv, sample_species, num_genes):
+    def __init__(self, lineageName,rxn_rates, children, count_csv, sample_csv, num_genes):
         """
         Takes in rxn_rates and children and constructs a cellType node
         """
@@ -13,7 +13,6 @@ class CellType:
         self.children = children
         self.count_csv = count_csv
         self.sample_csv = sample_csv
-        self.sample_species = sample_species
         self.num_genes = num_genes
 
     def sim_cell_type(self, num_samples, simulator):
@@ -36,12 +35,7 @@ class CellType:
             #for steady state check sergio method
         
         #Step 2: Sample num_samples reads for each gene
-        sim_out = pd.read_csv(self.count_csv)
-        samples = np.random.randint(0,len(sim_out.index), size = num_samples)
-        molecules = [gene * self.sample_species for gene in range(self.num_genes)]
-        sample_out = sim_out.iloc[samples][sim_out.columns[molecules]]
-        sample_out['Cell Type'] = [str(self.lineageName)] * num_samples
-        sample_out.to_csv(self.sample_csv, mode = 'a')
+        
 
         #Step 3: Recusively run sim_transition() on all children (this could be parallelized)
         #recursive case
@@ -81,12 +75,7 @@ class CellType:
 
         #collect Traisition samples
         if collect_samples:
-            samples = np.random.randint(0,len(sim_out.index), size = num_samples)
-            #molecules = [gene * self.sample_species for gene in range(self.num_genes)]
-            #find a better way to get indices for mRNAs in each gene
-            sample_out = sim_out.iloc[samples][sim_out.columns[molecules]]
-            sample_out['Cell Type'] = [str(self.lineageName)+'T'] * num_samples
-            sample_out.to_csv(self.sample_csv, mode = 'a')
+           
         
         #Step 3: Sample num_sample transition cells and store to output and run sim_cell_type
         self.sim_cell_type(num_samples, simulator)

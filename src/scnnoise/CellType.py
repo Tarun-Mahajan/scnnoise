@@ -3,17 +3,21 @@ import pandas as pd
 import numpy as np
 
 class CellType:
-    def __init__(self, lineageName,rxn_rates, children, count_csv, sample_csv, num_genes):
+    def __init__(self, lineageName,rxn_rate_csv, children, count_csv, sample_csv, num_genes):
         """
         Takes in rxn_rates and children and constructs a cellType node
         """
         #get rate parameters from external file or otherwise
         self.lineageName = lineageName
-        self.rxn_rates = rxn_rates
         self.children = children
         self.count_csv = count_csv
         self.sample_csv = sample_csv
         self.num_genes = num_genes
+        cell_types = pd.import_csv(rxn_rate_csv)
+        curr_cell_type = cell_types[cell_types['Cell Type'] == self.lineageName]
+        curr_cell_type.index = curr_cell_type['Gene']
+        curr_cell_type = curr_cell_type.drop(columns = ['Cell Type', 'Gene'])
+        self.rxn_rates = curr_cell_type.T.to_dict()
 
     def sim_cell_type(self, num_samples, simulator):
         """

@@ -40,7 +40,7 @@ class CellType:
         
         #Step 2: Sample num_samples reads for each gene
         sim_out = pd.read_csv(self.count_csv)
-        species = [col for col in out.columns if col[-4:] == 'mRNA']
+        species = [col for col in sim_out.columns if col[-4:] == 'mRNA']
         samples = np.random.randint(0,len(sim_out.index), size = num_samples)
         sample_out = sim_out.iloc[samples][species]
         sample_out['Cell Type'] = [str(self.lineageName)] * num_samples
@@ -88,7 +88,7 @@ class CellType:
         #collect Traisition samples
         if collect_samples:
             sim_out = pd.read_csv(self.count_csv)
-            species = [col for col in out.columns if col[-4:] == 'mRNA']
+            species = [col for col in sim_out.columns if col[-4:] == 'mRNA']
             samples = np.random.randint(0,len(sim_out.index), size = num_samples)
             sample_out = sim_out.iloc[samples][species]
             sample_out['Cell Type'] = [str(self.lineageName)+'T'] * num_samples

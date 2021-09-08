@@ -34,7 +34,8 @@ class CellType:
         f = open(self.count_csv, "w")
         f.truncate()
         f.close()
-        simulator.simulate(1000)
+        simulator.set_simulation_params(1000, True)
+        simulator.simulate(list(np.random.randint(low = 1, high = 1000000, size = 4)))
 
             #for steady state check sergio method
         
@@ -77,8 +78,9 @@ class CellType:
         #try t-test for mean for all genes (for each thousand timepoints) compared to calculated steady state for current cell_type
         f = open(self.count_csv, "w")
         f.truncate()
-        f.close()        
-        simulator.simulate(1000)
+        f.close()      
+        simulator.set_simulation_params(1000, True)
+        simulator.simulate(list(np.random.randint(low = 1, high = 1000000, size = 4)))
         sim_out = pd.read_csv(self.count_csv)
         #identify molecules of interest in csv
 

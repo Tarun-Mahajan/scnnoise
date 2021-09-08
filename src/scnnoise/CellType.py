@@ -13,7 +13,7 @@ class CellType:
         self.count_csv = count_csv
         self.sample_csv = sample_csv
         self.num_genes = num_genes
-        cell_types = pd.import_csv(rxn_rate_csv)
+        cell_types = pd.read_csv(rxn_rate_csv)
         curr_cell_type = cell_types[cell_types['Cell Type'] == self.lineageName]
         curr_cell_type.index = curr_cell_type['Gene']
         curr_cell_type = curr_cell_type.drop(columns = ['Cell Type', 'Gene'])

@@ -1,5 +1,6 @@
 // Class for computing online mean and variance
 #include <vector>
+#include <algorithm>
 #include "interpolate_1D.hpp"
 #include <math.h>
 

@@ -1,3 +1,4 @@
+#SIMULATOR NEEDS DEEPCOPY BADLY
 from scnnoise import _scnnoise
 import pandas as pd
 import numpy as np
@@ -40,6 +41,7 @@ class CellType:
         
         #Step 2: Sample num_samples reads for each gene
         sim_out = pd.read_csv(self.count_csv)
+        print(sim_out.iloc[-1])
         species = [col for col in sim_out.columns if col[-4:] == 'mRNA']
         samples = np.random.randint(0,len(sim_out.index), size = num_samples)
         sample_out = sim_out.iloc[samples][species]
@@ -86,8 +88,10 @@ class CellType:
         #steady state detection
 
         #collect Traisition samples
+        print(self.lineageName)
         if collect_samples:
             sim_out = pd.read_csv(self.count_csv)
+            print(sim_out.iloc[0])
             species = [col for col in sim_out.columns if col[-4:] == 'mRNA']
             samples = np.random.randint(0,len(sim_out.index), size = num_samples)
             sample_out = sim_out.iloc[samples][species]

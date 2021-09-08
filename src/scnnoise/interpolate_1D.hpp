@@ -24,7 +24,7 @@ namespace LinearInterpolate {
         double interpolate_1D (double x_sample, double x_lower, double x_upper,
             double y_lower, double y_upper);
 
-        std::vector<double> interpolate_samples (std::vector<double> x_samples);
+        std::vector<double> interpolate_samples (std::vector<double> &x_samples);
     };
 }
 

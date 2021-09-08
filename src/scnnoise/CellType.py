@@ -39,6 +39,14 @@ class CellType:
             #for steady state check sergio method
         
         #Step 2: Sample num_samples reads for each gene
+        sim_out = pd.read_csv(self.count_csv)
+        sim_out.index = out['time']
+        species = [col if col[-4:] == 'mRNA' for col in out.columns]
+        samples = np.random.randint(0,len(sim_out.index), size = num_samples)
+        sample_out = sim_out.iloc[samples][species]
+        sample_out['Cell Type'] = [str(self.lineageName)] * num_samples
+        sample_out.to_csv(self.sample_csv, mode = 'a')
+
         
 
         #Step 3: Recusively run sim_transition() on all children (this could be parallelized)
@@ -79,8 +87,15 @@ class CellType:
 
         #collect Traisition samples
         if collect_samples:
-           
+            sim_out = pd.read_csv(self.count_csv)
+            sim_out.index = out['time']
+            species = [col if col[-4:] == 'mRNA' for col in out.columns]
+            samples = np.random.randint(0,len(sim_out.index), size = num_samples)
+            sample_out = sim_out.iloc[samples][species]
+            sample_out['Cell Type'] = [str(self.lineageName)+'T'] * num_samples
+            sample_out.to_csv(self.sample_csv, mode = 'a')
         
         #Step 3: Sample num_sample transition cells and store to output and run sim_cell_type
         self.sim_cell_type(num_samples, simulator)
+        
         

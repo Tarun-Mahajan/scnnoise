@@ -2,7 +2,7 @@ from scnnoise import _scnnoise
 import pandas as pd
 
 class LTSim:
-    def __init__(self, root, num_genes, max_time, count_csv, gene_csv, mol_csv, GRN_csv, sample_csv):
+    def __init__(self, root, num_genes, count_csv, gene_csv, mol_csv, sample_csv, GRN_csv = ""):
         """
         Constructor for the LTSim object
         Takes in the root of the LineageTree in the simulation
@@ -11,7 +11,6 @@ class LTSim:
         
         #write set functions for each instead of in constructor
         self.num_genes = num_genes
-        self.max_time = max_time 
         self.count_csv= count_csv
         self.gene_csv = gene_csv
         self.mol_csv = mol_csv
@@ -26,9 +25,9 @@ class LTSim:
         #a. build GRN from params
         #b. define intragene interactions
         if self.GRN_csv == "":
-            simulator = _scnnoise.gillespieSDMnoCellCycle(self.num_genes, self.gene_csv, self.mol_csv, self.count_csv)
+            simulator = _scnnoise.gillespieSDMnoCellCycle(self.num_genes, self.gene_csv, self.mol_csv, self.count_csv, False, "dummy", 1000)
         else:
-            simulator = _scnnoise.gillespieSDMnoCellCycle(self.num_genes, self.gene_csv, self.mol_csv, self.count_csv, True, self.GRN_csv)
+            simulator = _scnnoise.gillespieSDMnoCellCycle(self.num_genes, self.gene_csv, self.mol_csv, self.count_csv, True, self.GRN_csv, 1000)
         
         """
         gene_type = [0,0] 

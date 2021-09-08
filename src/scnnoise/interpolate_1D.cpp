@@ -5,8 +5,8 @@
 
 namespace LinearInterpolate {
     LinearInterpolation_1D::LinearInterpolation_1D (std::vector<double> x_samples, std::vector<double> y_samples) {
-        data_struct.x_vals = x_samples;
-        data_struct.y_vals = y_samples;
+        data_pairs.x_vals = x_samples;
+        data_pairs.y_vals = y_samples;
     }
 
     // Interpolate single sample
@@ -23,19 +23,19 @@ namespace LinearInterpolate {
         std::vector<double> y_samples(x_samples.size(), -1);
         std::vector<int>::iterator low,up;
         for (std::size_t b = 0; b < x_samples.size(); ++b) {
-            up = std::upper_bound (data_struct.x_vals.begin(),
-                data_struct.x_vals.end(), x_samples[b]);
-            if (up != data_struct.x_vals.end() && up - data_struct.x_vals.begin() > 0) {
-                unsigned int id_lower = up - data_struct.x_vals.begin() - 1;
+            up = std::upper_bound (data_pairs.x_vals.begin(),
+                data_pairs.x_vals.end(), x_samples[b]);
+            if (up != data_pairs.x_vals.end() && up - data_pairs.x_vals.begin() > 0) {
+                unsigned int id_lower = up - data_pairs.x_vals.begin() - 1;
                 if (id_lower > 0) {
-                    if (data_struct.x_vals[id_lower] == x_samples[b]) {
+                    if (data_pairs.x_vals[id_lower] == x_samples[b]) {
                         id_lower -= 1;
                     }
                     y_samples[b] = interpolate_1D (x_samples[b],
-                        data_struct.x_vals[id_lower],
-                        data_struct.x_vals[up - data_struct.x_vals.begin()],
-                        data_struct.y_vals[id_lower],
-                        data_struct.y_vals[up - data_struct.x_vals.begin()]);
+                        data_pairs.x_vals[id_lower],
+                        data_pairs.x_vals[up - data_pairs.x_vals.begin()],
+                        data_pairs.y_vals[id_lower],
+                        data_pairs.y_vals[up - data_pairs.x_vals.begin()]);
                 }
 
             }

@@ -936,4 +936,11 @@ namespace ScnnoiseInterface {
           }
       }
   }
+
+  void scNNoiSE::set_curr_mol_count(std::map<std::string, std::vector<int>> init_count){
+        for(int gene = 0; gene<reactions.size(); ++gene){
+            reactions[gene].molecule_count_cur = init_count[reactions[gene].gene_name];
+         }
+    }
+  
 }

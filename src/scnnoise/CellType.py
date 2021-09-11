@@ -47,17 +47,19 @@ class CellType:
         sample_out = sim_out.iloc[samples][species]
         sample_out['Cell Type'] = [str(self.lineageName)] * num_samples
         sample_out.to_csv(self.sample_csv, mode = 'a')
-
+        
+        genes = set([gene.split(':')[0] for gene in sim_out.columns])
+        init_mol_count = { gene:list(sim_out.filter(regex = '^'+gene).iloc[-1]) for gene in genes}
         
 
         #Step 3: Recusively run sim_transition() on all children (this could be parallelized)
         #recursive case
         if len(self.children) != 0:
             for cell_type in self.children:
-                cell_type.sim_transition(num_samples, simulator, True)
+                cell_type.sim_transition(num_samples, simulator, True, init_mol_count)
                 
         
-    def sim_transition(self, num_samples, simulator, collect_samples):
+    def sim_transition(self, num_samples, simulator, collect_samples, init_mol_count):
         """
         Params
             num_samples - number of sample reads to output for this cell type
@@ -77,6 +79,7 @@ class CellType:
             #b. if steady states are similar mbe set simulation time?
             
         #try t-test for mean for all genes (for each thousand timepoints) compared to calculated steady state for current cell_type
+        simulator.set_curr_mol_count(init_mol_count)
         f = open(self.count_csv, "w")
         f.truncate()
         f.close()      

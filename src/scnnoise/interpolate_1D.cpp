@@ -22,9 +22,9 @@ namespace LinearInterpolate {
     // Interpolate values
     std::vector<double> LinearInterpolation_1D::interpolate_samples (std::vector<double> &x_samples) {
         std::vector<double> y_samples(x_samples.size(), -1);
-        std::vector<int>::iterator low,up;
+        // std::vector<int>::iterator low,up;
         for (std::size_t b = 0; b < x_samples.size(); ++b) {
-            up = std::upper_bound (data_pairs.x_vals.begin(),
+            auto up = std::upper_bound (data_pairs.x_vals.begin(),
                 data_pairs.x_vals.end(), x_samples[b]);
             if (up != data_pairs.x_vals.end() && up - data_pairs.x_vals.begin() > 0) {
                 unsigned int id_lower = up - data_pairs.x_vals.begin() - 1;

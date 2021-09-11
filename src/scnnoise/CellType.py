@@ -59,7 +59,7 @@ class CellType:
                 cell_type.sim_transition(num_samples, simulator, True, init_mol_count)
                 
         
-    def sim_transition(self, num_samples, simulator, collect_samples, init_mol_count):
+    def sim_transition(self, num_samples, simulator, collect_samples, init_mol_count  = {}):
         """
         Params
             num_samples - number of sample reads to output for this cell type
@@ -79,7 +79,10 @@ class CellType:
             #b. if steady states are similar mbe set simulation time?
             
         #try t-test for mean for all genes (for each thousand timepoints) compared to calculated steady state for current cell_type
-        simulator.set_curr_mol_count(init_mol_count)
+
+        if len(init_mol_count) != 0:
+            simulator.set_curr_mol_count(init_mol_count)
+
         f = open(self.count_csv, "w")
         f.truncate()
         f.close()      

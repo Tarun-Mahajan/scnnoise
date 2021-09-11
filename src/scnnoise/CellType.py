@@ -48,7 +48,7 @@ class CellType:
         sample_out['Cell Type'] = [str(self.lineageName)] * num_samples
         sample_out.to_csv(self.sample_csv, mode = 'a')
         
-        genes = set([gene.split(':')[0] for gene in sim_out.columns])
+        genes = set([gene.split(':')[0] for gene in sim_out.columns[1:]])
         init_mol_count = { gene:list(sim_out.filter(regex = '^'+gene).iloc[-1]) for gene in genes}
         
 

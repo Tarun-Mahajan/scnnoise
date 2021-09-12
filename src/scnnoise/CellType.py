@@ -48,9 +48,12 @@ class CellType:
         sample_out['Cell Type'] = [str(self.lineageName)] * num_samples
         sample_out.to_csv(self.sample_csv, mode = 'a')
         
-        genes = set([gene.split(':')[0] for gene in sim_out.columns[1:]])
-        init_mol_count = { gene:list(sim_out.filter(regex = '^'+gene).iloc[-1]) for gene in genes}
-        
+        genes = [gene.split(':') for gene in sim_out.columns[1:]]
+        init_mol_count = { gene[0] : {} for gene in genes}
+
+        for gene in genes:
+            init_mol_count[ gene[0] ].update( {gene[1]: int(sim_out[ gene[0]+':'+gene[1] ].iloc[-1]) })
+
 
         #Step 3: Recusively run sim_transition() on all children (this could be parallelized)
         #recursive case

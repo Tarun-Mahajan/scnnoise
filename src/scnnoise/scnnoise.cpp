@@ -941,7 +941,7 @@ namespace ScnnoiseInterface {
         for (auto &rxn : reactions) {
             gene_type_struct gene_info = gene_type_info[rxn.gene_type];
             for (auto &it : gene_info.species_map) {
-                rxn.molecule_count_cur[it->first] = init_count[rxn.gene_name][it->second];
+                rxn.molecule_count_cur[it.first] = init_count[rxn.gene_name][it.second];
             }
         }
     }

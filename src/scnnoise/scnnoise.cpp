@@ -937,10 +937,13 @@ namespace ScnnoiseInterface {
       }
   }
 
-  void scNNoiSE::set_curr_mol_count(std::map<std::string, std::vector<int>> init_count){
+  void scNNoiSE::set_curr_mol_count(std::map<std::string, std::map<std::string, int>> init_count){
         for(int gene = 0; gene<reactions.size(); ++gene){
-            reactions[gene].molecule_count_cur = init_count[reactions[gene].gene_name];
-         }
+            std::string gene_type = reactions[gene].gene_type;
+            for(auto it = gene_type_info[gene_type].species_map.begin(); it!=gene_type_info[gene_type].species_map.end(); ++it){
+                reactions[gene].molecule_count_cur[it->first] = init_count[reactions[gene].gene_name][it->second];
+            }
+        }
     }
   
 }

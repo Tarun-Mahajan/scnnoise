@@ -95,6 +95,7 @@ class CellType:
 
         #collect Traisition samples
         print(self.lineageName)
+        print(init_mol_count)
         if collect_samples:
             sim_out = pd.read_csv(self.count_csv)
             print(sim_out.iloc[0])

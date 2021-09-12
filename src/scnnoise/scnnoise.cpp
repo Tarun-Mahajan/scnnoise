@@ -930,9 +930,9 @@ namespace ScnnoiseInterface {
     }
 
     void scNNoiSE::swap_rxn_rates (std::map<std::string, std::map<std::string, double>> rxn_rates) {
-      for(int gene = 0; gene<reactions.size(); ++gene){
-          for(auto it = reactions[gene].rxn_rates.begin(); it != reactions[gene].rxn_rates.end(); ++it){
-            it->second = rxn_rates[reactions[gene].gene_name][it->first];
+      for (auto &rxn : reactions) {
+          for (auto &it : rxn.rxn_rates) {
+            it.second = rxn_rates[rxn.gene_name][it.first];
           }
       }
   }

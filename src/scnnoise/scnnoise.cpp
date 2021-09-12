@@ -929,7 +929,7 @@ namespace ScnnoiseInterface {
         this->count_save_file = new_filepath;
     }
 
-    void scNNoiSE::swap_rxn_rates (std::map<std::string, std::map<std::string, double>> rxn_rates){
+    void scNNoiSE::swap_rxn_rates (std::map<std::string, std::map<std::string, double>> rxn_rates) {
       for(int gene = 0; gene<reactions.size(); ++gene){
           for(auto it = reactions[gene].rxn_rates.begin(); it != reactions[gene].rxn_rates.end(); ++it){
             it->second = rxn_rates[reactions[gene].gene_name][it->first];
@@ -937,11 +937,11 @@ namespace ScnnoiseInterface {
       }
   }
 
-  void scNNoiSE::set_curr_mol_count(std::map<std::string, std::map<std::string, int>> init_count){
-        for(int gene = 0; gene<reactions.size(); ++gene){
-            std::string gene_type = reactions[gene].gene_type;
-            for(auto it = gene_type_info[gene_type].species_map.begin(); it!=gene_type_info[gene_type].species_map.end(); ++it){
-                reactions[gene].molecule_count_cur[it->first] = init_count[reactions[gene].gene_name][it->second];
+  void scNNoiSE::set_curr_mol_count (std::map<std::string, std::map<std::string, int>> init_count) {
+        for (auto &rxn : reactions) {
+            gene_type_struct gene_info = gene_type_info[rxn.gene_type];
+            for (auto &it : gene_info.species_map) {
+                rxn.molecule_count_cur[it->first] = init_count[rxn.gene_name][it->second];
             }
         }
     }

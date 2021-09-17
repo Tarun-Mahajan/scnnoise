@@ -380,7 +380,7 @@ namespace ScnnoiseInterface {
 
         std::vector<std::string> burst_size_distribution;
 
-        std::vector<double> gene_burst_size;
+        std::vector<double> gene_burst_sizes;
 
         std::vector<unsigned int> gene_copy_number;
 

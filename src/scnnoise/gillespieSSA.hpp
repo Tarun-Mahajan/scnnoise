@@ -20,7 +20,7 @@ namespace ScnnoiseInterface {
     /* data */
 
     public:
-        typedef std::mt19937 RNG;
+        // typedef std::mt19937 RNG;
         /* Member functions */
         // Constructor
         GillespieSSA (int num_genes, std::string gene_filepath,

@@ -382,7 +382,7 @@ namespace ScnnoiseInterface {
 
         std::vector<double> gene_burst_sizes;
 
-        std::vector<unsigned int> gene_copy_number;
+        std::vector<double> gene_copy_number;
 
         std::map<int, std::map<std::string, double>> max_rxn_rate_change;
 

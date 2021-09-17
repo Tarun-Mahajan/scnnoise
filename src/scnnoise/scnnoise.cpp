@@ -686,7 +686,7 @@ namespace ScnnoiseInterface {
         std::string row_text;
         std::string gene_name;
         std::string distribution_name;
-        unsigned int copy_number;
+        double copy_number;
         double burst_size;
         std::string word;
         while (std::getline(gene_burst_size, row_text)) {
@@ -712,7 +712,7 @@ namespace ScnnoiseInterface {
                         }
                     case 3:
                         {
-                            copy_number = std::stoul (word,nullptr,0);
+                            copy_number = std::stod (word);
                             break;
                         }
                     default:
@@ -972,7 +972,7 @@ namespace ScnnoiseInterface {
         std::size_t found = gene_type.find("reduced");
         if (found != std::string::npos && rxn_name == "transcription") {
             double burst_size = gene_burst_sizes[gene_selected];
-            unsigned int copy_number = gene_copy_number[gene_selected];
+            double copy_number = gene_copy_number[gene_selected];
             if (burst_size_distribution[gene_selected] == "geometric") {
                 std::geometric_distribution<int> distribution_(double(1.0/burst_size));
                 gene_burst_sizes[gene_selected] = distribution_(generator) + 1;

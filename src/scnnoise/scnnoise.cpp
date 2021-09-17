@@ -725,7 +725,7 @@ namespace ScnnoiseInterface {
             stoichio_factor_struct &stoichio_factor_gene =
                 stoichio_factors[gene_rev_map[gene_name]];
             stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
-                burst_size * copy_number;
+                double (burst_size * copy_number);
             burst_size_distribution[gene_rev_map[gene_name]] = distribution_name;
             gene_copy_number[gene_rev_map[gene_name]] = copy_number;
             gene_burst_sizes[gene_rev_map[gene_name]] = burst_size;
@@ -953,9 +953,9 @@ namespace ScnnoiseInterface {
             it.second = rxn_rates[rxn.gene_name][it.first];
           }
       }
-  }
+    }
 
-  void scNNoiSE::set_curr_mol_count (std::map<std::string, std::map<std::string, int>> init_count) {
+    void scNNoiSE::set_curr_mol_count (std::map<std::string, std::map<std::string, int>> init_count) {
         for (auto &rxn : reactions) {
             gene_type_struct gene_info = gene_type_info[rxn.gene_type];
             for (auto &it : gene_info.species_map) {
@@ -964,4 +964,21 @@ namespace ScnnoiseInterface {
         }
     }
 
+    void scNNoiSE::update_burst_size (RNG &generator, int rxn_selected) {
+        int gene_selected = rxn_order[rxn_selected].gene_id;
+        std::string rxn_name = rxn_order[rxn_selected].rxn_name;
+        std::string gene_type = reactions[gene_selected].gene_type;
+
+        std::size_t found = gene_type.find("reduced");
+        if (found != std::string::npos && rxn_name == "transcription") {
+            double burst_size = gene_burst_sizes[gene_selected];
+            unsigned int copy_number = gene_copy_number[gene_selected];
+            std::geometric_distribution<int> distribution_(double(1.0/burst_size));
+            gene_burst_sizes[gene_selected] = distribution_(generator) + 1;
+            stoichio_factor_struct &stoichio_factor_gene =
+                stoichio_factors[gene_selected];
+            stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
+                double (gene_burst_sizes[gene_selected] * copy_number);
+        }
+    }
 }

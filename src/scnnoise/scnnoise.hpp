@@ -594,6 +594,8 @@ namespace ScnnoiseInterface {
         void swap_rxn_rates (std::map<std::string, std::map<std::string, double>> rxn_rates);
 
         void set_curr_mol_count (std::map<std::string, std::map<std::string, int>> init_count);
+
+        void update_burst_size (RNG &generator, int rxn_selected);
     };
 }
 #endif

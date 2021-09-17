@@ -99,9 +99,10 @@ namespace ScnnoiseInterface {
                 std::string search_string = "two-state reduced";
                 size_t found = gene_type.find(search_string);
                 if (found != std::string::npos) {
-                    double &stoichio_ =
-                        stoichio_factors[gene].rxns["transcription"].products_factors["mRNA"];
-                    stoichio_ *= 2;
+                    // double &stoichio_ =
+                    //     stoichio_factors[gene].rxns["transcription"].products_factors["mRNA"];
+                    // stoichio_ *= 2;
+                    gene_copy_number[gene] *= 2;
                 }else{
                     search_string = "constitutive";
                     found = gene_type.find(search_string);
@@ -147,9 +148,10 @@ namespace ScnnoiseInterface {
                 std::string search_string = "two-state reduced";
                 std::size_t found = gene_type.find(search_string);
                 if (found != std::string::npos) {
-                    double &stoichio_ =
-                        stoichio_factors[gene].rxns["transcription"].products_factors["mRNA"];
-                    stoichio_ /= 2;
+                    // double &stoichio_ =
+                    //     stoichio_factors[gene].rxns["transcription"].products_factors["mRNA"];
+                    // stoichio_ /= 2;
+                    gene_copy_number[gene] /= 2;
                 }else{
                     search_string = "constitutive";
                     found = gene_type.find(search_string);

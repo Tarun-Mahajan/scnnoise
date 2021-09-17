@@ -378,6 +378,8 @@ namespace ScnnoiseInterface {
 
         std::vector<stoichio_factor_struct> stoichio_factors;
 
+        std::vector<std::string> burst_size_distribution;
+
         std::map<int, std::map<std::string, double>> max_rxn_rate_change;
 
 

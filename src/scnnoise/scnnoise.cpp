@@ -973,12 +973,15 @@ namespace ScnnoiseInterface {
         if (found != std::string::npos && rxn_name == "transcription") {
             double burst_size = gene_burst_sizes[gene_selected];
             unsigned int copy_number = gene_copy_number[gene_selected];
-            std::geometric_distribution<int> distribution_(double(1.0/burst_size));
-            gene_burst_sizes[gene_selected] = distribution_(generator) + 1;
-            stoichio_factor_struct &stoichio_factor_gene =
-                stoichio_factors[gene_selected];
-            stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
-                double (gene_burst_sizes[gene_selected] * copy_number);
+            if (burst_size_distribution[gene_selected] == "geometric") {
+                std::geometric_distribution<int> distribution_(double(1.0/burst_size));
+                gene_burst_sizes[gene_selected] = distribution_(generator) + 1;
+                stoichio_factor_struct &stoichio_factor_gene =
+                    stoichio_factors[gene_selected];
+                stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
+                    double (gene_burst_sizes[gene_selected] * copy_number);
+            }else{
+            }
         }
     }
 }

@@ -233,6 +233,7 @@ namespace ScnnoiseInterface {
 
     class scNNoiSE {
     public:
+        typedef std::mt19937 RNG;
     /* data */
         /********************************************//**
         \brief Number of chemical reaction channels.
@@ -586,7 +587,7 @@ namespace ScnnoiseInterface {
 
         void swap_rxn_rates (std::map<std::string, std::map<std::string, double>> rxn_rates);
 
-        void set_curr_mol_count(std::map<std::string, std::map<std::string, int>> init_count);
+        void set_curr_mol_count (std::map<std::string, std::map<std::string, int>> init_count);
     };
 }
 #endif

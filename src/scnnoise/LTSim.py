@@ -16,6 +16,9 @@ class LTSim:
         self.mol_csv = mol_csv
         self.GRN_csv = GRN_csv
         self.sample_csv= sample_csv
+        f = open(sample_csv, "w")
+        f.truncate()
+        f.close()
         
     def sim_LT(self, num_samples):
         """
@@ -72,7 +75,8 @@ class LTSim:
         self.root.sim_transition(num_samples, simulator, False)
         
         
+
         #Step 3: return result file, or data structure
             
-            
+        
         return pd.read_csv(self.sample_csv)

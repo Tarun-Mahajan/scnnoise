@@ -41,13 +41,13 @@ class CellType:
         
         #Step 2: Sample num_samples reads for each gene
         sim_out = pd.read_csv(self.count_csv)
-        print(sim_out.iloc[-1])
-        species = [col for col in sim_out.columns if col[-4:] == 'mRNA']
+        sim_out = sim_out.loc[:, ~sim_out.columns.str.contains('^Unnamed')]
+        species = [col for col in sim_out.columns if col[-7:] == 'protein']
         samples = np.random.randint(0,len(sim_out.index), size = num_samples)
         sample_out = sim_out.iloc[samples][species]
         sample_out['Cell Type'] = [str(self.lineageName)] * num_samples
-        sample_out.to_csv(self.sample_csv, mode = 'a')
-        
+        sample_out.to_csv(self.sample_csv, mode = 'a', header =False)
+
         genes = [gene.split(':') for gene in sim_out.columns[1:]]
         init_mol_count = { gene[0] : {} for gene in genes}
 
@@ -92,21 +92,20 @@ class CellType:
         simulator.set_simulation_params(1000, True)
         simulator.simulate(list(np.random.randint(low = 1, high = 1000000, size = 4)))
         sim_out = pd.read_csv(self.count_csv)
+        
         #identify molecules of interest in csv
 
         #steady state detection
 
         #collect Traisition samples
-        print(self.lineageName)
-        print(init_mol_count)
         if collect_samples:
             sim_out = pd.read_csv(self.count_csv)
-            print(sim_out.iloc[0])
-            species = [col for col in sim_out.columns if col[-4:] == 'mRNA']
+            sim_out = sim_out.loc[:, ~sim_out.columns.str.contains('^Unnamed')]
+            species = [col for col in sim_out.columns if col[-7:] == 'protein']
             samples = np.random.randint(0,len(sim_out.index), size = num_samples)
             sample_out = sim_out.iloc[samples][species]
             sample_out['Cell Type'] = [str(self.lineageName)+'T'] * num_samples
-            sample_out.to_csv(self.sample_csv, mode = 'a')
+            sample_out.to_csv(self.sample_csv, mode = 'a', header = False)
         
         #Step 3: Sample num_sample transition cells and store to output and run sim_cell_type
         self.sim_cell_type(num_samples, simulator)

@@ -608,6 +608,8 @@ namespace ScnnoiseInterface {
 
         void set_count_rxns_fired (bool count_rxns,
             unsigned int stop_rxn_count = 10**6);
+
+        void update_rxn_count (int rxn_selected, bool &stop_sim)
     };
 }
 #endif

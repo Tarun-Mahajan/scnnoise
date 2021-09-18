@@ -990,7 +990,7 @@ namespace ScnnoiseInterface {
         }
     }
 
-    void set_count_rxns_fired (bool count_rxns, unsigned int stop_rxn_count) {
+    void scNNoiSE::set_count_rxns_fired (bool count_rxns, unsigned int stop_rxn_count) {
         this->count_rxns = count_rxns;
         this->stop_rxn_count = stop_rxn_count;
         if (count_rxns) {
@@ -1001,5 +1001,26 @@ namespace ScnnoiseInterface {
                 }
             }
         }
+    }
+
+    void scNNoiSE::update_rxn_count (int rxn_selected, bool &stop_sim) {
+        if (count_rxns) {
+            int gene_selected = rxn_order[rxn_selected].gene_id;
+            std::string rxn_name = rxn_order[rxn_selected].rxn_name;
+            count_rxns_fired[gene_selected][rxn_name] += 1;
+            stop_sim = true;
+            for (auto rxn_ : reactions) {
+                for (auto it : rxn_.rxn_rates) {
+                    unsigned int count_ =
+                        count_rxns_fired[gene_rev_map[rxn_.gene_name]][it->first];
+                    if (count_ < stop_rxn_count) {
+                        stop_sim = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+
     }
 }

@@ -14,8 +14,8 @@ namespace SampleKinetics {
         double n_max;
         double tau_min;
         double tau_max;
-        double burst_size_min;
-        double burst_size_max;
+        int burst_size_min;
+        int burst_size_max;
 
 
     public:
@@ -28,7 +28,7 @@ namespace SampleKinetics {
         void set_min_max_burst_freq (double freq_min, double freq_max);
 
         // Set min, max for burst size
-        void set_min_max_burst_size (double burst_size_min, double burst_size_max);
+        void set_min_max_burst_size (int burst_size_min, int burst_size_max);
 
         // Set min, max for hill half maximal
         void set_min_max_hill_half_maximal (double K_min, double K_max);

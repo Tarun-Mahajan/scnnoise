@@ -414,6 +414,7 @@ namespace ScnnoiseInterface {
                 // }
                 int next_rxn = sample_next_rxn(generator);
                 update_burst_size (generator, next_rxn);
+                update_rxn_count (next_rxn, stop_sim)
                 // std::cout << "reached here 2 = " << std::endl;
                 GRN_out_changed = update_fired_reaction(next_rxn);
                 update_dependent_count_propensity(next_rxn, GRN_out_changed);

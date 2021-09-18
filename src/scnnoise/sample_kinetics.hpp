@@ -46,7 +46,7 @@ namespace SampleKinetics {
         double sample_tau (RNG &generator);
 
         // sample activator status
-        bool sample_activator_status (RNX &generator);
+        bool sample_activator_status (RNG &generator);
 
 
     };

@@ -1003,18 +1003,20 @@ namespace ScnnoiseInterface {
         }
     }
 
-    void scNNoiSE::update_rxn_count (int rxn_selected, bool &stop_sim) {
+    void scNNoiSE::update_rxn_count (int rxn_selected, bool &stop_sim, bool &reached_rxn_count) {
         if (count_rxns) {
             int gene_selected = rxn_order[rxn_selected].gene_id;
             std::string rxn_name = rxn_order[rxn_selected].rxn_name;
             count_rxns_fired[gene_selected][rxn_name] += 1;
             stop_sim = true;
+            reached_rxn_count = true;
             for (auto rxn_ : reactions) {
                 for (auto it : rxn_.rxn_rates) {
                     unsigned int count_ =
                         count_rxns_fired[gene_rev_map[rxn_.gene_name]][it->first];
                     if (count_ < stop_rxn_count) {
                         stop_sim = false;
+                        reached_rxn_count = false;
                         break;
                     }
                 }

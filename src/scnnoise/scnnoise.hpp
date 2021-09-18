@@ -580,7 +580,7 @@ namespace ScnnoiseInterface {
         A pure virtual function for simulating stochastic gene
         expression. Needs to be overridden in any derived class.
         ***********************************************/
-        virtual void simulate (std::vector<unsigned int> random_seeds) = 0;
+        virtual void simulate (RNG &generator) = 0;
 
         void set_simulation_params (double max_time = 10000,
             bool save_timeseries = false);

@@ -375,6 +375,7 @@ namespace ScnnoiseInterface {
         std::seed_seq sd(rd_seeds.begin(), rd_seeds.end());
         thread_local static RNG generator{sd};
         bool stop_sim = false;
+        bool reached_rxn_count = false;
         bool simulation_ended = false;
         int num_history = 0;
         int num_save_loop = 0;
@@ -400,7 +401,7 @@ namespace ScnnoiseInterface {
             cur_time = total_time;
             total_time += next_time_step;
             // std::cout << "reached here 1 = " << std::endl;
-            if (total_time < max_time) {
+            if (total_time < max_time || (count_rxns && !reached_rxn_count)) {
                 // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
                 //     std::cout << "error found0 " <<
                 //     reactions[0].propensity_vals["mRNA decay"] << " " <<
@@ -414,7 +415,7 @@ namespace ScnnoiseInterface {
                 // }
                 int next_rxn = sample_next_rxn(generator);
                 update_burst_size (generator, next_rxn);
-                update_rxn_count (next_rxn, stop_sim);
+                update_rxn_count (next_rxn, stop_sim, reached_rxn_count);
                 // std::cout << "reached here 2 = " << std::endl;
                 GRN_out_changed = update_fired_reaction(next_rxn);
                 update_dependent_count_propensity(next_rxn, GRN_out_changed);

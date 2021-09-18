@@ -376,6 +376,7 @@ namespace ScnnoiseInterface {
     void GillespieSSA::simulate (RNG &generator) {
         time_history.clear();
         time_history.push_back(0);
+        update_burst_size_init();
         compute_total_propensity();
         start_molecule_count_history_file();
 

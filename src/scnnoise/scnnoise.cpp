@@ -1052,7 +1052,7 @@ namespace ScnnoiseInterface {
 
     }
 
-    void scNNoiSE::set_regulation_type (std::string regulation_type = "hill additive") {
+    void scNNoiSE::set_regulation_type (std::string regulation_type) {
         this->regulation_type = regulation_type;
     }
 }

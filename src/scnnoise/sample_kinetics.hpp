@@ -28,7 +28,7 @@ namespace SampleKinetics {
         void set_min_max_hill_half_maximal (double K_min, double K_max);
 
         // Set min, max for hill cooperativity
-        void set_min_max_hill_coop (double n_min, double n_max);
+        void set_min_max_hill_coop (int n_min, int n_max);
 
         // Set min, max for tau (1/degradation_rate)
         void set_min_max_tau (double tau_min, double tau_max);

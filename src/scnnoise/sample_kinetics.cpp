@@ -15,7 +15,7 @@ namespace SampleKinetics {
         this->K_max = K_max;
     }
 
-    void SampleKineticParams::set_min_max_hill_coop (double n_min, double n_max) {
+    void SampleKineticParams::set_min_max_hill_coop (int n_min, int n_max) {
         this->n_min = n_min;
         this->n_max = n_max;
     }
@@ -27,25 +27,25 @@ namespace SampleKinetics {
 
     double SampleKineticParams::sample_burst_freq (RNG &generator) {
         std::uniform_real_distribution<double> distribution_(log10(freq_min),
-            log10(freq_min));
+            log10(freq_max));
         return(pow(10, distribution_(generator)));
     }
 
     double SampleKineticParams::sample_hill_half_maximal (RNG &generator) {
         std::uniform_real_distribution<double> distribution_(log10(K_min),
-            log10(K_min));
+            log10(K_max));
         return(pow(10, distribution_(generator)));
     }
 
     double SampleKineticParams::sample_hill_coop (RNG &generator) {
         std::uniform_real_distribution<double> distribution_(log10(n_min),
-            log10(n_min));
-        return(pow(10, distribution_(generator)));
+            log10(n_max));
+        returnpow(10, distribution_(generator)));
     }
 
     double SampleKineticParams::sample_tau (RNG &generator) {
         std::uniform_real_distribution<double> distribution_(log10(tau_min),
-            log10(tau_min));
+            log10(tau_max));
         return(pow(10, distribution_(generator)));
     }
 }

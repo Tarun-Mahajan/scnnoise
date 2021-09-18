@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <math.h>
 // #include "graph.hpp"
 
 
@@ -607,7 +608,7 @@ namespace ScnnoiseInterface {
         void set_save_timeseries_all (bool save_timeseries_all);
 
         void set_count_rxns_fired (bool count_rxns,
-            unsigned int stop_rxn_count = 10**6);
+            unsigned int stop_rxn_count = pow(10, 6));
 
         void update_rxn_count (int rxn_selected, bool &stop_sim, bool &reached_rxn_count);
     };

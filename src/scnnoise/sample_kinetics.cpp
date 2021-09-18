@@ -10,6 +10,11 @@ namespace SampleKinetics {
         this->freq_max = freq_max;
     }
 
+    void SampleKineticParams::set_min_max_burst_size (double burst_size_min, double burst_size_max) {
+        this->burst_size_min = burst_size_min;
+        this->burst_size_max = burst_size_max;
+    }
+
     void SampleKineticParams::set_min_max_hill_half_maximal (double K_min, double K_max) {
         this->K_min = K_min;
         this->K_max = K_max;
@@ -31,6 +36,12 @@ namespace SampleKinetics {
         return(pow(10, distribution_(generator)));
     }
 
+    double SampleKineticParams::sample_burst_size (RNG &generator) {
+        std::uniform_int_distribution<int> distribution_(int(burst_size_min),
+            int(burst_size_max));
+        return(double(distribution_(generator)));
+    }
+
     double SampleKineticParams::sample_hill_half_maximal (RNG &generator) {
         std::uniform_real_distribution<double> distribution_(log10(K_min),
             log10(K_max));
@@ -49,7 +60,7 @@ namespace SampleKinetics {
         return(pow(10, distribution_(generator)));
     }
 
-    bool sample_activator_status (RNG &generator) {
+    bool SampleKineticParams::sample_activator_status (RNG &generator) {
         std::uniform_int_distribution<int> distribution_(0, 1);
         if (distribution_(generator) == 0) {
             return(false);

@@ -5,15 +5,18 @@
 namespace SampleKinetics {
     class SampleKineticParams {
     private:
-    /* data */
-    double freq_min;
-    double freq_max;
-    double K_min;
-    double K_max;
-    double n_min;
-    double n_max;
-    double tau_min;
-    double tau_max;
+        /* data */
+        double freq_min;
+        double freq_max;
+        double K_min;
+        double K_max;
+        double n_min;
+        double n_max;
+        double tau_min;
+        double tau_max;
+        double burst_size_min;
+        double burst_size_max;
+
 
     public:
         typedef std::mt19937 RNG;
@@ -23,6 +26,9 @@ namespace SampleKinetics {
 
         // Set min, max for burst freq.
         void set_min_max_burst_freq (double freq_min, double freq_max);
+
+        // Set min, max for burst size
+        void set_min_max_burst_size (double burst_size_min, double burst_size_max);
 
         // Set min, max for hill half maximal
         void set_min_max_hill_half_maximal (double K_min, double K_max);
@@ -35,6 +41,9 @@ namespace SampleKinetics {
 
         // Sample burst freq
         double sample_burst_freq (RNG &generator);
+
+        // Sample burst size
+        double sample_burst_size (RNG &generator);
 
         // Sample hill half maximal
         double sample_hill_half_maximal (RNG &generator);

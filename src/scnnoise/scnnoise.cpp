@@ -997,7 +997,7 @@ namespace ScnnoiseInterface {
             count_rxns_fired.resize(num_genes);
             for (auto rxn_ : reactions) {
                 for (auto it : rxn_.rxn_rates) {
-                    count_rxns_fired[gene_rev_map[rxn_.gene_name]][it->first] = 0;
+                    count_rxns_fired[gene_rev_map[rxn_.gene_name]][it.first] = 0;
                 }
             }
         }
@@ -1013,7 +1013,7 @@ namespace ScnnoiseInterface {
             for (auto rxn_ : reactions) {
                 for (auto it : rxn_.rxn_rates) {
                     unsigned int count_ =
-                        count_rxns_fired[gene_rev_map[rxn_.gene_name]][it->first];
+                        count_rxns_fired[gene_rev_map[rxn_.gene_name]][it.first];
                     if (count_ < stop_rxn_count) {
                         stop_sim = false;
                         reached_rxn_count = false;

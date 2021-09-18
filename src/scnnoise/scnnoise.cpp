@@ -34,7 +34,7 @@ namespace ScnnoiseInterface {
         // num_rxn_gene_type.assign({6, 7, 5, 9});
         this->max_time = 10000;
         this->save_timeseries = false;
-        this->save_timeseries_all = false;
+        this->save_timeseries_all = true;
         this->num_timepoints_save = num_timepoints_save;
         this->count_save_file = count_save_file;
         // this->count_save_file = count_save_file;

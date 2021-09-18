@@ -268,7 +268,15 @@ namespace ScnnoiseInterface {
             num_save_loop += 1;
             if (save_timeseries) {
                 std::ofstream outfile;
-                outfile.open(count_save_file, std::ios_base::app);
+                if (save_timeseries_all) {
+                    outfile.open(count_save_file, std::ios_base::app);
+                }else{
+                    if (!simulation_ended) {
+                        outfile.open(count_save_file);
+                    }else{
+                        outfile.open(count_save_file, std::ios_base::app);
+                    }
+                }
                 for (int id_time = 0; id_time < num_timepoints_save_cur; ++id_time) {
                     outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
                     for (int gene = 0; gene < num_genes; ++gene) {

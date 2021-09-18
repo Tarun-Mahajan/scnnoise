@@ -433,6 +433,8 @@ namespace ScnnoiseInterface {
         ***********************************************/
         bool save_timeseries;
 
+        bool save_timeseries_all;
+
         /********************************************//**
         \brief Number of previous time points for which molecular counts are stored in
             a vector of vectors..
@@ -596,6 +598,8 @@ namespace ScnnoiseInterface {
         void set_curr_mol_count (std::map<std::string, std::map<std::string, int>> init_count);
 
         void update_burst_size (RNG &generator, int rxn_selected);
+
+        void set_save_timeseries_all (bool save_timeseries_all)
     };
 }
 #endif

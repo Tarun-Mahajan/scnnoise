@@ -34,6 +34,7 @@ namespace ScnnoiseInterface {
         // num_rxn_gene_type.assign({6, 7, 5, 9});
         this->max_time = 10000;
         this->save_timeseries = false;
+        this->save_timeseries_all = false;
         this->num_timepoints_save = num_timepoints_save;
         this->count_save_file = count_save_file;
         // this->count_save_file = count_save_file;
@@ -941,6 +942,10 @@ namespace ScnnoiseInterface {
     void scNNoiSE::set_simulation_params (double max_time, bool save_timeseries) {
         this->max_time = max_time;
         this->save_timeseries = save_timeseries;
+    }
+
+    void scNNoiSE::set_save_timeseries_all (bool save_timeseries_all) {
+        this->save_timeseries_all = save_timeseries_all;
     }
 
     void scNNoiSE::change_output_filepath (std::string new_filepath) {

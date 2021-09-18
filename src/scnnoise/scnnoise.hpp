@@ -388,6 +388,8 @@ namespace ScnnoiseInterface {
 
         std::map<int, std::map<std::string, double>> max_rxn_rate_change;
 
+        std::string regulation_type;
+
 
         // /********************************************//**
         //  \brief Vector for status in GRN
@@ -614,6 +616,8 @@ namespace ScnnoiseInterface {
         void update_rxn_count (int rxn_selected, bool &stop_sim, bool &reached_rxn_count);
 
         void update_burst_size_init ();
+
+        void set_regulation_type (std::string regulation_type = "hill additive");
     };
 }
 #endif

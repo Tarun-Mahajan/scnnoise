@@ -37,6 +37,7 @@ namespace ScnnoiseInterface {
         this->save_timeseries_all = true;
         this->num_timepoints_save = num_timepoints_save;
         this->count_save_file = count_save_file;
+        regulation_type = "hill additive";
         // this->count_save_file = count_save_file;
 
         /********************************************//**
@@ -339,11 +340,13 @@ namespace ScnnoiseInterface {
                 }
             }
         }
-        regulation_function_factor *= max_rxn_rate_change[gene_id][rxn_name];
-        if (is_regulated) {
-            regulation_function_factor += 1;
-        }else{
-            regulation_function_factor += 1;
+        if (regulation_type == "hill additive") {
+            regulation_function_factor *= max_rxn_rate_change[gene_id][rxn_name];
+            if (is_regulated) {
+                regulation_function_factor += 1;
+            }else{
+                regulation_function_factor += 1;
+            }
         }
         return regulation_function_factor;
     }
@@ -1047,5 +1050,9 @@ namespace ScnnoiseInterface {
         }
 
 
+    }
+
+    void scNNoiSE::set_regulation_type (std::string regulation_type = "hill additive") {
+        this->regulation_type = regulation_type;
     }
 }

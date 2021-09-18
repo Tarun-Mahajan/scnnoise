@@ -989,4 +989,17 @@ namespace ScnnoiseInterface {
             }
         }
     }
+
+    void set_count_rxns_fired (bool count_rxns, unsigned int stop_rxn_count) {
+        this->count_rxns = count_rxns;
+        this->stop_rxn_count = stop_rxn_count;
+        if (count_rxns) {
+            count_rxns_fired.resize(num_genes);
+            for (auto rxn_ : reactions) {
+                for (auto it : rxn_.rxn_rates) {
+                    count_rxns_fired[gene_rev_map[rxn_.gene_name]][it->first] = 0;
+                }
+            }
+        }
+    }
 }

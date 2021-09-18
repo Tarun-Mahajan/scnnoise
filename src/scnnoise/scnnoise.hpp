@@ -451,6 +451,11 @@ namespace ScnnoiseInterface {
         ***********************************************/
         int num_timepoints_save;
 
+        std::vector<std::map<std::string, unsigned int>> count_rxns_fired;
+
+        bool count_rxns;
+        unsigned int stop_rxn_count;
+
         double total_propensity;
 
         /********************************************//**
@@ -599,7 +604,10 @@ namespace ScnnoiseInterface {
 
         void update_burst_size (RNG &generator, int rxn_selected);
 
-        void set_save_timeseries_all (bool save_timeseries_all)
+        void set_save_timeseries_all (bool save_timeseries_all);
+
+        void set_count_rxns_fired (bool count_rxns,
+            unsigned int stop_rxn_count = 10**6);
     };
 }
 #endif

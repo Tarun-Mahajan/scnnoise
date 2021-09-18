@@ -31,6 +31,7 @@ class CellType:
         #Recursive function (careful with passing by reference/by copy)
         #Step 1: simulate gene expression at steady state
             #a. it would be nice to be able to pass the 4 to simulate for into the simulate function
+        print(str(self.lineageName))
         f = open(self.count_csv, "w")
         f.truncate()
         f.close()
@@ -42,7 +43,7 @@ class CellType:
         #Step 2: Sample num_samples reads for each gene
         sim_out = pd.read_csv(self.count_csv)
         sim_out = sim_out.loc[:, ~sim_out.columns.str.contains('^Unnamed')]
-        species = [col for col in sim_out.columns if col[-7:] == 'protein']
+        species = [col for col in sim_out.columns if col[-4:] == 'mRNA']
         samples = np.random.randint(0,len(sim_out.index), size = num_samples)
         sample_out = sim_out.iloc[samples][species]
         sample_out['Cell Type'] = [str(self.lineageName)] * num_samples
@@ -74,6 +75,7 @@ class CellType:
         #helper (careful with passing by reference/by copy)
         #Step 1: Save new kinetic parameters into simulator
             #a. maybe here it would be better to add options to the c++ code to make this easier 
+        print(str(self.lineageName)+'T')
         simulator.swap_rxn_rates(self.rxn_rates)
             
             
@@ -101,7 +103,7 @@ class CellType:
         if collect_samples:
             sim_out = pd.read_csv(self.count_csv)
             sim_out = sim_out.loc[:, ~sim_out.columns.str.contains('^Unnamed')]
-            species = [col for col in sim_out.columns if col[-7:] == 'protein']
+            species = [col for col in sim_out.columns if col[-4:] == 'mRNA']
             samples = np.random.randint(0,len(sim_out.index), size = num_samples)
             sample_out = sim_out.iloc[samples][species]
             sample_out['Cell Type'] = [str(self.lineageName)+'T'] * num_samples

@@ -79,4 +79,4 @@ class LTSim:
         #Step 3: return result file, or data structure
             
         
-        return pd.read_csv(self.sample_csv)
+        return pd.read_csv(self.sample_csv, header = None)

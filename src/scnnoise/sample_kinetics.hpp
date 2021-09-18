@@ -45,6 +45,9 @@ namespace SampleKinetics {
         // Sample tau (1/degradation_rate)
         double sample_tau (RNG &generator);
 
+        // sample activator status
+        bool sample_activator_status (RNX &generator);
+
 
     };
 }

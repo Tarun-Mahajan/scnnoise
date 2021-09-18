@@ -612,6 +612,8 @@ namespace ScnnoiseInterface {
             unsigned int stop_rxn_count = pow(10, 6));
 
         void update_rxn_count (int rxn_selected, bool &stop_sim, bool &reached_rxn_count);
+
+        void update_burst_size_init ();
     };
 }
 #endif

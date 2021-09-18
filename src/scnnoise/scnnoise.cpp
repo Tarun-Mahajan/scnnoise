@@ -990,6 +990,22 @@ namespace ScnnoiseInterface {
         }
     }
 
+    void scNNoiSE::update_burst_size_init () {
+
+        for (auto &rxn_ : reactions) {
+            int gene_selected = gene_rev_map[rxn_.gene_name];
+            std::string gene_type = rxn_.gene_type;
+            double copy_number = gene_copy_number[gene_selected];
+            std::size_t found = gene_type.find("reduced");
+            if (found != std::string::npos) {
+                stoichio_factor_struct &stoichio_factor_gene =
+                    stoichio_factors[gene_selected];
+                stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
+                    double (gene_burst_sizes[gene_selected] * copy_number);
+            }
+        }
+    }
+
     void scNNoiSE::set_count_rxns_fired (bool count_rxns, unsigned int stop_rxn_count) {
         this->count_rxns = count_rxns;
         this->stop_rxn_count = stop_rxn_count;
@@ -1010,10 +1026,17 @@ namespace ScnnoiseInterface {
             count_rxns_fired[gene_selected][rxn_name] += 1;
             stop_sim = true;
             reached_rxn_count = true;
+            if (gene_selected == 0) {
+                std::cout << "gene selected = " << gene_selected << " " << rxn_name << std::endl;
+            }
             for (auto rxn_ : reactions) {
                 for (auto it : rxn_.rxn_rates) {
                     unsigned int count_ =
                         count_rxns_fired[gene_rev_map[rxn_.gene_name]][it.first];
+                    // std::cout << network[0].adj_list[2][0] << std::endl;
+                    // std::cout << "should stop = " << " " << gene_rev_map[rxn_.gene_name] <<
+                    // " " << it.first << " " << count_ <<
+                    //     " " << stop_rxn_count << " " << count_rxns_fired[gene_rev_map[rxn_.gene_name]][it.first] << " " << reached_rxn_count << std::endl;
                     if (count_ < stop_rxn_count) {
                         stop_sim = false;
                         reached_rxn_count = false;

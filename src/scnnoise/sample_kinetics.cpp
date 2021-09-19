@@ -56,7 +56,7 @@ namespace SampleKinetics {
 
         std::uniform_int_distribution<int> distribution_(n_min,
             n_max);
-        return(double(distribution_(generator)))
+        return(double(distribution_(generator)));
     }
 
     double SampleKineticParams::sample_tau (RNG &generator) {

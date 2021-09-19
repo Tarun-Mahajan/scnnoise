@@ -431,7 +431,7 @@ namespace ScnnoiseInterface {
 
         double num_points_to_collect;
 
-        double time_to_save;
+        double time_interval_to_save;
 
         bool save_at_time_interval;
 

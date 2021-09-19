@@ -50,9 +50,13 @@ namespace SampleKinetics {
     }
 
     double SampleKineticParams::sample_hill_coop (RNG &generator) {
-        std::uniform_real_distribution<double> distribution_(log10(n_min),
-            log10(n_max));
-        return(pow(10, distribution_(generator)));
+        // std::uniform_real_distribution<double> distribution_(log10(n_min),
+        //     log10(n_max));
+        // return(pow(10, distribution_(generator)));
+
+        std::uniform_int_distribution<int> distribution_(n_min,
+            n_max);
+        return(double(distribution_(generator)))
     }
 
     double SampleKineticParams::sample_tau (RNG &generator) {

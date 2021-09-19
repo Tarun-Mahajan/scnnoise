@@ -71,7 +71,7 @@ namespace ScnnoiseInterface {
         init_stoichio_factors();
 
         // Initialize rxn order
-        init_rxn_order();
+        // init_rxn_order();
     }
 
     void scNNoiSE::init_stoichio_factors() {

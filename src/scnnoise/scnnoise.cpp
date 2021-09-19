@@ -376,6 +376,7 @@ namespace ScnnoiseInterface {
 
     void scNNoiSE::init_rxn_order () {
         unsigned int order_count = 0;
+        rxn_order.clear();
         for (auto &it : reactions) {
             for (auto const &rxns_ : it.rxn_rates) {
                 rxn_order_struct rxn_order_temp;

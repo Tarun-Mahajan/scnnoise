@@ -255,6 +255,30 @@ namespace ScnnoiseInterface {
         }
     }
 
+    void GillespieSSA::save_molecule_count_at_interval (double time_prev, double time_next,
+        double &points_collected_prev) {
+        if (time_next > burn_in) {
+            if (((time_next - burn_in) >= (points_collected_prev + 1) * time_interval_to_save) &&
+                ((time_prev - burn_in) < (points_collected_prev + 1) * time_interval_to_save)) {
+                std::ofstream outfile;
+                outfile.open(count_save_file, std::ios_base::app);
+                outfile << time_next << ',';
+                for (int gene = 0; gene < num_genes; ++gene) {
+                    for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+                        if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                            outfile << reactions[gene].molecule_count_cur[species];
+                        }else{
+                            outfile << reactions[gene].molecule_count_cur[species] << ',';
+                        }
+                    }
+                }
+                outfile << '\n';
+                outfile.close();
+                points_collected_prev += 1;
+            }
+        }
+    }
+
     void GillespieSSA::update_molecule_count_history (int &num_history, int &num_save_loop,
         bool simulation_ended) {
         if ((num_history == num_timepoints_save) || simulation_ended) {
@@ -398,6 +422,7 @@ namespace ScnnoiseInterface {
         int num_save_loop = 0;
         double total_time = 0;
         double cur_time = 0;
+        double points_collected_prev = 0;
         update_molecule_count_history(num_history, num_save_loop,
             simulation_ended);
         init_cell_cycle_state (generator, cur_time);
@@ -442,8 +467,13 @@ namespace ScnnoiseInterface {
                 //     total_propensity << std::endl;
                 // }
                 time_history.push_back(next_time_step);
-                update_molecule_count_history(num_history, num_save_loop,
-                    simulation_ended);
+                if (save_at_time_interval) {
+                    save_molecule_count_at_interval(cur_time, total_time,
+                        points_collected_prev);
+                }else{
+                    update_molecule_count_history(num_history, num_save_loop,
+                        simulation_ended);
+                }
                 // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
                 //     std::cout << "error foundlast " <<
                 //     reactions[0].propensity_vals["mRNA decay"] << " " <<

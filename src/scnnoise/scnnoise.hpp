@@ -433,6 +433,8 @@ namespace ScnnoiseInterface {
 
         double time_to_save;
 
+        bool save_at_time_interval;
+
         /********************************************//**
         \brief Save time series count data.
 
@@ -625,8 +627,9 @@ namespace ScnnoiseInterface {
 
         void set_regulation_type (std::string regulation_type = "hill additive");
 
-        void set_num_points_to_save (bool num_points_to_collect = 1000,
-            bool burn_in = 5000);
+        void set_num_points_to_save (bool save_at_time_interval = false,
+            double num_points_to_collect = 1000,
+            double burn_in = 5000);
     };
 }
 #endif

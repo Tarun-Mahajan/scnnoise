@@ -43,21 +43,21 @@ namespace ScnnoiseInterface {
         break;
       }
     }
-    gene_type_struct gene_type = gene_type_info[reactions[rxn_order[rxn_selected].gene_id].gene_type];
-    if (reactions[rxn_order[rxn_selected].gene_id].molecule_count_cur[gene_type.species_rev_map["mRNA"]] == 0 &&
-        rxn_order[rxn_selected].rxn_name == "mRNA decay") {
-        std::cout << "error found " <<
-        reactions[0].propensity_vals["mRNA decay"] << " " <<
-        total_propensity << std::endl;
-    }
+    // gene_type_struct gene_type = gene_type_info[reactions[rxn_order[rxn_selected].gene_id].gene_type];
+    // if (reactions[rxn_order[rxn_selected].gene_id].molecule_count_cur[0] == 0 &&
+    //     rxn_order[rxn_selected].rxn_name == "mRNA decay") {
+    //     std::cout << "error found " <<
+    //     reactions[rxn_order[rxn_selected].gene_id].propensity_vals["mRNA decay"] << " " <<
+    //     total_propensity << " selector " << selector_tmp << std::endl;
+    // }
     sort_reaction(rxn_selected);
-    gene_type = gene_type_info[reactions[rxn_order[rxn_selected].gene_id].gene_type];
-    if (reactions[rxn_order[rxn_selected].gene_id].molecule_count_cur[gene_type.species_rev_map["mRNA"]] == 0 &&
-        rxn_order[rxn_selected].rxn_name == "mRNA decay") {
-        std::cout << "error found 1 " <<
-        reactions[0].propensity_vals["mRNA decay"] << " " <<
-        total_propensity << std::endl;
-    }
+    // gene_type = gene_type_info[reactions[rxn_order[rxn_selected].gene_id].gene_type];
+    // if (reactions[rxn_order[rxn_selected].gene_id].molecule_count_cur[0] == 0 &&
+    //     rxn_order[rxn_selected].rxn_name == "mRNA decay") {
+    //     std::cout << "error found 1 " <<
+    //     reactions[0].propensity_vals["mRNA decay"] << " " <<
+    //     total_propensity << std::endl;
+    // }
     // if (rxn_selected > 0) {
     //   std::swap(rxn_order[rxn_selected - 1], rxn_order[rxn_selected]);
     //   rxn_selected -= 1;
@@ -377,6 +377,7 @@ namespace ScnnoiseInterface {
         time_history.clear();
         time_history.push_back(0);
         update_burst_size_init();
+        init_rxn_order();
         compute_total_propensity();
         start_molecule_count_history_file();
 
@@ -448,6 +449,22 @@ namespace ScnnoiseInterface {
                 //     reactions[0].propensity_vals["mRNA decay"] << " " <<
                 //     total_propensity << std::endl;
                 // }
+                // int rxn_found = 0;
+                // for (int i = 0; i < rxn_order.size(); ++i) {
+                //     if (rxn_order[i].rxn_name == "mRNA decay" &&
+                //         rxn_order[i].gene_id == 0) {
+                //             rxn_found = i;
+                //         }
+                // }
+                // if (reactions[0].molecule_count_cur[0] == 0 &&
+                //     reactions[0].propensity_vals["mRNA decay"] != 0) {
+                //         std::cout << "aha!! 1 " << reactions[0].propensity_vals["mRNA decay"] << std::endl;
+                //     }
+                //
+                // if (reactions[0].molecule_count_cur[0] == 0 &&
+                //     rxn_order[rxn_found].propensity_val != 0) {
+                //         std::cout << "aha!! 2 " << rxn_order[rxn_found].propensity_val << std::endl;
+                //     }
             }else{
                 simulation_ended = true;
                 update_molecule_count_history(num_history, num_save_loop,

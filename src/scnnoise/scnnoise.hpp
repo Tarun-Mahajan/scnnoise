@@ -427,6 +427,12 @@ namespace ScnnoiseInterface {
         ***********************************************/
         double max_time;
 
+        double burn_in;
+
+        double num_points_to_collect;
+
+        double time_to_save;
+
         /********************************************//**
         \brief Save time series count data.
 
@@ -618,6 +624,9 @@ namespace ScnnoiseInterface {
         void update_burst_size_init ();
 
         void set_regulation_type (std::string regulation_type = "hill additive");
+
+        void set_num_points_to_save (bool num_points_to_collect = 1000,
+            bool burn_in = 5000);
     };
 }
 #endif

@@ -952,6 +952,13 @@ namespace ScnnoiseInterface {
         this->save_timeseries_all = save_timeseries_all;
     }
 
+    void scNNoiSE::set_num_points_to_save (bool num_points_to_collect,
+        bool burn_in) {
+        this->num_points_to_collect = num_points_to_collect;
+        this->burn_in = burn_in;
+        this->time_interval_to_save = (max_time - burn_in) / num_points_to_collect;
+    }
+
     void scNNoiSE::change_output_filepath (std::string new_filepath) {
         this->count_save_file = new_filepath;
     }

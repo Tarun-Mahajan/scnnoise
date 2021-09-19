@@ -497,8 +497,10 @@ namespace ScnnoiseInterface {
                 //     }
             }else{
                 simulation_ended = true;
-                update_molecule_count_history(num_history, num_save_loop,
-                    simulation_ended);
+                if (!save_at_time_interval) {
+                    update_molecule_count_history(num_history, num_save_loop,
+                        simulation_ended);
+                }
                 stop_sim = true;
             }
         }

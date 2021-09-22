@@ -402,7 +402,21 @@ namespace ScnnoiseInterface {
     void GillespieSSA::start_statistics_file (std::string statistics_file) {
         std::ofstream outfile;
         outfile.open(statistics_file);
-        outfile << "mean" << "," << "variance" << "\n";
+        std::string connector = ":";
+        for (int gene = 0; gene < num_genes; ++gene) {
+            std::string gene_type = reactions[gene].gene_type;
+            for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+                std::string gene_species_name = gene_map[gene] + connector +
+                gene_type_info[gene_type].species_map[species];
+                if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                    outfile << "mean_" + gene_species_name << "," <<
+                        "variance_" + gene_species_name;
+                }else{
+                    outfile << "mean_" + gene_species_name << "," <<
+                        "variance_" + gene_species_name << ",";
+                }
+            }
+        }
         outfile.close();
     }
 

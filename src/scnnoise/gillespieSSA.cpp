@@ -406,7 +406,8 @@ namespace ScnnoiseInterface {
         outfile.close();
     }
 
-    void GillespieSSA::simulate (RNG &generator, double num_repeat, bool verbose, std::string statistics_file) {
+    void GillespieSSA::simulate (RNG &generator, double num_repeat, bool verbose,
+        bool compute_statistics, std::string statistics_file) {
         start_molecule_count_history_file();
         start_statistics_file(statistics_file);
         for (int repeat_ = 0; repeat_ < num_repeat; ++repeat_) {

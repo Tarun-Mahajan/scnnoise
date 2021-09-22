@@ -495,11 +495,6 @@ namespace ScnnoiseInterface {
             time_history.push_back(0);
             update_burst_size_init();
             init_rxn_order();
-            for (int gene_ = 0; gene_ < num_genes; ++gene_) {
-                std::cout << "activation " << network[0].edge_rxn_params[gene_][0].activator
-                << " " << network[0].edge_rxn_params[gene_][0].rxn_IN << " " <<
-                network[0].edge_rxn_params[gene_][0].species_OUT << std::endl;
-            }
             compute_total_propensity();
 
             std::random_device rd;

@@ -473,6 +473,8 @@ namespace ScnnoiseInterface {
         bool compute_statistics, std::string statistics_file) {
         start_molecule_count_history_file();
         std::string statistics_file_full;
+        double statistics_start_time = 0;
+        bool is_statistics_start_time_set = false;
 
         for (int repeat_ = 0; repeat_ < num_repeat; ++repeat_) {
             if (verbose) {
@@ -486,6 +488,8 @@ namespace ScnnoiseInterface {
                     std::to_string(repeat_) + ".csv";
                 start_statistics_file(statistics_file_full);
                 set_size_statistics_containers();
+                statistics_start_time = 0;
+                is_statistics_start_time_set = false;
             }
             time_history.clear();
             time_history.push_back(0);
@@ -528,7 +532,12 @@ namespace ScnnoiseInterface {
                 // }
                 double next_time_step = sample_time_step(generator);
                 if (total_time > burn_in && compute_statistics) {
-                    upate_running_statistics (total_time, next_time_step);
+                    if (!is_statistics_start_time_set) {
+                        statistics_start_time = total_time;
+                        is_statistics_start_time_set = true;
+                    }
+                    upate_running_statistics (total_time - statistics_start_time,
+                        next_time_step);
                 }
                 // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
                 //     std::cout << "error found0time1 " <<

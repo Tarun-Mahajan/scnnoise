@@ -462,7 +462,7 @@ namespace ScnnoiseInterface {
                 running_var[gene_][species_] +=
                     (pow(prev_count, 2) * (next_time_step / total_time_next));
                 running_var[gene_][species_] +=
-                    (pow(prev_mean, 2) * (next_time_step / total_time_next));
+                    (pow(prev_mean, 2) * (total_time_prev / total_time_next));
                 running_var[gene_][species_] -=
                     pow(running_mean[gene_][species_], 2);
             }

@@ -74,6 +74,8 @@ namespace ScnnoiseInterface {
             double &points_collected_prev);
 
         void start_statistics_file (std::string statistics_file, int repeat_);
+
+        void set_size_statistics_containers ()
     };
 }
 

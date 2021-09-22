@@ -408,6 +408,16 @@ namespace ScnnoiseInterface {
         outfile.close();
     }
 
+    void GillespieSSA::set_size_statistics_containers () {
+        running_mean.resize(num_genes);
+        running_var.resize(num_genes);
+
+        for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
+            running_mean[gene_].resize(reactions[gene_].molecule_count_cur.size());
+            running_var[gene_].resize(reactions[gene_].molecule_count_cur.size());
+        }
+    }
+
     void GillespieSSA::simulate (RNG &generator, double num_repeat, bool verbose,
         bool compute_statistics, std::string statistics_file) {
         start_molecule_count_history_file();
@@ -421,6 +431,7 @@ namespace ScnnoiseInterface {
             }
             if (compute_statistics) {
                 start_statistics_file(statistics_file, repeat_);
+                set_size_statistics_containers();
             }
             time_history.clear();
             time_history.push_back(0);

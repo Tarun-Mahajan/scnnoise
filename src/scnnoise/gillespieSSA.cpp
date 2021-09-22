@@ -596,16 +596,23 @@ namespace ScnnoiseInterface {
                     //         std::cout << "aha!! 2 " << rxn_order[rxn_found].propensity_val << std::endl;
                     //     }
                 }else{
-                    if (compute_statistics) {
-                        write_statistics_to_file(statistics_file_full);
-                    }
+                    // if (compute_statistics) {
+                    //     write_statistics_to_file(statistics_file_full);
+                    // }
                     simulation_ended = true;
-                    if (!save_at_time_interval) {
-                        update_molecule_count_history(num_history, num_save_loop,
-                            simulation_ended);
-                    }
+                    // if (!save_at_time_interval) {
+                    //     update_molecule_count_history(num_history, num_save_loop,
+                    //         simulation_ended);
+                    // }
                     stop_sim = true;
                 }
+            }
+            if (compute_statistics) {
+                write_statistics_to_file(statistics_file_full);
+            }
+            if (!save_at_time_interval) {
+                update_molecule_count_history(num_history, num_save_loop,
+                    simulation_ended);
             }
         }
     }

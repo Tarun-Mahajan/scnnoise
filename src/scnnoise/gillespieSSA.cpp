@@ -422,7 +422,7 @@ namespace ScnnoiseInterface {
 
     void GillespieSSA::write_statistics_to_file (std::string statistics_file) {
         std::ofstream outfile;
-        outfile.open(statistics_file);
+        outfile.open(statistics_file, std::ios_base::app);
         for (int gene_ = 0; gene_ < num_genes; ++gene_) {
             for (int species_ = 0; species_ < reactions[gene_].molecule_count_cur.size(); ++species_) {
                 if (species_ == reactions[gene_].molecule_count_cur.size() - 1 && gene_ == num_genes - 1) {

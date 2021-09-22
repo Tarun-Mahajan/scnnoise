@@ -104,7 +104,9 @@ namespace ScnnoiseInterface {
         //
         // }
 
-        molecule_count_history.resize(num_genes);
+        if (save_timeseries || save_timeseries_all) {
+            molecule_count_history.resize(num_genes);
+        }
         std::ifstream count_state_file(filepath);
         std::string row_text;
         std::string gene_name;
@@ -155,11 +157,13 @@ namespace ScnnoiseInterface {
             int gene_id = gene_rev_map[gene_name];
             gene_rxn_channel_struct rxn_ = reactions[gene_id];
             gene_type_struct gene_info = gene_type_info[rxn_.gene_type];
-            molecule_count_history[gene_id].resize(gene_info.num_species);
-            for (std::size_t i = 0; i < species_name.size(); ++i) {
-                molecule_count_history[gene_id][gene_info.species_rev_map[species_name[i]]].resize(num_timepoints_save, 0);
-                reactions[gene_id].molecule_count_cur[gene_info.species_rev_map[species_name[i]]] =
-                    species_count[i];
+            if (save_timeseries || save_timeseries_all) {
+                molecule_count_history[gene_id].resize(gene_info.num_species);
+                for (std::size_t i = 0; i < species_name.size(); ++i) {
+                    molecule_count_history[gene_id][gene_info.species_rev_map[species_name[i]]].resize(num_timepoints_save, 0);
+                    reactions[gene_id].molecule_count_cur[gene_info.species_rev_map[species_name[i]]] =
+                        species_count[i];
+                }
             }
 
         }
@@ -344,6 +348,12 @@ namespace ScnnoiseInterface {
             regulation_function_factor *= max_rxn_rate_change[gene_id][rxn_name];
             if (is_regulated) {
                 regulation_function_factor += 1;
+            }else{
+                regulation_function_factor += 1;
+            }
+        }else{
+            if (is_regulated) {
+                // regulation_function_factor += 1;
             }else{
                 regulation_function_factor += 1;
             }
@@ -854,12 +864,30 @@ namespace ScnnoiseInterface {
 
     double scNNoiSE::hill_function (int tf_count, double hill_coeff,
         double half_maximal, bool activator, double prob_contr) {
-        double tf_count_pow = pow(double(tf_count), hill_coeff);
-        double half_maximal_pow = pow(double(half_maximal), hill_coeff);
+        // double tf_count_pow = pow(double(tf_count), hill_coeff);
+        // double half_maximal_pow = pow(double(half_maximal), hill_coeff);
+        bool forward_ratio = true;
+        double tf_to_half_maximal_ratio =
+            double(tf_count) / double(half_maximal);
+        if (tf_to_half_maximal_ratio > 1) {
+            forward_ratio = false;
+            tf_to_half_maximal_ratio = 1.0/tf_to_half_maximal_ratio;
+        }
+        double tf_count_pow = pow(tf_to_half_maximal_ratio, hill_coeff);
         if (activator) {
-            return (tf_count_pow/(tf_count_pow + half_maximal_pow))*prob_contr;
+            if (forward_ratio) {
+                return (tf_count_pow / (1 + tf_count_pow))*prob_contr;
+            }else{
+                return (1 / (1 + tf_count_pow))*prob_contr;
+            }
+            // return (tf_count_pow/(tf_count_pow + half_maximal_pow))*prob_contr;
         }else{
-            return (half_maximal_pow/(tf_count_pow + half_maximal_pow))*prob_contr;
+            if (forward_ratio) {
+                return (1 / (1 + tf_count_pow))*prob_contr;
+            }else{
+                return (tf_count_pow / (1 + tf_count_pow))*prob_contr;
+            }
+            // return (half_maximal_pow/(tf_count_pow + half_maximal_pow))*prob_contr;
         }
     }
 

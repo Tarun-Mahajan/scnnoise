@@ -73,7 +73,7 @@ namespace ScnnoiseInterface {
         void save_molecule_count_at_interval (double time_prev, double time_next,
             double &points_collected_prev);
 
-        void start_statistics_file (std::string statistics_file, int repeat_);
+        void start_statistics_file (std::string statistics_file);
 
         void set_size_statistics_containers ()
     };

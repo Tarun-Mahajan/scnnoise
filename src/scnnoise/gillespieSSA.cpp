@@ -399,11 +399,9 @@ namespace ScnnoiseInterface {
         outfile.close();
     }
 
-    void GillespieSSA::start_statistics_file (std::string statistics_file, int repeat_) {
-        std::string filepath = statistics_file + "_repeat_" +
-            std::to_string(repeat_) + ".csv";
+    void GillespieSSA::start_statistics_file (std::string statistics_file) {
         std::ofstream outfile;
-        outfile.open(filepath);
+        outfile.open(statistics_file);
         outfile << "mean" << "," << "variance" << "\n";
         outfile.close();
     }
@@ -421,6 +419,7 @@ namespace ScnnoiseInterface {
     void GillespieSSA::simulate (RNG &generator, double num_repeat, bool verbose,
         bool compute_statistics, std::string statistics_file) {
         start_molecule_count_history_file();
+        std::string statistics_file_full;
 
         for (int repeat_ = 0; repeat_ < num_repeat; ++repeat_) {
             if (verbose) {
@@ -430,7 +429,9 @@ namespace ScnnoiseInterface {
                 max_time = 100;
             }
             if (compute_statistics) {
-                start_statistics_file(statistics_file, repeat_);
+                statistics_file_full = statistics_file + "_repeat_" +
+                    std::to_string(repeat_) + ".csv";
+                start_statistics_file(statistics_file_full);
                 set_size_statistics_containers();
             }
             time_history.clear();

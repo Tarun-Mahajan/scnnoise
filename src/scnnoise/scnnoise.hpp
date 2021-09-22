@@ -595,7 +595,7 @@ namespace ScnnoiseInterface {
         expression. Needs to be overridden in any derived class.
         ***********************************************/
         virtual void simulate (RNG &generator, double num_repeat, bool verbose,
-            std::string statistics_file) = 0;
+            bool compute_statistics = true, std::string statistics_file) = 0;
 
         void set_simulation_params (double max_time = 10000,
             bool save_timeseries = false);

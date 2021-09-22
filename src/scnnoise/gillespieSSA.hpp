@@ -72,6 +72,8 @@ namespace ScnnoiseInterface {
 
         void save_molecule_count_at_interval (double time_prev, double time_next,
             double &points_collected_prev);
+
+        void GillespieSSA::start_statistics_file (std::string statistics_file);
     };
 }
 

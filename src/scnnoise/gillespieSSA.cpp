@@ -399,8 +399,16 @@ namespace ScnnoiseInterface {
         outfile.close();
     }
 
+    void GillespieSSA::start_statistics_file (std::string statistics_file) {
+        std::ofstream outfile;
+        outfile.open(statistics_file);
+        outfile << "mean" << "," << "variance" << "\n";
+        outfile.close();
+    }
+
     void GillespieSSA::simulate (RNG &generator, double num_repeat, bool verbose, std::string statistics_file) {
         start_molecule_count_history_file();
+        start_statistics_file(statistics_file);
         for (int repeat_ = 0; repeat_ < num_repeat; ++repeat_) {
             if (verbose) {
                 std::cout << "Trajectory number = " << repeat_ + 1 << std::endl;

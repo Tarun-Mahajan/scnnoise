@@ -1067,9 +1067,6 @@ namespace ScnnoiseInterface {
             count_rxns_fired[gene_selected][rxn_name] += 1;
             stop_sim = true;
             reached_rxn_count = true;
-            if (gene_selected == 0) {
-                std::cout << "gene selected = " << gene_selected << " " << rxn_name << std::endl;
-            }
             for (auto rxn_ : reactions) {
                 for (auto it : rxn_.rxn_rates) {
                     unsigned int count_ =

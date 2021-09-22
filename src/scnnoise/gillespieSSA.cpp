@@ -425,8 +425,30 @@ namespace ScnnoiseInterface {
         running_var.resize(num_genes);
 
         for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
-            running_mean[gene_].resize(reactions[gene_].molecule_count_cur.size());
-            running_var[gene_].resize(reactions[gene_].molecule_count_cur.size());
+            running_mean[gene_].resize(reactions[gene_].molecule_count_cur.size(), 0);
+            running_var[gene_].resize(reactions[gene_].molecule_count_cur.size(), 0);
+        }
+    }
+
+    void GillespieSSA::upate_running_statistics (total_time_prev, next_time_step) {
+        double total_time_next = total_time_prev + next_time_step;
+        for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
+            for (int species_ = 0; species_ < reactions[gene].molecule_count_cur.size(); ++species_) {
+                double prev_count = reactions[gene].molecule_count_cur[species_];
+                double prev_mean = running_mean[gene_][species_];
+                running_mean[gene_][species_] =
+                    prev_mean * (total_time_prev / total_time_next);
+                running_mean[gene_][species_] +=
+                    prev_count * (next_time_step / total_time_next);
+                running_var[gene_][species_] =
+                    running_var[gene_][species_] * (total_time_prev / total_time_next);
+                running_var[gene_][species_] +=
+                    (pow(prev_count, 2) * (next_time_step / total_time_next));
+                running_var[gene_][species_] +=
+                    (pow(prev_mean, 2) * (next_time_step / total_time_next));
+                running_var[gene_][species_] -=
+                    pow(running_mean[gene_][species_], 2);
+            }
         }
     }
 
@@ -488,6 +510,9 @@ namespace ScnnoiseInterface {
                 //     total_propensity << " time = " << total_time << std::endl;
                 // }
                 double next_time_step = sample_time_step(generator);
+                if (total_time > burn_in) {
+                    upate_running_statistics (total_time_prev, next_time_step);
+                }
                 // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
                 //     std::cout << "error found0time1 " <<
                 //     reactions[0].propensity_vals["mRNA decay"] << " " <<

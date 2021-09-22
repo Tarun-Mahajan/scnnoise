@@ -75,7 +75,9 @@ namespace ScnnoiseInterface {
 
         void start_statistics_file (std::string statistics_file);
 
-        void set_size_statistics_containers ()
+        void set_size_statistics_containers ();
+
+        void upate_running_statistics (total_time_prev, next_time_step)
     };
 }
 

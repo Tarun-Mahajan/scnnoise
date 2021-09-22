@@ -490,6 +490,10 @@ namespace ScnnoiseInterface {
         // file to save molecule count history
         std::string count_save_file;
 
+        std::vector<std::vector<double>> running_mean;
+
+        std::vector<std::vector<double>> running_var;
+
         // public:
         /********************************************//**
         \brief Constructor for scNNoiSE.
@@ -590,7 +594,8 @@ namespace ScnnoiseInterface {
         A pure virtual function for simulating stochastic gene
         expression. Needs to be overridden in any derived class.
         ***********************************************/
-        virtual void simulate (RNG &generator, double num_repeat, bool verbose) = 0;
+        virtual void simulate (RNG &generator, double num_repeat, bool verbose,
+            std::string statistics_file) = 0;
 
         void set_simulation_params (double max_time = 10000,
             bool save_timeseries = false);

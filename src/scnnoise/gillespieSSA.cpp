@@ -424,7 +424,7 @@ namespace ScnnoiseInterface {
         std::ofstream outfile;
         outfile.open(statistics_file);
         for (int gene_ = 0; gene_ < num_genes; ++gene_) {
-            for (int species_ = 0; species_ < reactions[gene].molecule_count_cur.size(); ++species_) {
+            for (int species_ = 0; species_ < reactions[gene_].molecule_count_cur.size(); ++species_) {
                 if (species_ == reactions[gene_].molecule_count_cur.size() - 1 && gene_ == num_genes - 1) {
                     outfile << running_mean[gene_][species_] << "," <<
                         running_var[gene_][species_] << "\n";
@@ -450,8 +450,8 @@ namespace ScnnoiseInterface {
     void GillespieSSA::upate_running_statistics (double total_time_prev, double next_time_step) {
         double total_time_next = total_time_prev + next_time_step;
         for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
-            for (int species_ = 0; species_ < reactions[gene].molecule_count_cur.size(); ++species_) {
-                double prev_count = reactions[gene].molecule_count_cur[species_];
+            for (int species_ = 0; species_ < reactions[gene_].molecule_count_cur.size(); ++species_) {
+                double prev_count = reactions[gene_].molecule_count_cur[species_];
                 double prev_mean = running_mean[gene_][species_];
                 running_mean[gene_][species_] =
                     prev_mean * (total_time_prev / total_time_next);
@@ -528,7 +528,7 @@ namespace ScnnoiseInterface {
                 // }
                 double next_time_step = sample_time_step(generator);
                 if (total_time > burn_in && compute_statistics) {
-                    upate_running_statistics (total_time_prev, next_time_step);
+                    upate_running_statistics (total_time, next_time_step);
                 }
                 // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
                 //     std::cout << "error found0time1 " <<
@@ -592,7 +592,7 @@ namespace ScnnoiseInterface {
                     //         std::cout << "aha!! 2 " << rxn_order[rxn_found].propensity_val << std::endl;
                     //     }
                 }else{
-                    if (compute_statistics) }{
+                    if (compute_statistics) {
                         write_statistics_to_file(statistics_file_full);
                     }
                     simulation_ended = true;

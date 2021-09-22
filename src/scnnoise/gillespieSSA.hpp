@@ -42,7 +42,8 @@ namespace ScnnoiseInterface {
             std::vector<std::string> &GRN_out_changed);
 
         // Simulate.
-        void simulate (RNG &generator, double num_repeat = 1, bool verbose = false) override;
+        void simulate (RNG &generator, double num_repeat = 1, bool verbose = false,
+            std::string statistics_file) override;
 
         virtual void sort_reaction (int &rxn_selected) = 0;
 

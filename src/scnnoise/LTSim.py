@@ -2,7 +2,7 @@ from scnnoise import _scnnoise
 import pandas as pd
 
 class LTSim:
-    def __init__(self, root, num_genes, count_csv, gene_csv, mol_csv, sample_csv, GRN_csv = ""):
+    def __init__(self, root, num_genes, count_csv, gene_csv, mol_csv, sample_csv, molecule,GRN_csv = ""):
         """
         Constructor for the LTSim object
         Takes in the root of the LineageTree in the simulation
@@ -16,6 +16,7 @@ class LTSim:
         self.mol_csv = mol_csv
         self.GRN_csv = GRN_csv
         self.sample_csv= sample_csv
+        self.molecule = molecule
         f = open(sample_csv, "w")
         f.truncate()
         f.close()
@@ -72,7 +73,7 @@ class LTSim:
         """
         
         #Step 2: Run sim_cell_type() on root
-        self.root.sim_transition(num_samples, simulator, False)
+        self.root.sim_transition(num_samples, simulator, False, molecule)
         
         
 

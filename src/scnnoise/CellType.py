@@ -42,8 +42,10 @@ class CellType:
         sim_out = pd.read_csv(count_csv)
         sim_out = sim_out.loc[:, ~sim_out.columns.str.contains('^Unnamed')]
         species = [col for col in sim_out.columns if col[-len(molecule):] == molecule]
-        samples = np.random.randint(0,len(sim_out.index), size = num_samples)
-        sample_out = sim_out.iloc[samples][species]
+        samples = np.random.random(size = num_samples) *1000
+        time = np.cumsum(sim_out[sim_out.columns[0]])
+        idxs = [np.argmax(time>sample)-1 for sample in samples]
+        sample_out = sim_out.iloc[idxs][species]
         sample_out['Cell Type'] = [str(self.lineageName)] * num_samples
         sample_out.to_csv(sample_csv, mode = 'a', header =False)
 
@@ -102,8 +104,10 @@ class CellType:
             sim_out = pd.read_csv(count_csv)
             sim_out = sim_out.loc[:, ~sim_out.columns.str.contains('^Unnamed')]
             species = [col for col in sim_out.columns if col[-len(molecule):] == molecule]
-            samples = np.random.randint(0,len(sim_out.index), size = num_samples)
-            sample_out = sim_out.iloc[samples][species]
+            samples = np.random.random(size = num_samples) *1000
+            time = np.cumsum(sim_out[sim_out.columns[0]])
+            idxs = [np.argmax(time>sample)-1 for sample in samples]
+            sample_out = sim_out.iloc[idxs][species]
             sample_out['Cell Type'] = [str(self.lineageName)+'T'] * num_samples
             sample_out.to_csv(sample_csv, mode = 'a', header = False)
         

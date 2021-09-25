@@ -108,6 +108,6 @@ class CellType:
             sample_out.to_csv(sample_csv, mode = 'a', header = False)
         
         #Step 3: Sample num_sample transition cells and store to output and run sim_cell_type
-        self.sim_cell_type(num_samples, simulator, molecule)
+        self.sim_cell_type(num_samples, simulator, molecule, count_csv, sample_csv)
         
         

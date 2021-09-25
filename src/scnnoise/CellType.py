@@ -19,7 +19,7 @@ class CellType:
         curr_cell_type = curr_cell_type.drop(columns = ['Cell Type', 'Gene'])
         self.rxn_rates = curr_cell_type.T.to_dict()
 
-    def sim_cell_type(self, num_samples, simulator):
+    def sim_cell_type(self, num_samples, simulator, molecule):
         """
         Params
             num_samples - number of sample reads to output for this cell type
@@ -43,7 +43,7 @@ class CellType:
         #Step 2: Sample num_samples reads for each gene
         sim_out = pd.read_csv(self.count_csv)
         sim_out = sim_out.loc[:, ~sim_out.columns.str.contains('^Unnamed')]
-        species = [col for col in sim_out.columns if col[-4:] == 'mRNA']
+        species = [col for col in sim_out.columns if col[-len(molecule):] == molecule]
         samples = np.random.randint(0,len(sim_out.index), size = num_samples)
         sample_out = sim_out.iloc[samples][species]
         sample_out['Cell Type'] = [str(self.lineageName)] * num_samples
@@ -60,10 +60,10 @@ class CellType:
         #recursive case
         if len(self.children) != 0:
             for cell_type in self.children:
-                cell_type.sim_transition(num_samples, simulator, True, init_mol_count)
+                cell_type.sim_transition(num_samples, simulator, True, molecule,init_mol_count)
                 
         
-    def sim_transition(self, num_samples, simulator, collect_samples, init_mol_count  = {}):
+    def sim_transition(self, num_samples, simulator, collect_samples, molecule, init_mol_count  = {}):
         """
         Params
             num_samples - number of sample reads to output for this cell type
@@ -103,13 +103,13 @@ class CellType:
         if collect_samples:
             sim_out = pd.read_csv(self.count_csv)
             sim_out = sim_out.loc[:, ~sim_out.columns.str.contains('^Unnamed')]
-            species = [col for col in sim_out.columns if col[-4:] == 'mRNA']
+            species = [col for col in sim_out.columns if col[-len(molecule):] == molecule]
             samples = np.random.randint(0,len(sim_out.index), size = num_samples)
             sample_out = sim_out.iloc[samples][species]
             sample_out['Cell Type'] = [str(self.lineageName)+'T'] * num_samples
             sample_out.to_csv(self.sample_csv, mode = 'a', header = False)
         
         #Step 3: Sample num_sample transition cells and store to output and run sim_cell_type
-        self.sim_cell_type(num_samples, simulator)
+        self.sim_cell_type(num_samples, simulator, molecule)
         
         

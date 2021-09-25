@@ -7,7 +7,10 @@ class LTSim:
         Constructor for the LTSim object
         Takes in the root of the LineageTree in the simulation
         """
+
+        root.set_csvs(count_csv, sample_csv)
         self.root = root    #cell Type
+        
         
         #write set functions for each instead of in constructor
         self.num_genes = num_genes
@@ -73,7 +76,7 @@ class LTSim:
         """
         
         #Step 2: Run sim_cell_type() on root
-        self.root.sim_transition(num_samples, simulator, False, molecule)
+        self.root.sim_transition(num_samples, simulator, False, self.molecule)
         
         
 

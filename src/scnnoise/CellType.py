@@ -2,6 +2,7 @@
 from scnnoise import _scnnoise
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 class CellType:
     def __init__(self, lineageName,rxn_rate_csv, children):
@@ -43,7 +44,7 @@ class CellType:
         sim_out = sim_out.loc[:, ~sim_out.columns.str.contains('^Unnamed')]
         species = [col for col in sim_out.columns if col[-len(molecule):] == molecule]
         samples = np.random.random(size = num_samples) *1000
-        time = np.cumsum(sim_out[sim_out.columns[0]])
+        time = list(np.cumsum(sim_out[sim_out.columns[0]]))
         time.append(np.inf)
         idxs = np.searchsorted(time, samples,side = 'right') - 1
         sample_out = sim_out.iloc[idxs][species]
@@ -77,8 +78,11 @@ class CellType:
         #Step 1: Save new kinetic parameters into simulator
             #a. maybe here it would be better to add options to the c++ code to make this easier 
         print(str(self.lineageName)+'T')
+        #print(simulator.get_rxn_rates())
         simulator.swap_rxn_rates(self.rxn_rates)
-            
+        print(simulator.get_rxn_rates())
+        print(simulator.get_rxn_order())
+
             
         #Step 2: simluate transition from parent steady state to daughter steady state
             #a. here we check when the system reaches a new steady state and sample before then
@@ -95,7 +99,11 @@ class CellType:
         simulator.set_simulation_params(1000, True)
         simulator.simulate(list(np.random.randint(low = 1, high = 1000000, size = 4)))
         sim_out = pd.read_csv(count_csv)
-        
+        #print(sim_out[sim_out[sim_out.columns[1]]>0][sim_out.columns[1]])
+        #plt.plot(np.cumsum(sim_out[sim_out.columns[0]]), sim_out[sim_out.columns[1]])
+        #plt.plot(np.cumsum(sim_out[sim_out.columns[0]]), sim_out[sim_out.columns[2]])
+        #plt.show()
+
         #identify molecules of interest in csv
 
         #steady state detection

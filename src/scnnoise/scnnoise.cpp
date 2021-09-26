@@ -945,5 +945,22 @@ namespace ScnnoiseInterface {
             }
         }
     }
+
+    std::vector<std::map<std::string, double>> scNNoiSE::get_rxn_rates(){
+        std::vector<std::map<std::string,double>> output;
+        for (auto &rxn: reactions){
+            output.push_back(rxn.rxn_rates);
+        }
+        return output;
+    }
   
+    std::vector<std::map<std::string, double>> scNNoiSE::get_rxn_order(){
+        std::vector<std::map<std::string, double>> output;
+        output.resize(num_genes);
+        for( auto &rxn: rxn_order){
+            output[rxn.gene_id].insert(std::pair<std::string, double>(rxn.rxn_name, rxn.propensity_val));
+        }
+            
+        return output;
+    }
 }

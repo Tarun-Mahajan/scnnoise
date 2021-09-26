@@ -23,7 +23,11 @@ PYBIND11_MODULE(_scnnoise, m) {
         .def("swap_rxn_rates",
             &ScnnoiseInterface::scNNoiSE::swap_rxn_rates)
         .def("set_curr_mol_count",
-            &ScnnoiseInterface::scNNoiSE::set_curr_mol_count);
+            &ScnnoiseInterface::scNNoiSE::set_curr_mol_count)
+        .def("get_rxn_rates",
+            &ScnnoiseInterface::scNNoiSE::get_rxn_rates)
+        .def("get_rxn_order",
+            &ScnnoiseInterface::scNNoiSE::get_rxn_order);
     py::class_<ScnnoiseInterface::GillespieSSA,
               ScnnoiseInterface::scNNoiSE>(m, "GillespieSSA")
         .def("simulate", &ScnnoiseInterface::GillespieSSA::simulate);

@@ -34,7 +34,7 @@ class CellType:
         f = open(count_csv, "w")
         f.truncate()
         f.close()
-        simulator.set_simulation_params(1000, True)
+        simulator.set_simulation_params(10000, True)
         simulator.simulate(list(np.random.randint(low = 1, high = 1000000, size = 4)))
 
             #for steady state check sergio method
@@ -43,12 +43,12 @@ class CellType:
         sim_out = pd.read_csv(count_csv)
         sim_out = sim_out.loc[:, ~sim_out.columns.str.contains('^Unnamed')]
         species = [col for col in sim_out.columns if col[-len(molecule):] == molecule]
-        samples = np.random.random(size = num_samples) *1000
+        samples = np.random.random(size = num_samples*10) *10000
         time = list(np.cumsum(sim_out[sim_out.columns[0]]))
         time.append(np.inf)
         idxs = np.searchsorted(time, samples,side = 'right') - 1
         sample_out = sim_out.iloc[idxs][species]
-        sample_out['Cell Type'] = [str(self.lineageName)] * num_samples
+        sample_out['Cell Type'] = [str(self.lineageName)] * (num_samples*10)
         sample_out.to_csv(sample_csv, mode = 'a', header =False)
 
         genes = [gene.split(':') for gene in sim_out.columns[1:]]
@@ -80,8 +80,6 @@ class CellType:
         print(str(self.lineageName)+'T')
         #print(simulator.get_rxn_rates())
         simulator.swap_rxn_rates(self.rxn_rates)
-        print(simulator.get_rxn_rates())
-        print(simulator.get_rxn_order())
 
             
         #Step 2: simluate transition from parent steady state to daughter steady state

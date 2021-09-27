@@ -935,6 +935,8 @@ namespace ScnnoiseInterface {
             it.second = rxn_rates[rxn.gene_name][it.first];
           }
       }
+      rxn_order.clear();
+      init_rxn_order();
   }
 
   void scNNoiSE::set_curr_mol_count (std::map<std::string, std::map<std::string, int>> init_count) {

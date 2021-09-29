@@ -279,6 +279,30 @@ namespace ScnnoiseInterface {
         }
     }
 
+    void GillespieSSA::save_molecule_count_at_random_times (double time_prev, double time_next,
+        double &which_random_time_saved) {
+        if (time_next > burn_in) {
+            if (((time_next - burn_in) >= random_times_to_save[which_random_time_saved] &&
+                ((time_prev - burn_in) < random_times_to_save[which_random_time_saved])) {
+                std::ofstream outfile;
+                outfile.open(count_save_file, std::ios_base::app);
+                outfile << time_next << ',';
+                for (int gene = 0; gene < num_genes; ++gene) {
+                    for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
+                        if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
+                            outfile << reactions[gene].molecule_count_cur[species];
+                        }else{
+                            outfile << reactions[gene].molecule_count_cur[species] << ',';
+                        }
+                    }
+                }
+                outfile << '\n';
+                outfile.close();
+                which_random_time_saved += 1;
+            }
+        }
+    }
+
     void GillespieSSA::update_molecule_count_history (int &num_history, int &num_save_loop,
         bool simulation_ended) {
         if ((num_history == num_timepoints_save) || simulation_ended) {
@@ -475,6 +499,7 @@ namespace ScnnoiseInterface {
         std::string statistics_file_full;
         double statistics_start_time = 0;
         bool is_statistics_start_time_set = false;
+        unsigned int which_random_time_saved = 0;
 
         if (compute_statistics) {
             statistics_file_full = statistics_file + "_repeat_" +
@@ -490,8 +515,11 @@ namespace ScnnoiseInterface {
         init_rxn_order();
         compute_total_propensity();
         set_count_rxns_fired(count_rxns, stop_rxn_count);
+        if (save_at_random_times) {
+            find_random_times_to_save (generator);
+        }
 
-        std::random_device rd;
+        // std::random_device rd;
         // std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};
         // std::vector<std::uint_least32_t> rd_seeds =
         //     {random_seeds[0], random_seeds[1], random_seeds[2], random_seeds[3]};
@@ -561,9 +589,16 @@ namespace ScnnoiseInterface {
                 //     total_propensity << std::endl;
                 // }
                 time_history.push_back(next_time_step);
-                if (save_at_time_interval) {
-                    save_molecule_count_at_interval(cur_time, total_time,
-                        points_collected_prev);
+                if (save_at_time_interval || save_at_random_times) {
+                    if (save_at_time_interval) {
+                        save_molecule_count_at_interval(cur_time, total_time,
+                            points_collected_prev);
+                    }else{
+                        if (save_at_random_times) {
+                            save_molecule_count_at_random_times(cur_time, total_time,
+                                which_random_time_saved);
+                        }
+                    }
                 }else{
                     update_molecule_count_history(num_history, num_save_loop,
                         simulation_ended);

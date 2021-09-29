@@ -435,6 +435,10 @@ namespace ScnnoiseInterface {
 
         bool save_at_time_interval;
 
+        bool save_at_random_times;
+
+        std::vector<double> random_times_to_save;
+
         /********************************************//**
         \brief Save time series count data.
 
@@ -632,7 +636,10 @@ namespace ScnnoiseInterface {
 
         void set_regulation_type (std::string regulation_type = "hill additive");
 
+        void find_random_times_to_save (RNG &generator);
+
         void set_num_points_to_save (bool save_at_time_interval = false,
+            bool save_at_random_times = false,
             double num_points_to_collect = 1000,
             double burn_in = 5000);
     };

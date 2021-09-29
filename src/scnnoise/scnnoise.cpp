@@ -981,12 +981,14 @@ namespace ScnnoiseInterface {
     }
 
     void scNNoiSE::set_num_points_to_save (bool save_at_time_interval,
+        bool save_at_random_times,
         double num_points_to_collect,
         double burn_in) {
         this->num_points_to_collect = num_points_to_collect;
         this->burn_in = burn_in;
         this->time_interval_to_save = (max_time - burn_in) / num_points_to_collect;
         this->save_at_time_interval = save_at_time_interval;
+        this->save_at_random_times = save_at_random_times;
     }
 
     void scNNoiSE::change_output_filepath (std::string new_filepath) {
@@ -1089,5 +1091,16 @@ namespace ScnnoiseInterface {
 
     void scNNoiSE::set_regulation_type (std::string regulation_type) {
         this->regulation_type = regulation_type;
+    }
+
+    void scNNoiSE::find_random_times_to_save (RNG &generator) {
+        random_times_to_save.resize(num_points_to_collect, 0);
+        thread_local std::uniform_real_distribution<double> distribution_(burn_in + burn_in/10000,
+            max_time);
+        for (auto &time_ : random_times_to_save) {
+            time_ = distribution_(generator);
+        }
+        std::sort (random_times_to_save.begin(), random_times_to_save.end(), myobject);
+
     }
 }

@@ -469,152 +469,144 @@ namespace ScnnoiseInterface {
         }
     }
 
-    void GillespieSSA::simulate (RNG &generator, double num_repeat, bool verbose,
-        bool compute_statistics, std::string statistics_file) {
+    void GillespieSSA::simulate (RNG &generator, bool compute_statistics,
+        std::string statistics_file) {
         start_molecule_count_history_file();
         std::string statistics_file_full;
         double statistics_start_time = 0;
         bool is_statistics_start_time_set = false;
 
-        for (int repeat_ = 0; repeat_ < num_repeat; ++repeat_) {
-            if (verbose) {
-                std::cout << "Trajectory number = " << repeat_ + 1 << std::endl;
-            }
-            if (repeat_ == 1) {
-                max_time = 100;
-            }
-            if (compute_statistics) {
-                statistics_file_full = statistics_file + "_repeat_" +
-                    std::to_string(repeat_) + ".csv";
-                start_statistics_file(statistics_file_full);
-                set_size_statistics_containers();
-                statistics_start_time = 0;
-                is_statistics_start_time_set = false;
-            }
-            time_history.clear();
-            time_history.push_back(0);
-            update_burst_size_init();
-            init_rxn_order();
-            compute_total_propensity();
-            set_count_rxns_fired(count_rxns, stop_rxn_count);
+        if (compute_statistics) {
+            statistics_file_full = statistics_file + "_repeat_" +
+                std::to_string(repeat_) + ".csv";
+            start_statistics_file(statistics_file_full);
+            set_size_statistics_containers();
+            statistics_start_time = 0;
+            is_statistics_start_time_set = false;
+        }
+        time_history.clear();
+        time_history.push_back(0);
+        update_burst_size_init();
+        init_rxn_order();
+        compute_total_propensity();
+        set_count_rxns_fired(count_rxns, stop_rxn_count);
 
-            std::random_device rd;
-            // std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};
-            // std::vector<std::uint_least32_t> rd_seeds =
-            //     {random_seeds[0], random_seeds[1], random_seeds[2], random_seeds[3]};
-            // std::vector<std::uint_least32_t> rd_seeds(random_seeds.size());
-            // for (std::size_t b = 0; b < random_seeds.size(); ++b) {
-            //     rd_seeds[b] = random_seeds[b];
+        std::random_device rd;
+        // std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};
+        // std::vector<std::uint_least32_t> rd_seeds =
+        //     {random_seeds[0], random_seeds[1], random_seeds[2], random_seeds[3]};
+        // std::vector<std::uint_least32_t> rd_seeds(random_seeds.size());
+        // for (std::size_t b = 0; b < random_seeds.size(); ++b) {
+        //     rd_seeds[b] = random_seeds[b];
+        // }
+        // std::seed_seq sd(rd_seeds.begin(), rd_seeds.end());
+        // thread_local static RNG generator{sd};
+        bool stop_sim = false;
+        bool reached_rxn_count = false;
+        bool simulation_ended = false;
+        int num_history = 0;
+        int num_save_loop = 0;
+        double total_time = 0;
+        double cur_time = 0;
+        double points_collected_prev = 0;
+        update_molecule_count_history(num_history, num_save_loop,
+            simulation_ended);
+        init_cell_cycle_state (generator, cur_time);
+
+        while (!stop_sim) {
+            // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
+            //     std::cout << "error found0time " <<
+            //     reactions[0].propensity_vals["mRNA decay"] << " " <<
+            //     total_propensity << " time = " << total_time << std::endl;
             // }
-            // std::seed_seq sd(rd_seeds.begin(), rd_seeds.end());
-            // thread_local static RNG generator{sd};
-            bool stop_sim = false;
-            bool reached_rxn_count = false;
-            bool simulation_ended = false;
-            int num_history = 0;
-            int num_save_loop = 0;
-            double total_time = 0;
-            double cur_time = 0;
-            double points_collected_prev = 0;
-            update_molecule_count_history(num_history, num_save_loop,
-                simulation_ended);
-            init_cell_cycle_state (generator, cur_time);
-
-            while (!stop_sim) {
-                // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
-                //     std::cout << "error found0time " <<
-                //     reactions[0].propensity_vals["mRNA decay"] << " " <<
-                //     total_propensity << " time = " << total_time << std::endl;
-                // }
-                double next_time_step = sample_time_step(generator);
-                if (total_time > burn_in && compute_statistics) {
-                    if (!is_statistics_start_time_set) {
-                        statistics_start_time = total_time;
-                        is_statistics_start_time_set = true;
-                    }
-                    upate_running_statistics (total_time - statistics_start_time,
-                        next_time_step);
+            double next_time_step = sample_time_step(generator);
+            if (total_time > burn_in && compute_statistics) {
+                if (!is_statistics_start_time_set) {
+                    statistics_start_time = total_time;
+                    is_statistics_start_time_set = true;
                 }
+                upate_running_statistics (total_time - statistics_start_time,
+                    next_time_step);
+            }
+            // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
+            //     std::cout << "error found0time1 " <<
+            //     reactions[0].propensity_vals["mRNA decay"] << " " <<
+            //     total_propensity << std::endl;
+            // }
+            std::vector<std::string> GRN_out_changed;
+            cur_time = total_time;
+            total_time += next_time_step;
+            // std::cout << "reached here 1 = " << std::endl;
+            if (total_time < max_time || (count_rxns && !reached_rxn_count)) {
                 // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
-                //     std::cout << "error found0time1 " <<
+                //     std::cout << "error found0 " <<
                 //     reactions[0].propensity_vals["mRNA decay"] << " " <<
                 //     total_propensity << std::endl;
                 // }
-                std::vector<std::string> GRN_out_changed;
-                cur_time = total_time;
-                total_time += next_time_step;
-                // std::cout << "reached here 1 = " << std::endl;
-                if (total_time < max_time || (count_rxns && !reached_rxn_count)) {
-                    // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
-                    //     std::cout << "error found0 " <<
-                    //     reactions[0].propensity_vals["mRNA decay"] << " " <<
-                    //     total_propensity << std::endl;
-                    // }
-                    update_cell_cycle_state(total_time, cur_time, generator);
-                    // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
-                    //     std::cout << "error found01 " <<
-                    //     reactions[0].propensity_vals["mRNA decay"] << " " <<
-                    //     total_propensity << std::endl;
-                    // }
-                    int next_rxn = sample_next_rxn(generator);
-                    update_burst_size (generator, next_rxn);
-                    update_rxn_count (next_rxn, stop_sim, reached_rxn_count);
-                    // std::cout << "reached here 2 = " << std::endl;
-                    GRN_out_changed = update_fired_reaction(next_rxn);
-                    update_dependent_count_propensity(next_rxn, GRN_out_changed);
-                    // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
-                    //     std::cout << "error found3 " <<
-                    //     reactions[0].propensity_vals["mRNA decay"] << " " <<
-                    //     total_propensity << std::endl;
-                    // }
-                    time_history.push_back(next_time_step);
-                    if (save_at_time_interval) {
-                        save_molecule_count_at_interval(cur_time, total_time,
-                            points_collected_prev);
-                    }else{
-                        update_molecule_count_history(num_history, num_save_loop,
-                            simulation_ended);
-                    }
-                    // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
-                    //     std::cout << "error foundlast " <<
-                    //     reactions[0].propensity_vals["mRNA decay"] << " " <<
-                    //     total_propensity << std::endl;
-                    // }
-                    // int rxn_found = 0;
-                    // for (int i = 0; i < rxn_order.size(); ++i) {
-                    //     if (rxn_order[i].rxn_name == "mRNA decay" &&
-                    //         rxn_order[i].gene_id == 0) {
-                    //             rxn_found = i;
-                    //         }
-                    // }
-                    // if (reactions[0].molecule_count_cur[0] == 0 &&
-                    //     reactions[0].propensity_vals["mRNA decay"] != 0) {
-                    //         std::cout << "aha!! 1 " << reactions[0].propensity_vals["mRNA decay"] << std::endl;
-                    //     }
-                    //
-                    // if (reactions[0].molecule_count_cur[0] == 0 &&
-                    //     rxn_order[rxn_found].propensity_val != 0) {
-                    //         std::cout << "aha!! 2 " << rxn_order[rxn_found].propensity_val << std::endl;
-                    //     }
+                update_cell_cycle_state(total_time, cur_time, generator);
+                // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
+                //     std::cout << "error found01 " <<
+                //     reactions[0].propensity_vals["mRNA decay"] << " " <<
+                //     total_propensity << std::endl;
+                // }
+                int next_rxn = sample_next_rxn(generator);
+                update_burst_size (generator, next_rxn);
+                update_rxn_count (next_rxn, stop_sim, reached_rxn_count);
+                // std::cout << "reached here 2 = " << std::endl;
+                GRN_out_changed = update_fired_reaction(next_rxn);
+                update_dependent_count_propensity(next_rxn, GRN_out_changed);
+                // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
+                //     std::cout << "error found3 " <<
+                //     reactions[0].propensity_vals["mRNA decay"] << " " <<
+                //     total_propensity << std::endl;
+                // }
+                time_history.push_back(next_time_step);
+                if (save_at_time_interval) {
+                    save_molecule_count_at_interval(cur_time, total_time,
+                        points_collected_prev);
                 }else{
-                    // if (compute_statistics) {
-                    //     write_statistics_to_file(statistics_file_full);
-                    // }
-                    simulation_ended = true;
-                    // if (!save_at_time_interval) {
-                    //     update_molecule_count_history(num_history, num_save_loop,
-                    //         simulation_ended);
-                    // }
-                    stop_sim = true;
+                    update_molecule_count_history(num_history, num_save_loop,
+                        simulation_ended);
                 }
+                // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
+                //     std::cout << "error foundlast " <<
+                //     reactions[0].propensity_vals["mRNA decay"] << " " <<
+                //     total_propensity << std::endl;
+                // }
+                // int rxn_found = 0;
+                // for (int i = 0; i < rxn_order.size(); ++i) {
+                //     if (rxn_order[i].rxn_name == "mRNA decay" &&
+                //         rxn_order[i].gene_id == 0) {
+                //             rxn_found = i;
+                //         }
+                // }
+                // if (reactions[0].molecule_count_cur[0] == 0 &&
+                //     reactions[0].propensity_vals["mRNA decay"] != 0) {
+                //         std::cout << "aha!! 1 " << reactions[0].propensity_vals["mRNA decay"] << std::endl;
+                //     }
+                //
+                // if (reactions[0].molecule_count_cur[0] == 0 &&
+                //     rxn_order[rxn_found].propensity_val != 0) {
+                //         std::cout << "aha!! 2 " << rxn_order[rxn_found].propensity_val << std::endl;
+                //     }
+            }else{
+                // if (compute_statistics) {
+                //     write_statistics_to_file(statistics_file_full);
+                // }
+                simulation_ended = true;
+                // if (!save_at_time_interval) {
+                //     update_molecule_count_history(num_history, num_save_loop,
+                //         simulation_ended);
+                // }
+                stop_sim = true;
             }
-            if (compute_statistics) {
-                write_statistics_to_file(statistics_file_full);
-            }
-            if (!save_at_time_interval) {
-                update_molecule_count_history(num_history, num_save_loop,
-                    simulation_ended);
-            }
+        }
+        if (compute_statistics) {
+            write_statistics_to_file(statistics_file_full);
+        }
+        if (!save_at_time_interval) {
+            update_molecule_count_history(num_history, num_save_loop,
+                simulation_ended);
         }
     }
 }

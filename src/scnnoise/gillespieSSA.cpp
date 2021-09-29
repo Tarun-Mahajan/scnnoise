@@ -496,6 +496,7 @@ namespace ScnnoiseInterface {
             update_burst_size_init();
             init_rxn_order();
             compute_total_propensity();
+            set_count_rxns_fired(count_rxns, stop_rxn_count);
 
             std::random_device rd;
             // std::vector<std::uint_least32_t> rd_seeds = {rd(), rd(), rd(), rd()};

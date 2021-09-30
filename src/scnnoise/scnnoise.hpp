@@ -237,6 +237,7 @@ namespace ScnnoiseInterface {
     public:
         typedef std::mt19937 RNG;
     /* data */
+        std::vector<RNG> generator;
         /********************************************//**
         \brief Number of chemical reaction channels.
 
@@ -642,6 +643,9 @@ namespace ScnnoiseInterface {
             bool save_at_random_times = false,
             double num_points_to_collect = 1000,
             double burn_in = 5000);
+
+        void init_random_number_generator (std::vector<std::uint_least32_t> random_seeds =
+            {582654328, 1065236345, 322147403, 2229968939});
     };
 }
 #endif

@@ -1103,4 +1103,9 @@ namespace ScnnoiseInterface {
         std::sort (random_times_to_save.begin(), random_times_to_save.end(), myobject);
 
     }
+
+    void scNNoiSE::initialize_random_number_generator (std::vector<std::uint_least32_t> random_seeds) {
+        std::seed_seq sd(random_seeds.begin(), random_seeds.end());
+        generator.push_back(RNG{sd});
+    }
 }

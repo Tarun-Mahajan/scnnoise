@@ -493,16 +493,13 @@ namespace ScnnoiseInterface {
         }
     }
 
-    void GillespieSSA::simulate (bool compute_statistics, std::string statistics_file) {
+    void GillespieSSA::simulate (bool compute_statistics, std::string statistics_file_full) {
         start_molecule_count_history_file();
-        std::string statistics_file_full;
         double statistics_start_time = 0;
         bool is_statistics_start_time_set = false;
         unsigned int which_random_time_saved = 0;
 
         if (compute_statistics) {
-            statistics_file_full = statistics_file + "_repeat_" +
-                std::to_string(repeat_) + ".csv";
             start_statistics_file(statistics_file_full);
             set_size_statistics_containers();
             statistics_start_time = 0;

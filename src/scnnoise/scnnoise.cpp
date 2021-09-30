@@ -230,8 +230,6 @@ namespace ScnnoiseInterface {
         std::string row_text;
         std::string gene_name;
         std::string gene_type;
-        std::vector<std::string>  GRN_rxn_IN;
-        std::vector<std::string>  GRN_species_OUT;
         std::vector<std::string> rxn_names;
         std::vector<double> rxn_rates;
         std::string word;
@@ -240,8 +238,6 @@ namespace ScnnoiseInterface {
         unsigned int gene_count = 0;
         while (std::getline(gene_state_file, row_text)) {
             gene_rxn_channel_struct gene_rxns;
-            GRN_rxn_IN.clear();
-            GRN_species_OUT.clear();
             rxn_names.clear();
             rxn_rates.clear();
             std::istringstream str_stream(row_text);
@@ -259,39 +255,19 @@ namespace ScnnoiseInterface {
                             gene_type = word;
                             break;
                         }
-                    case 2:
-                        {
-                            num_rxn_IN = (unsigned int) std::stoi(word);
-                            break;
-                        }
                     default:
                         {
-                            if (id_counter > 2 && id_counter < 3 + num_rxn_IN) {
-                                GRN_rxn_IN.push_back(word);
-                            }else{
-                                if (id_counter == 3 + num_rxn_IN) {
-                                    num_species_OUT = (unsigned int) std::stoi(word);
-                                }else{
-                                    if (id_counter > 3 + num_rxn_IN &&
-                                        id_counter <
-                                        4 + num_rxn_IN + num_species_OUT) {
-                                            GRN_species_OUT.push_back(word);
-                                    }else{
-                                        unsigned int diff_ = id_counter -
-                                            (4 + num_rxn_IN + num_species_OUT);
-                                        if (diff_ % 2 == 0) {
-                                            if (word == "") {
-                                                break;
-                                            }
-                                            rxn_names.push_back(word);
-                                        }else{
-                                            if (word == "") {
-                                                break;
-                                            }
-                                            rxn_rates.push_back(std::stod(word));
-                                        }
-                                    }
+                            unsigned int diff_ = id_counter - 2;
+                            if (diff_ % 2 == 0) {
+                                if (word == "") {
+                                    break;
                                 }
+                                rxn_names.push_back(word);
+                            }else{
+                                if (word == "") {
+                                    break;
+                                }
+                                rxn_rates.push_back(std::stod(word));
                             }
                             break;
                         }
@@ -302,8 +278,6 @@ namespace ScnnoiseInterface {
             gene_map[gene_count] = gene_name;
             gene_rev_map[gene_name] = gene_count;
             gene_rxns.gene_type = match_and_return_gene_type(gene_type);
-            gene_rxns.GRN_rxn_IN = GRN_rxn_IN;
-            gene_rxns.GRN_species_OUT = GRN_species_OUT;
             for (unsigned int i = 0; i < rxn_names.size(); ++i) {
               gene_rxns.rxn_rates[rxn_names[i]] = rxn_rates[i];
             }
@@ -928,6 +902,8 @@ namespace ScnnoiseInterface {
         std::vector<int> GRN_int_param;
         std::vector<double> GRN_params;
         std::vector<bool> GRN_activation;
+        std::string rxn_IN;
+        std::string species_OUT;
         std::string word;
         while (std::getline(GRN_file, row_text)) {
             GRN_int_param.clear();
@@ -945,10 +921,12 @@ namespace ScnnoiseInterface {
                             gene_type_struct gene_info =
                                 gene_type_info[reactions[GRN_int_param[1]].gene_type];
                             GRN_int_param.push_back(gene_info.rxn_rev_map[word]);
+                            rxn_IN = word;
                         }else {
                             gene_type_struct gene_info =
                                 gene_type_info[reactions[GRN_int_param[0]].gene_type];
                             GRN_int_param.push_back(gene_info.species_rev_map[word]);
+                            species_OUT = word;
                         }
                     }
                 }else{
@@ -967,6 +945,9 @@ namespace ScnnoiseInterface {
             network[0].add_edge_kinetics(GRN_int_param[0], GRN_int_param[1],
                 GRN_params[0], GRN_params[1], GRN_params[2],
                 GRN_int_param[2], GRN_int_param[3], GRN_activation[0]);
+
+            reactions[GRN_int_param[0]].GRN_species_OUT.push_back(species_OUT);
+            reactions[GRN_int_param[1]].GRN_rxn_IN.push_back(rxn_IN);
 
         }
     }

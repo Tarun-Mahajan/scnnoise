@@ -389,6 +389,10 @@ namespace ScnnoiseInterface {
 
         std::map<int, std::map<std::string, double>> max_rxn_rate_change;
 
+        std::vector<double> basal_regulation;
+
+        std::vector<double> max_freq_regulation;
+
         std::string regulation_type;
 
 
@@ -646,6 +650,8 @@ namespace ScnnoiseInterface {
 
         void init_random_number_generator (std::vector<std::uint_least32_t> random_seeds =
             {582654328, 1065236345, 322147403, 2229968939});
+
+        void set_basal_regulation (std::vector<double> basal_regulation);
     };
 }
 #endif

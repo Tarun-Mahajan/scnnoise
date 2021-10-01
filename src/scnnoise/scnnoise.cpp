@@ -38,6 +38,8 @@ namespace ScnnoiseInterface {
         this->num_timepoints_save = num_timepoints_save;
         this->count_save_file = count_save_file;
         regulation_type = "hill additive";
+        basal_regulation.resize(num_genes, 1.0);
+        max_freq_regulation.resize(num_genes, 1.5);
         // this->count_save_file = count_save_file;
 
         /********************************************//**
@@ -319,9 +321,11 @@ namespace ScnnoiseInterface {
             }
         }
         if (regulation_type == "hill additive") {
-            regulation_function_factor *= max_rxn_rate_change[gene_id][rxn_name];
+            // regulation_function_factor *= max_rxn_rate_change[gene_id][rxn_name];
+            regulation_function_factor *=
+                (max_freq_regulation[gene_id] - basal_regulation[gene_id]);
             if (is_regulated) {
-                regulation_function_factor += 1;
+                regulation_function_factor += basal_regulation[gene_id];
             }else{
                 regulation_function_factor += 1;
             }
@@ -1088,5 +1092,9 @@ namespace ScnnoiseInterface {
     void scNNoiSE::init_random_number_generator (std::vector<std::uint_least32_t> random_seeds) {
         std::seed_seq sd(random_seeds.begin(), random_seeds.end());
         generator.push_back(RNG{sd});
+    }
+
+    void scNNoiSE::set_basal_regulation (std::vector<double> basal_regulation) {
+        this->basal_regulation = basal_regulation;
     }
 }

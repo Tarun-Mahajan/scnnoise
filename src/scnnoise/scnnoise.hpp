@@ -652,6 +652,8 @@ namespace ScnnoiseInterface {
             {582654328, 1065236345, 322147403, 2229968939});
 
         void set_basal_regulation (std::vector<double> basal_regulation);
+
+        void set_max_freq_regulation (std::vector<double> max_freq_regulation);
     };
 }
 #endif

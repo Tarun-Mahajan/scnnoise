@@ -1097,4 +1097,8 @@ namespace ScnnoiseInterface {
     void scNNoiSE::set_basal_regulation (std::vector<double> basal_regulation) {
         this->basal_regulation = basal_regulation;
     }
+
+    void scNNoiSE::set_max_freq_regulation (std::vector<double> max_freq_regulation) {
+        this->max_freq_regulation = max_freq_regulation;
+    }
 }

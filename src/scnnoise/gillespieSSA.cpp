@@ -280,7 +280,7 @@ namespace ScnnoiseInterface {
     }
 
     void GillespieSSA::save_molecule_count_at_random_times (double time_prev, double time_next,
-        double &which_random_time_saved) {
+        unsigned int &which_random_time_saved) {
         if (time_next > burn_in) {
             if (((time_next - burn_in) >= random_times_to_save[which_random_time_saved]) &&
                 ((time_prev - burn_in) < random_times_to_save[which_random_time_saved])) {

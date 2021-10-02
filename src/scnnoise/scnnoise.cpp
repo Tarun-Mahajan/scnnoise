@@ -952,6 +952,9 @@ namespace ScnnoiseInterface {
 
             reactions[GRN_int_param[0]].GRN_species_OUT.push_back(species_OUT);
             reactions[GRN_int_param[1]].GRN_rxn_IN.push_back(rxn_IN);
+            std::cout << "TF = " << GRN_int_param[0] << " TG = " <<
+                GRN_int_param[1] << " rxn_IN = " << rxn_IN << " species OUT" <<
+                species_OUT << std::endl;
 
         }
     }
@@ -1085,8 +1088,7 @@ namespace ScnnoiseInterface {
         for (auto &time_ : random_times_to_save) {
             time_ = distribution_(generator);
         }
-        std::sort (random_times_to_save.begin(), random_times_to_save.end(),
-            random_times_to_save);
+        std::sort (random_times_to_save.begin(), random_times_to_save.end());
 
     }
 

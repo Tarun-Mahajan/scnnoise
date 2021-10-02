@@ -163,9 +163,11 @@ namespace ScnnoiseInterface {
                 molecule_count_history[gene_id].resize(gene_info.num_species);
                 for (std::size_t i = 0; i < species_name.size(); ++i) {
                     molecule_count_history[gene_id][gene_info.species_rev_map[species_name[i]]].resize(num_timepoints_save, 0);
-                    reactions[gene_id].molecule_count_cur[gene_info.species_rev_map[species_name[i]]] =
-                        species_count[i];
                 }
+            }
+            for (std::size_t i = 0; i < species_name.size(); ++i) {
+                reactions[gene_id].molecule_count_cur[gene_info.species_rev_map[species_name[i]]] =
+                    species_count[i];
             }
 
         }
@@ -952,9 +954,6 @@ namespace ScnnoiseInterface {
 
             reactions[GRN_int_param[0]].GRN_species_OUT.push_back(species_OUT);
             reactions[GRN_int_param[1]].GRN_rxn_IN.push_back(rxn_IN);
-            std::cout << "TF = " << GRN_int_param[0] << " TG = " <<
-                GRN_int_param[1] << " rxn_IN = " << rxn_IN << " species OUT" <<
-                species_OUT << std::endl;
 
         }
     }

@@ -560,6 +560,9 @@ namespace ScnnoiseInterface {
             std::vector<std::string> GRN_out_changed;
             cur_time = total_time;
             total_time += next_time_step;
+            if (int(total_time / 1000) - int(cur_time / 1000) == 1) {
+                std::cout << "time = " << total_time << std::endl;
+            }
             // std::cout << "reached here 1 = " << std::endl;
             if (total_time < max_time || (count_rxns && !reached_rxn_count)) {
                 // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {

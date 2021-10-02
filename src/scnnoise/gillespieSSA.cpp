@@ -282,8 +282,8 @@ namespace ScnnoiseInterface {
     void GillespieSSA::save_molecule_count_at_random_times (double time_prev, double time_next,
         unsigned int &which_random_time_saved) {
         if (time_next > burn_in) {
-            if (((time_next - burn_in) >= random_times_to_save[which_random_time_saved]) &&
-                ((time_prev - burn_in) < random_times_to_save[which_random_time_saved])) {
+            if (((time_next) >= random_times_to_save[which_random_time_saved]) &&
+                ((time_prev) < random_times_to_save[which_random_time_saved])) {
                 std::ofstream outfile;
                 outfile.open(count_save_file, std::ios_base::app);
                 outfile << time_next << ',';

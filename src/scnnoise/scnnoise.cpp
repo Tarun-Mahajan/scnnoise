@@ -1085,7 +1085,8 @@ namespace ScnnoiseInterface {
         for (auto &time_ : random_times_to_save) {
             time_ = distribution_(generator);
         }
-        std::sort (random_times_to_save.begin(), random_times_to_save.end(), myobject);
+        std::sort (random_times_to_save.begin(), random_times_to_save.end(),
+            random_times_to_save);
 
     }
 

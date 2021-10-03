@@ -1088,6 +1088,8 @@ namespace ScnnoiseInterface {
             time_ = distribution_(generator);
         }
         std::sort (random_times_to_save.begin(), random_times_to_save.end());
+        random_times_to_save.erase( unique( random_times_to_save.begin(),
+            random_times_to_save.end() ), random_times_to_save.end() );
 
     }
 

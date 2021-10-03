@@ -281,6 +281,11 @@ namespace ScnnoiseInterface {
 
     void GillespieSSA::save_molecule_count_at_random_times (double time_prev, double time_next,
         unsigned int &which_random_time_saved) {
+            while (((time_next) > random_times_to_save[which_random_time_saved]) &&
+                ((time_prev) > random_times_to_save[which_random_time_saved]) &&
+                which_random_time_saved < num_points_to_collect - 1) {
+                    ++which_random_time_saved;
+            }
         if (time_next > burn_in) {
             if (((time_next) >= random_times_to_save[which_random_time_saved]) &&
                 ((time_prev) < random_times_to_save[which_random_time_saved])) {
@@ -561,7 +566,7 @@ namespace ScnnoiseInterface {
             cur_time = total_time;
             total_time += next_time_step;
             if (int(total_time / 1000) - int(cur_time / 1000) == 1) {
-                std::cout << "time = " << total_time << std::endl;
+                std::cout << "time = " << total_time << " saved point = " << which_random_time_saved << std::endl;
             }
             // std::cout << "reached here 1 = " << std::endl;
             if (total_time < max_time || (count_rxns && !reached_rxn_count)) {

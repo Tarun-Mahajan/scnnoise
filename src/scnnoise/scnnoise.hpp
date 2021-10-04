@@ -27,8 +27,8 @@ namespace ScnnoiseInterface {
     struct rxn_struct {
         // std::vector<int> reactants;
         // std::vector<int> products;
-        std::map<std::string, double> reactants_stoichio;
-        std::map<std::string, double> products_stoichio;
+        std::map<std::string, int> reactants_stoichio;
+        std::map<std::string, int> products_stoichio;
         // double rxn_rate;
         // double propensity_val;
     };

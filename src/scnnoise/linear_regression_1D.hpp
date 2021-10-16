@@ -6,7 +6,6 @@
 #include <algorithm>
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <boost/math/special_functions/hypergeometric_pFq.hpp>
 
 namespace LinearRegressionSpace {
     class LinearRegression1D {

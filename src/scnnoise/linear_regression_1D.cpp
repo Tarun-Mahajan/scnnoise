@@ -4,8 +4,6 @@
 #include <numeric>
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <boost/math/special_functions/hypergeometric_pFq.hpp>
-#include <boost/multiprecision/mpfr.hpp>
 #include <boost/math/distributions/students_t.hpp>
 #include "linear_regression_1D.hpp"
 

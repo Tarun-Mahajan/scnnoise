@@ -10,7 +10,7 @@ using namespace boost::math;
 
 namespace LinearRegressionSpace {
     LinearRegression1D::LinearRegression1D () {
-        alpha_ = 0.001;
+        alpha_ = 0.0001;
     };
 
     void LinearRegression1D::set_sample_size (unsigned int num_samples) {

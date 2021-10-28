@@ -43,6 +43,10 @@ namespace ScnnoiseInterface {
         break;
       }
     }
+    if (rxn_selected == -1) {
+        thread_local std::uniform_int_distribution<int> distribution(0, rxn_order.size() - 1);
+        rxn_selected = distribution(generator);
+    }
     // gene_type_struct gene_type = gene_type_info[reactions[rxn_order[rxn_selected].gene_id].gene_type];
     // if (reactions[rxn_order[rxn_selected].gene_id].molecule_count_cur[0] == 0 &&
     //     rxn_order[rxn_selected].rxn_name == "mRNA decay") {
@@ -286,11 +290,13 @@ namespace ScnnoiseInterface {
                 which_random_time_saved < num_points_to_collect - 1) {
                     ++which_random_time_saved;
             }
-        if (time_next > burn_in) {
+        if (time_next > burn_in && time_next < max_time) {
             if (((time_next) >= random_times_to_save[which_random_time_saved]) &&
                 ((time_prev) < random_times_to_save[which_random_time_saved])) {
+                std::string cur_cell_cycle_phase = get_cur_cell_cycle_state();
                 std::ofstream outfile;
                 outfile.open(count_save_file, std::ios_base::app);
+                outfile << cur_cell_cycle_phase << ',';
                 outfile << time_next << ',';
                 for (int gene = 0; gene < num_genes; ++gene) {
                     for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
@@ -310,7 +316,7 @@ namespace ScnnoiseInterface {
 
     void GillespieSSA::update_molecule_count_history (int &num_history, int &num_save_loop,
         bool simulation_ended) {
-        if ((num_history == num_timepoints_save) || simulation_ended) {
+        if ((num_history == num_timepoints_save && (save_timeseries || save_timeseries_all)) || simulation_ended) {
             int num_timepoints_save_cur;
             if (simulation_ended) {
                 num_timepoints_save_cur = num_history;
@@ -326,6 +332,7 @@ namespace ScnnoiseInterface {
                 }else{
                     if (!simulation_ended) {
                         outfile.open(count_save_file);
+                        outfile << "phase" << ",";
                         outfile << "time" << ",";
                         for (int gene = 0; gene < num_genes; ++gene) {
                           for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
@@ -346,6 +353,7 @@ namespace ScnnoiseInterface {
                     }
                 }
                 for (int id_time = 0; id_time < num_timepoints_save_cur; ++id_time) {
+                    outfile << cell_cycle_phase_history[id_time] << ",";
                     outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
                     for (int gene = 0; gene < num_genes; ++gene) {
                         for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
@@ -363,6 +371,7 @@ namespace ScnnoiseInterface {
                 if (simulation_ended) {
                     std::ofstream outfile;
                     outfile.open(count_save_file, std::ios_base::app);
+                    outfile << get_cur_cell_cycle_state() << ",";
                     outfile << time_history.back() << ",";
                     for (int gene = 0; gene < num_genes; ++gene) {
                         for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
@@ -382,6 +391,7 @@ namespace ScnnoiseInterface {
         }
 
         if (save_timeseries || save_timeseries_all) {
+            cell_cycle_phase_history[num_history] = get_cur_cell_cycle_state();
             for (int gene = 0; gene < num_genes; ++gene) {
               for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
                 molecule_count_history[gene][species][num_history] =
@@ -395,6 +405,7 @@ namespace ScnnoiseInterface {
     void GillespieSSA::start_molecule_count_history_file () {
         std::ofstream outfile;
         outfile.open(count_save_file);
+        outfile << "phase" << ",";
         outfile << "time" << ",";
         for (int gene = 0; gene < num_genes; ++gene) {
           for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
@@ -476,6 +487,17 @@ namespace ScnnoiseInterface {
         }
     }
 
+    void GillespieSSA::set_size_statistics_history_containers () {
+        history_statistics.resize(num_genes);
+        for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
+            history_statistics[gene_].resize(reactions[gene_].molecule_count_cur.size());
+            unsigned int mol_size = reactions[gene_].molecule_count_cur.size();
+            for (unsigned int mol_ = 0; mol_ < mol_size; ++mol_) {
+                history_statistics[gene_][mol_].resize(num_history_statistics, 0);
+            }
+        }
+    }
+
     void GillespieSSA::upate_running_statistics (double total_time_prev, double next_time_step) {
         double total_time_next = total_time_prev + next_time_step;
         for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
@@ -498,26 +520,39 @@ namespace ScnnoiseInterface {
         }
     }
 
-    void GillespieSSA::simulate (bool compute_statistics, std::string statistics_file_full) {
-        start_molecule_count_history_file();
+    void GillespieSSA::simulate (bool compute_statistics, std::string statistics_file_full,
+        bool verbose) {
+        // start_molecule_count_history_file();
         double statistics_start_time = 0;
         bool is_statistics_start_time_set = false;
         unsigned int which_random_time_saved = 0;
+        is_steady_state_reached = false;
+        unsigned int cur_rxn_count = 0;
+        unsigned int rxn_count_after_burn_in = 0;
 
         if (compute_statistics) {
             start_statistics_file(statistics_file_full);
             set_size_statistics_containers();
+            set_size_statistics_history_containers();
             statistics_start_time = 0;
             is_statistics_start_time_set = false;
+        }else{
+            is_steady_state_reached = true;
         }
         time_history.clear();
         time_history.push_back(0);
         update_burst_size_init();
         init_rxn_order();
+        std::string tmp = get_cur_cell_cycle_state();
+        std::cout << "cur phase = " << reactions[0].rxn_rates["gene on"] << std::endl;
+        init_cell_cycle_state (generator[0], 0);
+        std::string cur_cell_cycle_phase = get_cur_cell_cycle_state();
+        std::cout << "cur phase2 = " << reactions[0].rxn_rates["gene on"] << std::endl;
         compute_total_propensity();
         set_count_rxns_fired(count_rxns, stop_rxn_count);
-        if (save_at_random_times) {
-            find_random_times_to_save (generator[0]);
+        if (save_at_random_times && is_steady_state_reached) {
+            find_random_times_to_save (generator[0],
+                burn_in, max_time);
         }
 
         // std::random_device rd;
@@ -538,18 +573,29 @@ namespace ScnnoiseInterface {
         double total_time = 0;
         double cur_time = 0;
         double points_collected_prev = 0;
+        cur_cell_cycle_phase = get_cur_cell_cycle_state();
         update_molecule_count_history(num_history, num_save_loop,
             simulation_ended);
-        init_cell_cycle_state (generator[0], cur_time);
 
         while (!stop_sim) {
+            cur_rxn_count += 1;
+            if (compute_statistics && cur_rxn_count > burn_in_rxn_count) {
+                rxn_count_after_burn_in += 1;
+                if (!is_steady_state_reached) {
+                    max_time = total_time + max_time - burn_in;
+                    burn_in = total_time;
+                    find_random_times_to_save (generator[0],
+                        burn_in, max_time);
+                    is_steady_state_reached = true;
+                }
+            }
             // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
             //     std::cout << "error found0time " <<
             //     reactions[0].propensity_vals["mRNA decay"] << " " <<
             //     total_propensity << " time = " << total_time << std::endl;
             // }
             double next_time_step = sample_time_step(generator[0]);
-            if (total_time > burn_in && compute_statistics) {
+            if (cur_rxn_count > burn_in_rxn_count && compute_statistics) {
                 if (!is_statistics_start_time_set) {
                     statistics_start_time = total_time;
                     is_statistics_start_time_set = true;
@@ -565,22 +611,27 @@ namespace ScnnoiseInterface {
             std::vector<std::string> GRN_out_changed;
             cur_time = total_time;
             total_time += next_time_step;
-            if (int(total_time / 1000) - int(cur_time / 1000) == 1) {
-                std::cout << "time = " << total_time << " saved point = " << which_random_time_saved << std::endl;
+            if (verbose) {
+                if (int(total_time / 1000) - int(cur_time / 1000) == 1) {
+                    std::cout << "time = " << total_time << " saved point = " << which_random_time_saved << std::endl;
+                }
             }
             // std::cout << "reached here 1 = " << std::endl;
-            if (total_time < max_time || (count_rxns && !reached_rxn_count)) {
+            if (total_time < max_time || (count_rxns && !reached_rxn_count) ||
+                (compute_statistics && rxn_count_after_burn_in < after_burn_in_rxn_count)) {
                 // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
                 //     std::cout << "error found0 " <<
                 //     reactions[0].propensity_vals["mRNA decay"] << " " <<
                 //     total_propensity << std::endl;
                 // }
                 update_cell_cycle_state(total_time, cur_time, generator[0]);
+                cur_cell_cycle_phase = get_cur_cell_cycle_state();
                 // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
                 //     std::cout << "error found01 " <<
                 //     reactions[0].propensity_vals["mRNA decay"] << " " <<
                 //     total_propensity << std::endl;
                 // }
+
                 int next_rxn = sample_next_rxn(generator[0]);
                 update_burst_size (generator[0], next_rxn);
                 update_rxn_count (next_rxn, stop_sim, reached_rxn_count);
@@ -598,7 +649,7 @@ namespace ScnnoiseInterface {
                         save_molecule_count_at_interval(cur_time, total_time,
                             points_collected_prev);
                     }else{
-                        if (save_at_random_times) {
+                        if (save_at_random_times && is_steady_state_reached) {
                             save_molecule_count_at_random_times(cur_time, total_time,
                                 which_random_time_saved);
                         }
@@ -643,7 +694,7 @@ namespace ScnnoiseInterface {
         if (compute_statistics) {
             write_statistics_to_file(statistics_file_full);
         }
-        if (!save_at_time_interval) {
+        if (!save_at_time_interval && !save_at_random_times) {
             update_molecule_count_history(num_history, num_save_loop,
                 simulation_ended);
         }

@@ -390,4 +390,12 @@ namespace ScnnoiseInterface {
         this->is_frozen_cell_cycle = is_frozen_cell_cycle;
         this->frozen_state = frozen_state;
     }
+
+    std::string gillespieSDMCellCycle::get_cur_cell_cycle_state () {
+        if (is_frozen_cell_cycle) {
+            return frozen_state;
+        }else{
+            return current_cell_cycle_state;
+        }
+    }
 }

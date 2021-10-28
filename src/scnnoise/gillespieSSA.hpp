@@ -43,12 +43,14 @@ namespace ScnnoiseInterface {
 
         // Simulate.
         void simulate (bool compute_statistics = false,
-            std::string statistics_file = "dummy") override;
+            std::string statistics_file = "dummy", bool verbose = true) override;
 
         virtual void sort_reaction (int &rxn_selected) = 0;
 
         virtual void update_cell_cycle_state (double next_time,
             double cur_time, RNG &generator) = 0;
+
+        virtual std::string get_cur_cell_cycle_state () = 0;
 
         virtual void init_cell_cycle_state (RNG &generator, double cur_time) = 0;
 
@@ -76,6 +78,8 @@ namespace ScnnoiseInterface {
         void start_statistics_file (std::string statistics_file);
 
         void set_size_statistics_containers ();
+
+        void set_size_statistics_history_containers ();
 
         void upate_running_statistics (double total_time_prev, double next_time_step);
 

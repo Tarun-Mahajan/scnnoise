@@ -79,6 +79,7 @@ namespace ScnnoiseInterface {
             std::string frozen_state = "G2");
         void move_to_G1 (RNG &generator);
         void move_to_G2 ();
+        std::string get_cur_cell_cycle_state () override;
     };
 }
 

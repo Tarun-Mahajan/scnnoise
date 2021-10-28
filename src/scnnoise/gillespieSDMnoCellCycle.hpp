@@ -30,6 +30,8 @@ namespace ScnnoiseInterface {
         void update_cell_cycle_state (double next_time,
             double cur_time, RNG &generator) override;
         void init_cell_cycle_state (RNG &generator, double cur_time) override;
+
+        std::string get_cur_cell_cycle_state () override;
     };
 }
 

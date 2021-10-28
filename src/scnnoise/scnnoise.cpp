@@ -40,6 +40,7 @@ namespace ScnnoiseInterface {
         regulation_type = "hill additive";
         basal_regulation.resize(num_genes, 1.0);
         max_freq_regulation.resize(num_genes, 1.5);
+        cell_cycle_phase_history.resize(num_timepoints_save, "G1");
         // this->count_save_file = count_save_file;
 
         /********************************************//**
@@ -1025,9 +1026,9 @@ namespace ScnnoiseInterface {
         for (auto &rxn_ : reactions) {
             int gene_selected = gene_rev_map[rxn_.gene_name];
             std::string gene_type = rxn_.gene_type;
-            double copy_number = gene_copy_number[gene_selected];
             std::size_t found = gene_type.find("reduced");
             if (found != std::string::npos) {
+                double copy_number = gene_copy_number[gene_selected];
                 stoichio_factor_struct &stoichio_factor_gene =
                     stoichio_factors[gene_selected];
                 stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
@@ -1080,7 +1081,8 @@ namespace ScnnoiseInterface {
         this->regulation_type = regulation_type;
     }
 
-    void scNNoiSE::find_random_times_to_save (RNG &generator) {
+    void scNNoiSE::find_random_times_to_save (RNG &generator,
+        double burn_in, double max_time) {
         random_times_to_save.resize(num_points_to_collect, 0);
         thread_local std::uniform_real_distribution<double> distribution_(burn_in + burn_in/10000,
             max_time);
@@ -1098,11 +1100,22 @@ namespace ScnnoiseInterface {
         generator.push_back(RNG{sd});
     }
 
+    void scNNoiSE::set_random_number_generator (RNG &generator) {
+        this->generator.push_back(generator);
+    }
+
     void scNNoiSE::set_basal_regulation (std::vector<double> basal_regulation) {
         this->basal_regulation = basal_regulation;
     }
 
     void scNNoiSE::set_max_freq_regulation (std::vector<double> max_freq_regulation) {
         this->max_freq_regulation = max_freq_regulation;
+    }
+
+    void scNNoiSE::set_statistics_history_params (unsigned int num_history_statistics,
+        unsigned int burn_in_rxn_count, unsigned int after_burn_in_rxn_count) {
+        this->num_history_statistics = num_history_statistics;
+        this->burn_in_rxn_count = burn_in_rxn_count;
+        this->after_burn_in_rxn_count = after_burn_in_rxn_count;
     }
 }

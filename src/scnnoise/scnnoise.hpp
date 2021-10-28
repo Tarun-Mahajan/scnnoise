@@ -395,6 +395,17 @@ namespace ScnnoiseInterface {
 
         std::string regulation_type;
 
+        // data members for steady state testing of moments
+        bool is_steady_state_reached;
+
+        unsigned int num_history_statistics;
+
+        unsigned int burn_in_rxn_count;
+
+        unsigned int after_burn_in_rxn_count;
+
+        std::vector<std::vector<std::vector<double>>> history_statistics;
+
 
         // /********************************************//**
         //  \brief Vector for status in GRN
@@ -490,6 +501,8 @@ namespace ScnnoiseInterface {
         written to the output file.
         ***********************************************/
         std::vector<std::vector<std::vector<int>>> molecule_count_history;
+
+        std::vector<std::string> cell_cycle_phase_history;
 
         /********************************************//**
         \brief Vector to store time points along the simulation path.
@@ -604,7 +617,7 @@ namespace ScnnoiseInterface {
         expression. Needs to be overridden in any derived class.
         ***********************************************/
         virtual void simulate (bool compute_statistics = false,
-            std::string statistics_file = "dummy") = 0;
+            std::string statistics_file = "dummy", bool verbose = true) = 0;
 
         void set_simulation_params (double max_time = 10000,
             bool save_timeseries = false);
@@ -641,7 +654,8 @@ namespace ScnnoiseInterface {
 
         void set_regulation_type (std::string regulation_type = "hill additive");
 
-        void find_random_times_to_save (RNG &generator);
+        void find_random_times_to_save (RNG &generator, double burn_in,
+            double max_time);
 
         void set_num_points_to_save (bool save_at_time_interval = false,
             bool save_at_random_times = false,
@@ -654,6 +668,12 @@ namespace ScnnoiseInterface {
         void set_basal_regulation (std::vector<double> basal_regulation);
 
         void set_max_freq_regulation (std::vector<double> max_freq_regulation);
+
+        void set_statistics_history_params (unsigned int num_history_statistics = 10000,
+            unsigned int burn_in_rxn_count = 10000,
+            unsigned int after_burn_in_rxn_count = 10000);
+
+        void set_random_number_generator (RNG &generator);
     };
 }
 #endif

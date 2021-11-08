@@ -14,15 +14,15 @@
 namespace ScnnoiseInterface {
   /* function definitions */
   // Constructor
-  GillespieSSA::GillespieSSA (int num_genes, std::string gene_filepath,
-      std::string molecule_count_filepath,
-      std::string count_save_file, bool keep_GRN,
-      std::string GRN_filepath, int num_timepoints_save):
-    scNNoiSE (num_genes, gene_filepath,
-        molecule_count_filepath,
-        count_save_file, keep_GRN,
-        GRN_filepath, num_timepoints_save) {
-  }
+    GillespieSSA::GillespieSSA (int num_genes, std::string gene_filepath,
+        std::string molecule_count_filepath,
+        std::string count_save_file, bool keep_GRN,
+        std::string GRN_filepath, int num_timepoints_save):
+        scNNoiSE (num_genes, gene_filepath,
+            molecule_count_filepath,
+            count_save_file, keep_GRN,
+            GRN_filepath, num_timepoints_save) {
+    }
 
   inline double GillespieSSA::sample_time_step (RNG &generator) {
     thread_local std::uniform_real_distribution<double> distribution(0.0, 1.0);
@@ -544,10 +544,10 @@ namespace ScnnoiseInterface {
         update_burst_size_init();
         init_rxn_order();
         std::string tmp = get_cur_cell_cycle_state();
-        std::cout << "cur phase = " << reactions[0].rxn_rates["gene on"] << std::endl;
+        // std::cout << "cur phase = " << reactions[0].rxn_rates["gene on"] << std::endl;
         init_cell_cycle_state (generator[0], 0);
         std::string cur_cell_cycle_phase = get_cur_cell_cycle_state();
-        std::cout << "cur phase2 = " << reactions[0].rxn_rates["gene on"] << std::endl;
+        // std::cout << "cur phase2 = " << reactions[0].rxn_rates["gene on"] << std::endl;
         compute_total_propensity();
         set_count_rxns_fired(count_rxns, stop_rxn_count);
         if (save_at_random_times && is_steady_state_reached) {

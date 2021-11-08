@@ -675,9 +675,9 @@ namespace ScnnoiseInterface {
     }
 
     void scNNoiSE::set_reduced_model_stoichio_factor (std::string filepath) {
-        burst_size_distribution.resize(num_genes);
-        gene_copy_number.resize(num_genes);
-        gene_burst_sizes.resize(num_genes);
+        burst_size_distribution.resize(num_genes, "constant");
+        gene_copy_number.resize(num_genes, 2);
+        gene_burst_sizes.resize(num_genes, 3);
         std::ifstream gene_burst_size(filepath);
         std::string row_text;
         std::string gene_name;

@@ -728,8 +728,8 @@ namespace ScnnoiseInterface {
         }
     }
 
-    void scNNoiSE::set_reduced_model_burst_size_manual (int gene_id, double burst_size, 
-        double copy_number) {
+    void scNNoiSE::set_reduced_model_burst_size_manual (int gene_id, double burst_size,
+        double copy_number, std::string distribution_name) {
         stoichio_factors[gene_id].rxns["transcription"].products_factors["mRNA"] =
             double (burst_size * copy_number);
         burst_size_distribution[gene_id] = distribution_name;

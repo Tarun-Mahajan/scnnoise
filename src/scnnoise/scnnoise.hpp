@@ -571,6 +571,9 @@ namespace ScnnoiseInterface {
 
         void set_reduced_model_stoichio_factor (std::string filepath);
 
+        void set_reduced_model_burst_size_manual (int gene_id, double burst_size,
+            double copy_number);
+
         gene_type_struct create_two_state_reduced_type ();
 
         gene_type_struct create_two_state_reduced_mRNA_type ();

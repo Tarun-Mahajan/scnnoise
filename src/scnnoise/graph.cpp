@@ -77,9 +77,9 @@ namespace GraphSpace {
     }
 
     // Recursive DFS function for checking graph connectedness.
-    void Graph::is_connected_DFS (int vert, std::vector<bool> visited) {
+    void Graph::is_connected_DFS (int vert, std::vector<bool> &visited) {
         if (!visited[vert]) {
-            std::cout << "current node = " << vert << std::endl;
+            // std::cout << "current node = " << vert << std::endl;
             visited[vert] = true;
              for (int v: adj_list[vert]) {
                  if(!visited[v]){
@@ -114,8 +114,8 @@ namespace GraphSpace {
     }
 
     // Recursive DFS utility function for determining whether graph is DAG or not.
-    bool Graph::is_DAG_util (int vert, std::vector<bool> visited,
-                           std::vector<bool> active) {
+    bool Graph::is_DAG_util (int vert, std::vector<bool> &visited,
+                           std::vector<bool> &active) {
 
         visited[vert] = true;
         active[vert] = true;

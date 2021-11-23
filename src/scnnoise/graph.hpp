@@ -23,6 +23,7 @@ namespace GraphSpace {
         ***********************************************/
         std::vector<std::vector<int>> adj_list;
         std::vector<std::vector<int>> parent_list;
+        std::vector<int> topological_order;
         // std::vector<std::map<int, edge_struct>> edge_kinetic_params;
 
         /* Memeber functions */

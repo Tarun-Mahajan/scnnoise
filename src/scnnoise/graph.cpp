@@ -130,12 +130,14 @@ namespace GraphSpace {
             }
             else{}
         }
+        topological_order.push_back(vert);
         active[vert] = false;
         return true;
     }
 
     // Function to check whether graph is DAG or not.
     bool Graph::is_DAG () {
+        topological_order.clear();
         std::vector<bool> visited(num_nodes);
         std::vector<bool> active(num_nodes);
         for (auto vert: visited) {

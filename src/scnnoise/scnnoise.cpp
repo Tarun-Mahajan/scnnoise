@@ -730,6 +730,7 @@ namespace ScnnoiseInterface {
         burst_size_distribution.resize(num_genes, "constant");
         gene_copy_number.resize(num_genes, 2);
         gene_burst_sizes.resize(num_genes, 3);
+        burst_sizes_mean.resize(num_genes, 3);
         std::ifstream gene_burst_size(filepath);
         std::string row_text;
         std::string gene_name;
@@ -777,6 +778,7 @@ namespace ScnnoiseInterface {
             burst_size_distribution[gene_rev_map[gene_name]] = distribution_name;
             gene_copy_number[gene_rev_map[gene_name]] = copy_number;
             gene_burst_sizes[gene_rev_map[gene_name]] = burst_size;
+            burst_sizes_mean[gene_rev_map[gene_name]] = burst_size;
         }
     }
 
@@ -787,6 +789,7 @@ namespace ScnnoiseInterface {
         burst_size_distribution[gene_id] = distribution_name;
         gene_copy_number[gene_id] = copy_number;
         gene_burst_sizes[gene_id] = burst_size;
+        burst_sizes_mean[gene_id] = burst_size;
     }
 
     gene_type_struct scNNoiSE::create_two_state_reduced_type () {
@@ -1069,11 +1072,15 @@ namespace ScnnoiseInterface {
 
         std::size_t found = gene_type.find("reduced");
         if (found != std::string::npos && rxn_name == "transcription") {
-            double burst_size = gene_burst_sizes[gene_selected];
+            // double burst_size = gene_burst_sizes[gene_selected];
+            double burst_size = burst_sizes_mean[gene_selected];
             double copy_number = gene_copy_number[gene_selected];
             if (burst_size_distribution[gene_selected] == "geometric") {
                 std::geometric_distribution<int> distribution_(double(1.0/burst_size));
                 gene_burst_sizes[gene_selected] = distribution_(generator) + 1;
+                // std::cout << "gene = " <<
+                //     gene_selected << " burst = " << gene_burst_sizes[gene_selected] <<
+                //     " " << burst_sizes_mean[gene_selected] << std::endl;
                 stoichio_factor_struct &stoichio_factor_gene =
                     stoichio_factors[gene_selected];
                 stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =

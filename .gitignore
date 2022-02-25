@@ -144,6 +144,9 @@ data/
 # Exclude build files
 tests/bin
 
+# exclude directory python
+python/
+
 # CLion files
 cmake-build-debug/
 .idea/

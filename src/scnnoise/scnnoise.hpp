@@ -385,6 +385,8 @@ namespace ScnnoiseInterface {
 
         std::vector<double> gene_burst_sizes;
 
+        std::vector<double> burst_sizes_mean;
+
         std::vector<double> gene_copy_number;
 
         std::map<int, std::map<std::string, double>> max_rxn_rate_change;
@@ -566,6 +568,8 @@ namespace ScnnoiseInterface {
         gene_type_struct create_constitutive_nascent_type ();
 
         gene_type_struct create_two_state_type ();
+
+        gene_type_struct create_two_state_two_gene_cascade_activation_type ();
 
         gene_type_struct create_two_state_mRNA_type ();
 

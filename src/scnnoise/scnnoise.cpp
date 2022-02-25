@@ -600,6 +600,122 @@ namespace ScnnoiseInterface {
         return gene_info;
     }
 
+    gene_type_struct scNNoiSE::create_two_state_two_gene_cascade_activation_type () {
+        gene_type_struct gene_info;
+        // Species are 0:gene off, 1:gene on, 2:mRNA, 3:protein
+        gene_info.species_rev_map["gene off 1"] = 0;
+        gene_info.species_rev_map["gene on 1"] = 1;
+        gene_info.species_rev_map["mRNA 1"] = 2;
+        gene_info.species_rev_map["protein 1"] = 3;
+        gene_info.species_rev_map["gene off 2"] = 4;
+        gene_info.species_rev_map["gene on 2"] = 5;
+        gene_info.species_rev_map["mRNA 2"] = 6;
+        gene_info.species_rev_map["protein 2"] = 7;
+        for (auto const &it : gene_info.species_rev_map) {
+            gene_info.species_map[it.second] = it.first;
+        }
+        gene_info.num_species = gene_info.species_map.size();
+        // Reactions are 0:gene on, 1:gene off 2:transcription, 3:mRNA decay,
+        // 4:translation, 5:protein decay
+        gene_info.rxn_map[0] = "gene on 1";
+        gene_info.rxn_map[1] = "gene off 1";
+        gene_info.rxn_map[2] = "transcription 1";
+        gene_info.rxn_map[3] = "mRNA decay 1";
+        gene_info.rxn_map[4] = "translation 1";
+        gene_info.rxn_map[5] = "protein decay 1";
+        gene_info.rxn_map[6] = "gene on 2";
+        gene_info.rxn_map[7] = "gene off 2";
+        gene_info.rxn_map[8] = "transcription 2";
+        gene_info.rxn_map[9] = "mRNA decay 2";
+        gene_info.rxn_map[10] = "translation 2";
+        gene_info.rxn_map[11] = "protein decay 2";
+        for (auto const &it : gene_info.rxn_map) {
+            gene_info.rxn_rev_map[it.second] = it.first;
+        }
+        gene_info.num_rxns = gene_info.rxn_map.size();
+        std::map<std::string, rxn_struct> rxns_;
+        // Gene on 1
+        std::string str_ = "gene on 1";
+        rxns_[str_].reactants_stoichio["gene off 1"] = 1;
+        rxns_[str_].products_stoichio["gene on 1"] = 1;
+        // Gene off 1
+        str_ = "gene off 1";
+        rxns_[str_].reactants_stoichio["gene on 1"] = 1;
+        rxns_[str_].products_stoichio["gene off 1"] = 1;
+        // Transcription 1
+        str_ = "transcription 1";
+        rxns_[str_].reactants_stoichio["gene on 1"] = 1;
+        rxns_[str_].products_stoichio["gene on 1"] = 1;
+        rxns_[str_].products_stoichio["mRNA 1"] = 1;
+        // mRNA decay 1
+        str_ = "mRNA decay 1";
+        rxns_[str_].reactants_stoichio["mRNA 1"] = 1;
+        // Translation rxn 1
+        str_ = "translation 1";
+        rxns_[str_].reactants_stoichio["mRNA 1"] = 1;
+        rxns_[str_].products_stoichio["mRNA 1"] = 1;
+        rxns_[str_].products_stoichio["protein 1"] = 1;
+        // protein decay 1
+        str_ = "protein decay 1";
+        rxns_[str_].reactants_stoichio["protein 1"] = 1;
+        // Gene on 2
+        str_ = "gene on 2";
+        rxns_[str_].reactants_stoichio["gene off 2"] = 1;
+        rxns_[str_].reactants_stoichio["protein 1"] = 1;
+        rxns_[str_].products_stoichio["gene on 2"] = 1;
+        // Gene off 2
+        str_ = "gene off 2";
+        rxns_[str_].reactants_stoichio["gene on 2"] = 1;
+        rxns_[str_].products_stoichio["gene off 2"] = 1;
+        rxns_[str_].products_stoichio["protein 1"] = 1;
+        // Transcription 2
+        str_ = "transcription 2";
+        rxns_[str_].reactants_stoichio["gene on 2"] = 1;
+        rxns_[str_].products_stoichio["gene on 2"] = 1;
+        rxns_[str_].products_stoichio["mRNA 2"] = 1;
+        // mRNA decay 2
+        str_ = "mRNA decay 2";
+        rxns_[str_].reactants_stoichio["mRNA 2"] = 1;
+        // Translation rxn 2
+        str_ = "translation 2";
+        rxns_[str_].reactants_stoichio["mRNA 2"] = 1;
+        rxns_[str_].products_stoichio["mRNA 2"] = 1;
+        rxns_[str_].products_stoichio["protein 2"] = 1;
+        // protein decay 2
+        str_ = "protein decay 2";
+        rxns_[str_].reactants_stoichio["protein 2"] = 1;
+        gene_info.rxns = rxns_;
+        gene_info.gene_rxn_dependency.push_back(
+            GraphSpace::GraphDependency(gene_info.num_rxns));
+        gene_info.gene_rxn_dependency[0].add_edge(0, 0);
+        gene_info.gene_rxn_dependency[0].add_edge(0, 1);
+        gene_info.gene_rxn_dependency[0].add_edge(0, 2);
+        gene_info.gene_rxn_dependency[0].add_edge(1, 0);
+        gene_info.gene_rxn_dependency[0].add_edge(1, 1);
+        gene_info.gene_rxn_dependency[0].add_edge(1, 2);
+        gene_info.gene_rxn_dependency[0].add_edge(2, 3);
+        gene_info.gene_rxn_dependency[0].add_edge(2, 4);
+        gene_info.gene_rxn_dependency[0].add_edge(3, 3);
+        gene_info.gene_rxn_dependency[0].add_edge(3, 4);
+        gene_info.gene_rxn_dependency[0].add_edge(4, 5);
+        gene_info.gene_rxn_dependency[0].add_edge(5, 5);
+
+        gene_info.gene_rxn_dependency[0].add_edge(6, 5);
+        gene_info.gene_rxn_dependency[0].add_edge(6, 6);
+        gene_info.gene_rxn_dependency[0].add_edge(6, 7);
+        gene_info.gene_rxn_dependency[0].add_edge(6, 8);
+        gene_info.gene_rxn_dependency[0].add_edge(7, 6);
+        gene_info.gene_rxn_dependency[0].add_edge(7, 7);
+        gene_info.gene_rxn_dependency[0].add_edge(7, 8);
+        gene_info.gene_rxn_dependency[0].add_edge(8, 9);
+        gene_info.gene_rxn_dependency[0].add_edge(8, 10);
+        gene_info.gene_rxn_dependency[0].add_edge(9, 9);
+        gene_info.gene_rxn_dependency[0].add_edge(9, 10);
+        gene_info.gene_rxn_dependency[0].add_edge(10, 11);
+        gene_info.gene_rxn_dependency[0].add_edge(11, 11);
+        return gene_info;
+    }
+
     gene_type_struct scNNoiSE::create_two_state_mRNA_type () {
         gene_type_struct gene_info;
         // Species are 0:gene off, 1:gene on, 2:mRNA, 3:protein
@@ -730,6 +846,7 @@ namespace ScnnoiseInterface {
         burst_size_distribution.resize(num_genes, "constant");
         gene_copy_number.resize(num_genes, 2);
         gene_burst_sizes.resize(num_genes, 3);
+        burst_sizes_mean.resize(num_genes, 3);
         std::ifstream gene_burst_size(filepath);
         std::string row_text;
         std::string gene_name;
@@ -777,6 +894,7 @@ namespace ScnnoiseInterface {
             burst_size_distribution[gene_rev_map[gene_name]] = distribution_name;
             gene_copy_number[gene_rev_map[gene_name]] = copy_number;
             gene_burst_sizes[gene_rev_map[gene_name]] = burst_size;
+            burst_sizes_mean[gene_rev_map[gene_name]] = burst_size;
         }
     }
 
@@ -787,6 +905,7 @@ namespace ScnnoiseInterface {
         burst_size_distribution[gene_id] = distribution_name;
         gene_copy_number[gene_id] = copy_number;
         gene_burst_sizes[gene_id] = burst_size;
+        burst_sizes_mean[gene_id] = burst_size;
     }
 
     gene_type_struct scNNoiSE::create_two_state_reduced_type () {
@@ -875,6 +994,8 @@ namespace ScnnoiseInterface {
         gene_type_info["two-state reduced"] = create_two_state_reduced_type();
         gene_type_info["two-state reduced mRNA"] = create_two_state_reduced_mRNA_type();
         gene_type_info["two-state mRNA"] = create_two_state_mRNA_type();
+        gene_type_info["two-state two-gene cascade"] =
+            create_two_state_two_gene_cascade_activation_type();
     }
 
     int scNNoiSE::factorial (int num) {
@@ -1069,11 +1190,20 @@ namespace ScnnoiseInterface {
 
         std::size_t found = gene_type.find("reduced");
         if (found != std::string::npos && rxn_name == "transcription") {
-            double burst_size = gene_burst_sizes[gene_selected];
+            // double burst_size = gene_burst_sizes[gene_selected];
+            double burst_size = burst_sizes_mean[gene_selected];
             double copy_number = gene_copy_number[gene_selected];
             if (burst_size_distribution[gene_selected] == "geometric") {
+<<<<<<< HEAD
                 std::geometric_distribution<int> distribution_(double(1.0/(1.0 + burst_size)));
                 gene_burst_sizes[gene_selected] = distribution_(generator);
+=======
+                std::geometric_distribution<int> distribution_(double(1.0/burst_size));
+                gene_burst_sizes[gene_selected] = distribution_(generator) + 1;
+                // std::cout << "gene = " <<
+                //     gene_selected << " burst = " << gene_burst_sizes[gene_selected] <<
+                //     " " << burst_sizes_mean[gene_selected] << std::endl;
+>>>>>>> d45b60cbca25f2bf828b1be51409c16bd172de45
                 stoichio_factor_struct &stoichio_factor_gene =
                     stoichio_factors[gene_selected];
                 stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =

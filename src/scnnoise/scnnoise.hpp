@@ -569,7 +569,7 @@ namespace ScnnoiseInterface {
 
         gene_type_struct create_two_state_type ();
 
-        gene_type_struct create_two_state_two_gene_cascade_activation_type ()
+        gene_type_struct create_two_state_two_gene_cascade_activation_type ();
 
         gene_type_struct create_two_state_mRNA_type ();
 

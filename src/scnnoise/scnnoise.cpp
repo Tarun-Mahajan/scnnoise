@@ -659,7 +659,7 @@ namespace ScnnoiseInterface {
         str_ = "protein decay 1";
         rxns_[str_].reactants_stoichio["protein 1"] = 1;
         // Gene on 2
-        std::string str_ = "gene on 2";
+        str_ = "gene on 2";
         rxns_[str_].reactants_stoichio["gene off 2"] = 1;
         rxns_[str_].reactants_stoichio["protein 1"] = 1;
         rxns_[str_].products_stoichio["gene on 2"] = 1;

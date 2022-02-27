@@ -315,7 +315,7 @@ namespace ScnnoiseInterface {
     }
 
     void GillespieSSA::update_molecule_count_history (int &num_history, int &num_save_loop,
-        bool simulation_ended, double cur_time) {
+        bool simulation_ended, double cur_time, double cur_rxn) {
         if ((num_history == num_timepoints_save && (save_timeseries || save_timeseries_all)) || simulation_ended) {
             int num_timepoints_save_cur;
             if (simulation_ended) {
@@ -332,6 +332,7 @@ namespace ScnnoiseInterface {
                 }else{
                     if (!simulation_ended) {
                         outfile.open(count_save_file);
+                        outfile << "reaction" << ",";
                         outfile << "phase" << ",";
                         outfile << "time" << ",";
                         for (int gene = 0; gene < num_genes; ++gene) {
@@ -353,6 +354,7 @@ namespace ScnnoiseInterface {
                     }
                 }
                 for (int id_time = 0; id_time < num_timepoints_save_cur; ++id_time) {
+                    outfile << rxn_history[id_time] << ",";
                     outfile << cell_cycle_phase_history[id_time] << ",";
                     // outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
                     outfile << time_history[id_time] << ',';
@@ -372,6 +374,7 @@ namespace ScnnoiseInterface {
                 if (simulation_ended) {
                     std::ofstream outfile;
                     outfile.open(count_save_file, std::ios_base::app);
+                    outfile << cur_rxn << ",";
                     outfile << get_cur_cell_cycle_state() << ",";
                     outfile << cur_time << ",";
                     for (int gene = 0; gene < num_genes; ++gene) {
@@ -392,6 +395,7 @@ namespace ScnnoiseInterface {
         }
 
         if (save_timeseries || save_timeseries_all) {
+            rxn_history[num_history] = cur_rxn;
             time_history[num_history] = cur_time;
             cell_cycle_phase_history[num_history] = get_cur_cell_cycle_state();
             for (int gene = 0; gene < num_genes; ++gene) {
@@ -544,6 +548,8 @@ namespace ScnnoiseInterface {
         // time_history.clear();
         // time_history.push_back(0);
         std::fill(time_history.begin(), time_history.end(), 0);
+        std::fill(rxn_history.begin(), rxn_history.end(), "transcription");
+
         update_burst_size_init();
         init_rxn_order();
         std::string tmp = get_cur_cell_cycle_state();
@@ -576,10 +582,11 @@ namespace ScnnoiseInterface {
         double total_time = 0;
         double cur_time = 0;
         double next_time_step = 0;
+        std::string next_rxn_name = "transcription";
         double points_collected_prev = 0;
         cur_cell_cycle_phase = get_cur_cell_cycle_state();
         update_molecule_count_history(num_history, num_save_loop,
-            simulation_ended, 0);
+            simulation_ended, next_time_step, next_rxn_name);
 
         while (!stop_sim) {
             cur_rxn_count += 1;
@@ -637,6 +644,7 @@ namespace ScnnoiseInterface {
                 // }
 
                 int next_rxn = sample_next_rxn(generator[0]);
+                next_rxn_name = rxn_order[next_rxn].rxn_name;
                 update_burst_size (generator[0], next_rxn);
                 update_rxn_count (next_rxn, stop_sim, reached_rxn_count);
                 // std::cout << "reached here 2 = " << std::endl;
@@ -660,7 +668,7 @@ namespace ScnnoiseInterface {
                     }
                 }else{
                     update_molecule_count_history(num_history, num_save_loop,
-                        simulation_ended, next_time_step);
+                        simulation_ended, next_time_step, next_rxn_name);
                 }
                 // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
                 //     std::cout << "error foundlast " <<
@@ -700,7 +708,7 @@ namespace ScnnoiseInterface {
         }
         if (!save_at_time_interval && !save_at_random_times) {
             update_molecule_count_history(num_history, num_save_loop,
-                simulation_ended, next_time_step);
+                simulation_ended, next_time_step, "transcription");
         }
     }
 }

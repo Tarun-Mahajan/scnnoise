@@ -411,6 +411,7 @@ namespace ScnnoiseInterface {
     void GillespieSSA::start_molecule_count_history_file () {
         std::ofstream outfile;
         outfile.open(count_save_file);
+        outfile << "reaction" << ",";
         outfile << "phase" << ",";
         outfile << "time" << ",";
         for (int gene = 0; gene < num_genes; ++gene) {

@@ -315,7 +315,7 @@ namespace ScnnoiseInterface {
     }
 
     void GillespieSSA::update_molecule_count_history (int &num_history, int &num_save_loop,
-        bool simulation_ended, double cur_time, double cur_rxn) {
+        bool simulation_ended, double cur_time, std::string cur_rxn) {
         if ((num_history == num_timepoints_save && (save_timeseries || save_timeseries_all)) || simulation_ended) {
             int num_timepoints_save_cur;
             if (simulation_ended) {

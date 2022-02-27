@@ -53,7 +53,8 @@ namespace ScnnoiseInterface {
         // }
 
 
-        time_history.push_back(0);
+        // time_history.push_back(0);
+        time_history.resize(num_timepoints_save, 0);
 
         // Create dependency graphs
         create_init_gene_type_info();

@@ -70,7 +70,7 @@ namespace ScnnoiseInterface {
 
         // Update molecule count history
         void update_molecule_count_history (int &num_history, int &num_save_loop,
-            bool simulation_ended);
+            bool simulation_ended, double cur_time);
 
         void save_molecule_count_at_interval (double time_prev, double time_next,
             double &points_collected_prev);

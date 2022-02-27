@@ -645,7 +645,10 @@ namespace ScnnoiseInterface {
                 // }
 
                 int next_rxn = sample_next_rxn(generator[0]);
-                next_rxn_name = rxn_order[next_rxn].rxn_name;
+                std::string connector_ = ":";
+                next_rxn_name =
+                    to_string(rxn_order[rxn_selected].gene_id) +
+                    connector_ + rxn_order[next_rxn].rxn_name;
                 update_burst_size (generator[0], next_rxn);
                 update_rxn_count (next_rxn, stop_sim, reached_rxn_count);
                 // std::cout << "reached here 2 = " << std::endl;

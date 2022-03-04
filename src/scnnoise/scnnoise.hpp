@@ -520,6 +520,8 @@ namespace ScnnoiseInterface {
 
         std::vector<std::vector<double>> running_var;
 
+        std::vector<double> running_cov;
+
         // public:
         /********************************************//**
         \brief Constructor for scNNoiSE.
@@ -656,10 +658,12 @@ namespace ScnnoiseInterface {
 
         void set_save_timeseries_all (bool save_timeseries_all);
 
-        void set_count_rxns_fired (bool count_rxns,
+        void set_count_rxns_fired (bool count_rxns, bool compute_statistics,
             unsigned int stop_rxn_count = pow(10, 6));
 
-        void update_rxn_count (int rxn_selected, bool &stop_sim, bool &reached_rxn_count);
+        bool update_rxn_count (int rxn_selected, bool &stop_sim,
+            bool &reached_rxn_count, bool compute_statistics,
+            unsigned int burn_in_rxn_count);
 
         void update_burst_size_init ();
 

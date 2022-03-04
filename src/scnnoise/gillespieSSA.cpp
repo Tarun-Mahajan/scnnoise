@@ -450,11 +450,23 @@ namespace ScnnoiseInterface {
         std::ofstream outfile;
         outfile.open(statistics_file);
         std::string connector = ":";
+        std::string connector_2 = "_";
         for (int gene = 0; gene < num_genes; ++gene) {
             std::string gene_type = reactions[gene].gene_type;
             for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
                 std::string gene_species_name = gene_map[gene] + connector +
                 gene_type_info[gene_type].species_map[species];
+
+                for (unsigned int gene_2 = 0; gene_2 < num_genes; ++gene_2) {
+                    std::string gene_type_2 = reactions[gene_2].gene_type;
+                    for (int species_2 = 0; species_2 < reactions[gene_2].molecule_count_cur.size(); ++species_2) {
+                        std::string gene_species_name_2 = gene_map[gene_2] + connector +
+                        gene_type_info[gene_type_2].species_map[species_2];
+                        outfile << "cov_" + gene_species_name + connector_2 +
+                            gene_species_name_2 << ",";
+                    }
+                }
+
                 if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
                     outfile << "mean_" + gene_species_name << "," <<
                         "variance_" + gene_species_name << "\n";
@@ -470,8 +482,17 @@ namespace ScnnoiseInterface {
     void GillespieSSA::write_statistics_to_file (std::string statistics_file) {
         std::ofstream outfile;
         outfile.open(statistics_file, std::ios_base::app);
+        unsigned int count_ = 0;
         for (int gene_ = 0; gene_ < num_genes; ++gene_) {
             for (int species_ = 0; species_ < reactions[gene_].molecule_count_cur.size(); ++species_) {
+
+                for (unsigned int gene_2 = 0; gene_2 < num_genes; ++gene_2) {
+                    for (int species_2 = 0; species_2 < reactions[gene_2].molecule_count_cur.size(); ++species_2) {
+                        outfile << running_cov[count_] << ",";
+                        count_ += 1;
+                    }
+                }
+
                 if (species_ == reactions[gene_].molecule_count_cur.size() - 1 && gene_ == num_genes - 1) {
                     outfile << running_mean[gene_][species_] << "," <<
                         running_var[gene_][species_] << "\n";
@@ -488,10 +509,20 @@ namespace ScnnoiseInterface {
         running_mean.resize(num_genes);
         running_var.resize(num_genes);
 
+        unsigned int count_ = 0;
         for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
+            for (int species_ = 0; species_ < reactions[gene_].molecule_count_cur.size(); ++species_) {
+                for (unsigned int gene_2 = 0; gene_2 < num_genes; ++gene_2) {
+                    for (int species_2 = 0; species_2 < reactions[gene_2].molecule_count_cur.size(); ++species_2) {
+                        count_ += 1;
+                    }
+                }
+            }
             running_mean[gene_].resize(reactions[gene_].molecule_count_cur.size(), 0);
             running_var[gene_].resize(reactions[gene_].molecule_count_cur.size(), 0);
         }
+
+        running_cov.resize(count_, 0);
     }
 
     void GillespieSSA::set_size_statistics_history_containers () {
@@ -507,14 +538,39 @@ namespace ScnnoiseInterface {
 
     void GillespieSSA::upate_running_statistics (double total_time_prev, double next_time_step) {
         double total_time_next = total_time_prev + next_time_step;
+        unsigned int  count_ = 0;
         for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
             for (int species_ = 0; species_ < reactions[gene_].molecule_count_cur.size(); ++species_) {
                 double prev_count = reactions[gene_].molecule_count_cur[species_];
                 double prev_mean = running_mean[gene_][species_];
-                running_mean[gene_][species_] =
+                double next_mean =
                     prev_mean * (total_time_prev / total_time_next);
-                running_mean[gene_][species_] +=
+                next_mean +=
                     prev_count * (next_time_step / total_time_next);
+                for (unsigned int gene_2 = 0; gene_2 < num_genes; ++gene_2) {
+                    for (int species_2 = 0; species_2 < reactions[gene_2].molecule_count_cur.size(); ++species_2) {
+                        double prev_count_2 =
+                            reactions[gene_2].molecule_count_cur[species_2];
+                        double prev_mean_2 = running_mean[gene_2][species_2];
+                        double next_mean_2 =
+                            prev_mean_2 * (total_time_prev / total_time_next);
+                        next_mean_2 +=
+                            prev_count_2 * (next_time_step / total_time_next);
+                        running_cov[count_] += prev_mean * prev_mean_2;
+                        running_cov[count_] *=
+                            (total_time_prev / total_time_next);
+                        running_cov[count_] += (prev_count * prev_count_2) *
+                            (next_time_step / total_time_next);
+                        running_cov[count_] -= next_mean * next_mean_2;
+                        count_ += 1;
+                    }
+                }
+
+                running_mean[gene_][species_] = next_mean;
+                // running_mean[gene_][species_] =
+                //     prev_mean * (total_time_prev / total_time_next);
+                // running_mean[gene_][species_] +=
+                //     prev_count * (next_time_step / total_time_next);
                 running_var[gene_][species_] =
                     running_var[gene_][species_] * (total_time_prev / total_time_next);
                 running_var[gene_][species_] +=
@@ -540,7 +596,7 @@ namespace ScnnoiseInterface {
         if (compute_statistics) {
             start_statistics_file(statistics_file_full);
             set_size_statistics_containers();
-            set_size_statistics_history_containers();
+            // set_size_statistics_history_containers();
             statistics_start_time = 0;
             is_statistics_start_time_set = false;
         }else{
@@ -559,7 +615,7 @@ namespace ScnnoiseInterface {
         std::string cur_cell_cycle_phase = get_cur_cell_cycle_state();
         // std::cout << "cur phase2 = " << reactions[0].rxn_rates["gene on"] << std::endl;
         compute_total_propensity();
-        set_count_rxns_fired(count_rxns, stop_rxn_count);
+        set_count_rxns_fired(count_rxns, compute_statistics, stop_rxn_count);
         if (save_at_random_times && is_steady_state_reached) {
             find_random_times_to_save (generator[0],
                 burn_in, max_time);
@@ -574,7 +630,8 @@ namespace ScnnoiseInterface {
         //     rd_seeds[b] = random_seeds[b];
         // }
         // std::seed_seq sd(rd_seeds.begin(), rd_seeds.end());
-        // thread_local static RNG generator{sd};
+        // thread_local static RNG generator{sd};]
+        bool reached_burn_in_rxn = false;
         bool stop_sim = false;
         bool reached_rxn_count = false;
         bool simulation_ended = false;
@@ -590,10 +647,10 @@ namespace ScnnoiseInterface {
             simulation_ended, next_time_step, next_rxn_name);
 
         while (!stop_sim) {
-            cur_rxn_count += 1;
-            if (compute_statistics && cur_rxn_count > burn_in_rxn_count) {
+            // cur_rxn_count += 1;
+            if (compute_statistics && reached_burn_in_rxn) {
                 rxn_count_after_burn_in += 1;
-                if (!is_steady_state_reached) {
+                if (!is_steady_state_reached && save_at_random_times) {
                     max_time = total_time + max_time - burn_in;
                     burn_in = total_time;
                     find_random_times_to_save (generator[0],
@@ -607,7 +664,7 @@ namespace ScnnoiseInterface {
             //     total_propensity << " time = " << total_time << std::endl;
             // }
             next_time_step = sample_time_step(generator[0]);
-            if (cur_rxn_count > burn_in_rxn_count && compute_statistics) {
+            if (reached_burn_in_rxn && compute_statistics) {
                 if (!is_statistics_start_time_set) {
                     statistics_start_time = total_time;
                     is_statistics_start_time_set = true;
@@ -630,7 +687,7 @@ namespace ScnnoiseInterface {
             }
             // std::cout << "reached here 1 = " << std::endl;
             if (total_time < max_time || (count_rxns && !reached_rxn_count) ||
-                (compute_statistics && rxn_count_after_burn_in < after_burn_in_rxn_count)) {
+                (compute_statistics && !reached_rxn_count)) {
                 // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
                 //     std::cout << "error found0 " <<
                 //     reactions[0].propensity_vals["mRNA decay"] << " " <<
@@ -650,7 +707,9 @@ namespace ScnnoiseInterface {
                     std::to_string(rxn_order[next_rxn].gene_id) +
                     connector_ + rxn_order[next_rxn].rxn_name;
                 update_burst_size (generator[0], next_rxn);
-                update_rxn_count (next_rxn, stop_sim, reached_rxn_count);
+                reached_burn_in_rxn =
+                    update_rxn_count (next_rxn, stop_sim, reached_rxn_count,
+                        compute_statistics, burn_in_rxn_count);
                 // std::cout << "reached here 2 = " << std::endl;
                 GRN_out_changed = update_fired_reaction(next_rxn);
                 update_dependent_count_propensity(next_rxn, GRN_out_changed);

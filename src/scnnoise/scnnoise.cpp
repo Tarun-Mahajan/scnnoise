@@ -1224,10 +1224,11 @@ namespace ScnnoiseInterface {
         }
     }
 
-    void scNNoiSE::set_count_rxns_fired (bool count_rxns, unsigned int stop_rxn_count) {
+    void scNNoiSE::set_count_rxns_fired (bool count_rxns,
+        bool compute_statistics, unsigned int stop_rxn_count) {
         this->count_rxns = count_rxns;
         this->stop_rxn_count = stop_rxn_count;
-        if (count_rxns) {
+        if (count_rxns || compute_statistics) {
             count_rxns_fired.resize(num_genes);
             for (auto rxn_ : reactions) {
                 for (auto it : rxn_.rxn_rates) {
@@ -1237,8 +1238,11 @@ namespace ScnnoiseInterface {
         }
     }
 
-    void scNNoiSE::update_rxn_count (int rxn_selected, bool &stop_sim, bool &reached_rxn_count) {
-        if (count_rxns) {
+    bool scNNoiSE::update_rxn_count (int rxn_selected, bool &stop_sim,
+        bool &reached_rxn_count, bool compute_statistics,
+        unsigned int burn_in_rxn_count) {
+        bool reached_burn_in = true;
+        if (count_rxns || compute_statistics) {
             int gene_selected = rxn_order[rxn_selected].gene_id;
             std::string rxn_name = rxn_order[rxn_selected].rxn_name;
             count_rxns_fired[gene_selected][rxn_name] += 1;
@@ -1251,7 +1255,6 @@ namespace ScnnoiseInterface {
                     // std::cout << network[0].adj_list[2][0] << std::endl;
                     // std::cout << "should stop = " << " " << gene_rev_map[rxn_.gene_name] <<
                     // " " << it.first << " " << count_ <<
-                    //     " " << stop_rxn_count << " " << count_rxns_fired[gene_rev_map[rxn_.gene_name]][it.first] << " " << reached_rxn_count << std::endl;
                     if (count_ < stop_rxn_count) {
                         stop_sim = false;
                         reached_rxn_count = false;
@@ -1261,6 +1264,27 @@ namespace ScnnoiseInterface {
             }
         }
 
+        if (compute_statistics) {
+            int gene_selected = rxn_order[rxn_selected].gene_id;
+            std::string rxn_name = rxn_order[rxn_selected].rxn_name;
+            count_rxns_fired[gene_selected][rxn_name] += 1;
+            for (auto rxn_ : reactions) {
+                for (auto it : rxn_.rxn_rates) {
+                    unsigned int count_ =
+                        count_rxns_fired[gene_rev_map[rxn_.gene_name]][it.first];
+                    // std::cout << network[0].adj_list[2][0] << std::endl;
+                    // std::cout << "should stop = " << " " << gene_rev_map[rxn_.gene_name] <<
+                    // " " << it.first << " " << count_ <<
+                    //     " " << stop_rxn_count << " "
+                    // << count_rxns_fired[gene_rev_map[rxn_.gene_name]][it.first] << " " << reached_rxn_count << std::endl;
+                    if (count_ < burn_in_rxn_count) {
+                        reached_burn_in = false;
+                        break;
+                    }
+                }
+            }
+        }
+        return reached_burn_in;
 
     }
 

@@ -538,13 +538,18 @@ namespace ScnnoiseInterface {
 
     void GillespieSSA::upate_running_statistics (double total_time_prev, double next_time_step) {
         double total_time_next = total_time_prev + next_time_step;
+        double time_ratio = 0;
+        if (total_time_prev > 0) {
+            time_ratio = pow(10, log10(total_time_prev) -
+                log10(total_time_next));
+        }
         unsigned int  count_ = 0;
         for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
             for (int species_ = 0; species_ < reactions[gene_].molecule_count_cur.size(); ++species_) {
                 double prev_count = reactions[gene_].molecule_count_cur[species_];
                 double prev_mean = running_mean[gene_][species_];
                 double next_mean =
-                    prev_mean * (total_time_prev / total_time_next);
+                    prev_mean * (time_ratio);
                 next_mean +=
                     prev_count * (next_time_step / total_time_next);
                 for (unsigned int gene_2 = 0; gene_2 < num_genes; ++gene_2) {
@@ -553,7 +558,7 @@ namespace ScnnoiseInterface {
                             reactions[gene_2].molecule_count_cur[species_2];
                         double prev_mean_2 = running_mean[gene_2][species_2];
                         double next_mean_2 =
-                            prev_mean_2 * (total_time_prev / total_time_next);
+                            prev_mean_2 * (time_ratio);
                         next_mean_2 +=
                             prev_count_2 * (next_time_step / total_time_next);
                         running_cov[count_] += prev_mean * prev_mean_2;
@@ -572,11 +577,65 @@ namespace ScnnoiseInterface {
                 // running_mean[gene_][species_] +=
                 //     prev_count * (next_time_step / total_time_next);
                 running_var[gene_][species_] =
-                    running_var[gene_][species_] * (total_time_prev / total_time_next);
+                    running_var[gene_][species_] * (time_ratio);
                 running_var[gene_][species_] +=
                     (pow(prev_count, 2) * (next_time_step / total_time_next));
                 running_var[gene_][species_] +=
-                    (pow(prev_mean, 2) * (total_time_prev / total_time_next));
+                    (pow(prev_mean, 2) * (time_ratio));
+                running_var[gene_][species_] -=
+                    pow(running_mean[gene_][species_], 2);
+            }
+        }
+    }
+
+    void GillespieSSA::upate_running_statistics_without_time_step (
+        double num_rxns_cur) {
+        double num_rxns_next = num_rxns_cur + 1;
+        double num_rxn_ratio = 0;
+        if (num_rxns_cur != 0) {
+            num_rxn_ratio = pow(10, log10(num_rxns_cur) -
+                log10(num_rxns_next));
+        }
+
+        unsigned int  count_ = 0;
+        for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
+            for (int species_ = 0; species_ < reactions[gene_].molecule_count_cur.size(); ++species_) {
+                double prev_count = reactions[gene_].molecule_count_cur[species_];
+                double prev_mean = running_mean[gene_][species_];
+                double next_mean =
+                    prev_mean * num_rxn_ratio;
+                next_mean +=
+                    prev_count * (1.0 / num_rxns_next);
+                for (unsigned int gene_2 = 0; gene_2 < num_genes; ++gene_2) {
+                    for (int species_2 = 0; species_2 < reactions[gene_2].molecule_count_cur.size(); ++species_2) {
+                        double prev_count_2 =
+                            reactions[gene_2].molecule_count_cur[species_2];
+                        double prev_mean_2 = running_mean[gene_2][species_2];
+                        double next_mean_2 =
+                            prev_mean_2 * num_rxn_ratio;
+                        next_mean_2 +=
+                            prev_count_2 * (1.0 / num_rxns_next);
+                        running_cov[count_] += prev_mean * prev_mean_2;
+                        running_cov[count_] *=
+                            num_rxn_ratio;
+                        running_cov[count_] += (prev_count * prev_count_2) *
+                            (1.0 / num_rxns_next);
+                        running_cov[count_] -= next_mean * next_mean_2;
+                        count_ += 1;
+                    }
+                }
+
+                running_mean[gene_][species_] = next_mean;
+                // running_mean[gene_][species_] =
+                //     prev_mean * (total_time_prev / total_time_next);
+                // running_mean[gene_][species_] +=
+                //     prev_count * (next_time_step / total_time_next);
+                running_var[gene_][species_] =
+                    running_var[gene_][species_] * num_rxn_ratio;
+                running_var[gene_][species_] +=
+                    (pow(prev_count, 2) * (1.0 / num_rxns_next));
+                running_var[gene_][species_] +=
+                    (pow(prev_mean, 2) * num_rxn_ratio);
                 running_var[gene_][species_] -=
                     pow(running_mean[gene_][species_], 2);
             }
@@ -586,6 +645,7 @@ namespace ScnnoiseInterface {
     void GillespieSSA::simulate (bool compute_statistics, std::string statistics_file_full,
         bool verbose) {
         // start_molecule_count_history_file();
+        double count_rxns_num = 0;
         double statistics_start_time = 0;
         bool is_statistics_start_time_set = false;
         unsigned int which_random_time_saved = 0;
@@ -671,6 +731,8 @@ namespace ScnnoiseInterface {
                 }
                 upate_running_statistics (total_time - statistics_start_time,
                     next_time_step);
+                // upate_running_statistics_without_time_step(count_rxns_num);
+                count_rxns_num += 1;
             }
             // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
             //     std::cout << "error found0time1 " <<

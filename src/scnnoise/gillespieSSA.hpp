@@ -83,6 +83,8 @@ namespace ScnnoiseInterface {
 
         void upate_running_statistics (double total_time_prev, double next_time_step);
 
+        void upate_running_statistics_without_time_step (double num_rxns_cur);
+
         void write_statistics_to_file (std::string statistics_file);
 
         void save_molecule_count_at_random_times (double time_prev, double time_next,

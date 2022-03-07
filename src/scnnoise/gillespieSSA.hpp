@@ -89,6 +89,14 @@ namespace ScnnoiseInterface {
 
         void save_molecule_count_at_random_times (double time_prev, double time_next,
             unsigned int &which_random_time_saved);
+
+        void upate_running_probs (double total_time_, double next_time_step,
+            unsigned int &history_num, bool &if_first_write);
+
+        void output_probs_to_file (bool if_first_write);
+
+        void set_running_probs_containers (unsigned int running_probs_buffer_size,
+            std::string filepath_probs, double total_time_norm);
     };
 }
 

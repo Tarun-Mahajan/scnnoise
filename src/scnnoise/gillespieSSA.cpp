@@ -4,7 +4,8 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <cctype>
+#include <sstream>
 #include <random>
 #include <math.h>
 // #include "graph.hpp"
@@ -642,6 +643,280 @@ namespace ScnnoiseInterface {
         }
     }
 
+    void GillespieSSA::set_running_probs_containers (unsigned int running_probs_buffer_size,
+        std::string filepath_probs, double total_time_norm) {
+        this->running_probs_buffer_size = running_probs_buffer_size;
+        this->filepath_probs = filepath_probs;
+        this->total_time_norm = total_time_norm;
+        running_marginal_probs.resize(num_genes);
+
+        unsigned int count_ = 0;
+        for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
+            for (int species_ = 0; species_ < reactions[gene_].molecule_count_cur.size(); ++species_) {
+                for (unsigned int gene_2 = 0; gene_2 < num_genes; ++gene_2) {
+                    for (int species_2 = 0; species_2 < reactions[gene_2].molecule_count_cur.size(); ++species_2) {
+                        if ((gene_ == gene_2) && (species_ == species_2)) {
+
+                        } else {
+                            count_ += 1;
+                        }
+                    }
+                }
+            }
+            running_marginal_probs[gene_].resize(reactions[gene_].molecule_count_cur.size());
+        }
+
+        running_joint_probs.resize(count_);
+    }
+
+    void GillespieSSA::output_probs_to_file (bool if_first_write) {
+        std::string connector_ = "_";
+        std::string file_ext = ".csv";
+        unsigned int  count_ = 0;
+        for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
+            for (int species_ = 0; species_ < reactions[gene_].molecule_count_cur.size(); ++species_) {
+                std::string filepath = filepath_probs + connector_ +
+                    std::to_string(gene_) + connector_ +
+                    std::to_string(species_) + file_ext;
+
+                if (!if_first_write) {
+                    std::ifstream prob_state_file(filepath);
+                    std::string row_text;
+                    unsigned int count_key;
+                    double prob_;
+                    std::string word;
+                    unsigned int line_counter = 0;
+                    while (std::getline(prob_state_file, row_text)) {
+                        if (line_counter > 0) {
+                            std::istringstream str_stream(row_text);
+
+                            unsigned int id_counter = 0;
+                            while (std::getline(str_stream, word, ',')) {
+                                switch(id_counter) {
+                                    case 0:
+                                        {
+                                            count_key = std::stoi(word);
+                                            break;
+                                        }
+                                    case 1:
+                                        {
+                                            prob_ = std::stod(word);
+                                            break;
+                                        }
+                                    default:
+                                        {
+                                            break;
+                                        }
+                                }
+                                ++id_counter;
+                            }
+                            if (running_marginal_probs[gene_][species_].find(count_key) !=
+                                running_marginal_probs[gene_][species_].end()) {
+                                running_marginal_probs[gene_][species_][count_key] +=
+                                    prob_;
+                            } else {
+                                running_marginal_probs[gene_][species_][count_key] =
+                                    prob_;
+                            }
+                        }
+                        ++line_counter;
+
+                    }
+
+                    std::ofstream outfile;
+                    outfile.open(filepath);
+                    outfile << "count_key" << "," << "prob" << "\n";
+                    for (auto &it : running_marginal_probs[gene_][species_]) {
+                        // if ((it != running_marginal_probs[gene_][species_].end()) &&
+                        //     (std::next(it) == running_marginal_probs[gene_][species_].end())) {
+                        //     outfile << std::to_string(it->first) << "," <<
+                        //         std::to_string(it->second);
+                        // } else {
+                        //     outfile << std::to_string(it->first) << "," <<
+                        //         std::to_string(it->second) << "\n";
+                        // }
+                        outfile << std::to_string(it.first) << "," <<
+                            std::to_string(it.second) << "\n";
+                    }
+                    running_marginal_probs[gene_][species_].clear();
+                    outfile.close();
+
+                } else {
+                    std::ofstream outfile;
+                    outfile.open(filepath);
+                    outfile << "count_key" << "," << "prob" << "\n";
+
+                    for (auto &it : running_marginal_probs[gene_][species_]) {
+                        // if ((it != running_marginal_probs[gene_][species_].end()) &&
+                        //     (std::next(it) == running_marginal_probs[gene_][species_].end())) {
+                        //     outfile << std::to_string(it->first) << "," <<
+                        //         std::to_string(it->second);
+                        // } else {
+                        //     outfile << std::to_string(it->first) << "," <<
+                        //         std::to_string(it->second) << "\n";
+                        // }
+                        outfile << std::to_string(it.first) << "," <<
+                            std::to_string(it.second) << "\n";
+                    }
+                    running_marginal_probs[gene_][species_].clear();
+                    outfile.close();
+                }
+
+
+                for (unsigned int gene_2 = 0; gene_2 < num_genes; ++gene_2) {
+                    for (int species_2 = 0; species_2 < reactions[gene_2].molecule_count_cur.size(); ++species_2) {
+                        if ((gene_ == gene_2) && (species_ == species_2)) {
+
+                        } else {
+                            std::string filepath = filepath_probs + connector_ +
+                                std::to_string(gene_) + connector_ +
+                                std::to_string(species_) + connector_ +
+                                    std::to_string(gene_2) + connector_ +
+                                    std::to_string(species_2) + file_ext;
+
+                            if (!if_first_write) {
+                                std::ifstream prob_state_file(filepath);
+                                std::string row_text;
+                                std::string count_key;
+                                double prob_;
+                                std::string word;
+                                unsigned int line_counter = 0;
+                                while (std::getline(prob_state_file, row_text)) {
+                                    if (line_counter > 0) {
+                                        std::istringstream str_stream(row_text);
+
+                                        unsigned int id_counter = 0;
+                                        while (std::getline(str_stream, word, ',')) {
+                                            switch(id_counter) {
+                                                case 0:
+                                                    {
+                                                        count_key = word;
+                                                        break;
+                                                    }
+                                                case 1:
+                                                    {
+                                                        prob_ = std::stod(word);
+                                                        break;
+                                                    }
+                                                default:
+                                                    {
+                                                        break;
+                                                    }
+                                            }
+                                            ++id_counter;
+                                        }
+                                        if (running_joint_probs[count_].find(count_key) !=
+                                            running_joint_probs[count_].end()) {
+                                            running_joint_probs[count_][count_key] +=
+                                                prob_;
+                                        } else {
+                                            running_joint_probs[count_][count_key] = prob_;
+                                        }
+                                    }
+                                    ++line_counter;
+
+                                }
+
+                                std::ofstream outfile;
+                                outfile.open(filepath);
+                                outfile << "count_key" << "," << "prob" << "\n";
+
+                                for (auto &it : running_joint_probs[count_]) {
+                                    // if ((it != running_joint_probs[count_].end()) &&
+                                    //     (std::next(it) == running_joint_probs[count_].end())) {
+                                    //     outfile << std::to_string(it->first) << "," <<
+                                    //         std::to_string(it->second);
+                                    // } else {
+                                    //     outfile << std::to_string(it->first) << "," <<
+                                    //         std::to_string(it->second) << "\n";
+                                    // }
+                                    outfile << it.first << "," <<
+                                        std::to_string(it.second) << "\n";
+                                }
+                                running_joint_probs[count_].clear();
+                                outfile.close();
+
+                            } else {
+                                std::ofstream outfile;
+                                outfile.open(filepath);
+                                outfile << "count_key" << "," << "prob" << "\n";
+
+                                for (auto &it : running_joint_probs[count_]) {
+                                    // if ((it != running_joint_probs[count_].end()) &&
+                                    //     (std::next(it) == running_joint_probs[count_].end())) {
+                                    //     outfile << std::to_string(it->first) << "," <<
+                                    //         std::to_string(it->second);
+                                    // } else {
+                                    //     outfile << std::to_string(it->first) << "," <<
+                                    //         std::to_string(it->second) << "\n";
+                                    // }
+                                    outfile << it.first << "," <<
+                                        std::to_string(it.second) << "\n";
+                                }
+                                running_joint_probs[count_].clear();
+                                outfile.close();
+                            }
+                            count_ += 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void GillespieSSA::upate_running_probs (double total_time_, double next_time_step,
+        unsigned int &history_num, bool &if_first_write) {
+        unsigned int  count_ = 0;
+        for (unsigned int gene_ = 0; gene_ < num_genes; ++gene_) {
+            for (int species_ = 0; species_ < reactions[gene_].molecule_count_cur.size(); ++species_) {
+                unsigned int prev_count = reactions[gene_].molecule_count_cur[species_];
+
+                if (running_marginal_probs[gene_][species_].find(prev_count) !=
+                    running_marginal_probs[gene_][species_].end()) {
+                    running_marginal_probs[gene_][species_][prev_count] +=
+                        next_time_step / total_time_;
+                } else {
+                    running_marginal_probs[gene_][species_][prev_count] =
+                        next_time_step / total_time_;
+                }
+
+                for (unsigned int gene_2 = 0; gene_2 < num_genes; ++gene_2) {
+                    for (int species_2 = 0; species_2 < reactions[gene_2].molecule_count_cur.size(); ++species_2) {
+                        if ((gene_ == gene_2) && (species_ == species_2)) {
+
+                        } else {
+                            unsigned int prev_count_2 =
+                                reactions[gene_2].molecule_count_cur[species_2];
+                            std::string connector_ = "_";
+                            std::string joint_counts = std::to_string(prev_count) +
+                                connector_ + std::to_string(prev_count_2);
+
+                            if (running_joint_probs[count_].find(joint_counts) !=
+                                running_joint_probs[count_].end()) {
+                                running_joint_probs[count_][joint_counts] +=
+                                    next_time_step / total_time_;
+                            } else {
+                                running_joint_probs[count_][joint_counts] =
+                                    next_time_step / total_time_;
+                            }
+                            count_ += 1;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        if (history_num >= running_probs_buffer_size + 1) {
+            output_probs_to_file(if_first_write);
+            history_num = 0;
+            if (if_first_write) {
+                if_first_write = false;
+            }
+        }
+
+    }
+
     void GillespieSSA::simulate (bool compute_statistics, std::string statistics_file_full,
         bool verbose) {
         // start_molecule_count_history_file();
@@ -706,6 +981,11 @@ namespace ScnnoiseInterface {
         update_molecule_count_history(num_history, num_save_loop,
             simulation_ended, next_time_step, next_rxn_name);
 
+
+        // set params for running marginal and joint probs
+        unsigned int history_num = 0;
+        bool if_first_write = true;
+
         while (!stop_sim) {
             // cur_rxn_count += 1;
             if (compute_statistics && reached_burn_in_rxn) {
@@ -731,6 +1011,10 @@ namespace ScnnoiseInterface {
                 }
                 upate_running_statistics (total_time - statistics_start_time,
                     next_time_step);
+
+                // upate_running_probs (total_time_norm, next_time_step,
+                //     history_num, if_first_write);
+                // ++history_num;
                 // upate_running_statistics_without_time_step(count_rxns_num);
                 count_rxns_num += 1;
             }
@@ -830,6 +1114,10 @@ namespace ScnnoiseInterface {
         }
         if (compute_statistics) {
             write_statistics_to_file(statistics_file_full);
+
+            // if (history_num > 1) {
+            //     output_probs_to_file (if_first_write);
+            // }
         }
         if (!save_at_time_interval && !save_at_random_times) {
             update_molecule_count_history(num_history, num_save_loop,

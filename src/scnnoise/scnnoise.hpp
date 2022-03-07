@@ -522,6 +522,17 @@ namespace ScnnoiseInterface {
 
         std::vector<double> running_cov;
 
+        // running marginal and joint probabilities
+        std::vector<std::vector<std::map<unsigned int, double>>> running_marginal_probs;
+
+        std::vector<std::map<std::string, double>> running_joint_probs;
+
+        unsigned int running_probs_buffer_size;
+
+        std::string filepath_probs;
+
+        double total_time_norm;
+
         // public:
         /********************************************//**
         \brief Constructor for scNNoiSE.

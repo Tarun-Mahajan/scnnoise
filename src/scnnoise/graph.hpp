@@ -63,7 +63,8 @@ namespace GraphSpace {
                 graph have been visited by the DFS or not.
         ***********************************************/
         bool is_DAG_util (int vert, std::vector<bool> &visited,
-            std::vector<bool> &active);
+            std::vector<bool> &active,
+            std::vector<int> & topological_order_tmp);
 
 
 

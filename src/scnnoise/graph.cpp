@@ -115,13 +115,14 @@ namespace GraphSpace {
 
     // Recursive DFS utility function for determining whether graph is DAG or not.
     bool Graph::is_DAG_util (int vert, std::vector<bool> &visited,
-                           std::vector<bool> &active) {
+                           std::vector<bool> &active,
+                           std::vector<int> & topological_order_tmp) {
 
         visited[vert] = true;
         active[vert] = true;
         for (int v: adj_list[vert]) {
             if(!visited[v]){
-                if(!is_DAG_util(v, visited, active)){
+                if(!is_DAG_util(v, visited, active, topological_order_tmp)){
                     return false;
                 }
             }
@@ -130,7 +131,13 @@ namespace GraphSpace {
             }
             else{}
         }
-        topological_order.push_back(vert);
+
+        if (adj_list[vert].size() != 0) {
+            topological_order.push_back(vert);
+        } else {
+            topological_order_tmp.push_back(vert);
+        }
+
         active[vert] = false;
         return true;
     }
@@ -138,6 +145,7 @@ namespace GraphSpace {
     // Function to check whether graph is DAG or not.
     bool Graph::is_DAG () {
         topological_order.clear();
+        std::vector<int> topological_order_tmp;
         std::vector<bool> visited(num_nodes, false);
         std::vector<bool> active(num_nodes, false);
         // for (auto vert: visited) {
@@ -148,11 +156,16 @@ namespace GraphSpace {
         // }
         for(int v = 0; v < num_nodes; ++v){
             if(!visited[v]){
-                if(!is_DAG_util(v, visited, active)){
+                if(!is_DAG_util(v, visited, active, topological_order_tmp)){
                     return false;
                 }
             }
         }
+
+        for (auto &vert_ : topological_order_tmp) {
+            topological_order.push_back(vert_);
+        }
+        topological_order_tmp.clear();
         return true;
     }
 

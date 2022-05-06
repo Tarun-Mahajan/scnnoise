@@ -983,7 +983,7 @@ namespace ScnnoiseInterface {
         std::string str_ = "transcription";
         rxns_[str_].products_stoichio["nascent mRNA"] = 1;
         // mRNA maturation
-        std::string str_ = "maturation";
+        str_ = "maturation";
         rxns_[str_].reactants_stoichio["nascent mRNA"] = 1;
         rxns_[str_].products_stoichio["mature mRNA"] = 1;
         // mRNA decay

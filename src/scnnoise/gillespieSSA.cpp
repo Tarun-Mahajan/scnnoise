@@ -26,13 +26,13 @@ namespace ScnnoiseInterface {
     }
 
   inline double GillespieSSA::sample_time_step (RNG &generator) {
-    thread_local std::uniform_real_distribution<double> distribution(0.0, 1.0);
+    std::uniform_real_distribution<double> distribution(0.0, 1.0);
     double rand_num = distribution(generator);
     return -log(double(1.0) - rand_num)/total_propensity;
   }
 
   int GillespieSSA::sample_next_rxn (RNG &generator) {
-    thread_local std::uniform_real_distribution<double> distribution(0.0, 1.0);
+    std::uniform_real_distribution<double> distribution(0.0, 1.0);
     double rand_num = distribution(generator);
     double selector = total_propensity * (double(1.0) - rand_num);
     int rxn_selected = -1;
@@ -45,7 +45,7 @@ namespace ScnnoiseInterface {
       }
     }
     if (rxn_selected == -1) {
-        thread_local std::uniform_int_distribution<int> distribution(0, rxn_order.size() - 1);
+        std::uniform_int_distribution<int> distribution(0, rxn_order.size() - 1);
         rxn_selected = distribution(generator);
     }
     // gene_type_struct gene_type = gene_type_info[reactions[rxn_order[rxn_selected].gene_id].gene_type];
@@ -285,18 +285,19 @@ namespace ScnnoiseInterface {
     }
 
     void GillespieSSA::save_molecule_count_at_random_times (double time_prev, double time_next,
-        unsigned int &which_random_time_saved) {
-            while (((time_next) > random_times_to_save[which_random_time_saved]) &&
-                ((time_prev) > random_times_to_save[which_random_time_saved]) &&
-                which_random_time_saved < num_points_to_collect - 1) {
-                    ++which_random_time_saved;
-            }
+        unsigned int &which_random_time_saved, int next_rxn) {
+        while (((time_next) > random_times_to_save[which_random_time_saved]) &&
+            ((time_prev) > random_times_to_save[which_random_time_saved]) &&
+            which_random_time_saved < num_points_to_collect - 1) {
+                ++which_random_time_saved;
+        }
         if (time_next > burn_in && time_next < max_time) {
             if (((time_next) >= random_times_to_save[which_random_time_saved]) &&
                 ((time_prev) < random_times_to_save[which_random_time_saved])) {
                 std::string cur_cell_cycle_phase = get_cur_cell_cycle_state();
                 std::ofstream outfile;
                 outfile.open(count_save_file, std::ios_base::app);
+                outfile << rxn_order[next_rxn].rxn_name << ",";
                 outfile << cur_cell_cycle_phase << ',';
                 outfile << time_next << ',';
                 for (int gene = 0; gene < num_genes; ++gene) {
@@ -987,6 +988,8 @@ namespace ScnnoiseInterface {
         bool if_first_write = true;
 
         while (!stop_sim) {
+            // std::cout << "start, max time = " << max_time << " burn in = " <<
+            //     burn_in << std::endl;
             // cur_rxn_count += 1;
             if (compute_statistics && reached_burn_in_rxn) {
                 rxn_count_after_burn_in += 1;
@@ -1072,7 +1075,7 @@ namespace ScnnoiseInterface {
                     }else{
                         if (save_at_random_times && is_steady_state_reached) {
                             save_molecule_count_at_random_times(cur_time, total_time,
-                                which_random_time_saved);
+                                which_random_time_saved, next_rxn);
                         }
                     }
                 }else{

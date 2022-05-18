@@ -892,8 +892,25 @@ namespace ScnnoiseInterface {
             }
             stoichio_factor_struct &stoichio_factor_gene =
                 stoichio_factors[gene_rev_map[gene_name]];
-            stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
-                double (burst_size * copy_number);
+            // stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
+            //     double (burst_size * copy_number);
+
+            std::map<std::string, double> map_tmp =
+                stoichio_factor_gene.rxns["transcription"].products_factors;
+
+            // for (const auto & key : map_tmp) {
+            //     std::cout << key.first << " : " << key.second << std::endl;
+            // }
+            if (map_tmp.find("mRNA") != map_tmp.end()) {
+                // std::cout << "here mRNA" << std::endl;
+                stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
+                    double (burst_size * copy_number);
+            } else {
+                if (map_tmp.find("nascent mRNA") != map_tmp.end()) {
+                    stoichio_factor_gene.rxns["transcription"].products_factors["nascent mRNA"] =
+                        double (burst_size * copy_number);
+                }
+            }
             burst_size_distribution[gene_rev_map[gene_name]] = distribution_name;
             gene_copy_number[gene_rev_map[gene_name]] = copy_number;
             gene_burst_sizes[gene_rev_map[gene_name]] = burst_size;
@@ -903,8 +920,20 @@ namespace ScnnoiseInterface {
 
     void scNNoiSE::set_reduced_model_burst_size_manual (int gene_id, double burst_size,
         double copy_number, std::string distribution_name) {
-        stoichio_factors[gene_id].rxns["transcription"].products_factors["mRNA"] =
-            double (burst_size * copy_number);
+        std::map<std::string, double> map_tmp =
+            stoichio_factors[gene_id].rxns["transcription"].products_factors;
+        if (map_tmp.find("mRNA") != map_tmp.end()) {
+            // std::cout << "mRNA" << std::endl;
+            stoichio_factors[gene_id].rxns["transcription"].products_factors["mRNA"] =
+                double (burst_size * copy_number);
+        } else {
+            if (map_tmp.find("nascent mRNA") != map_tmp.end()) {
+                // std::cout << "nascent mRNA" << std::endl;
+                stoichio_factors[gene_id].rxns["transcription"].products_factors["nascent mRNA"] =
+                    double (burst_size * copy_number);
+            }
+        }
+
         burst_size_distribution[gene_id] = distribution_name;
         gene_copy_number[gene_id] = copy_number;
         gene_burst_sizes[gene_id] = burst_size;
@@ -992,7 +1021,7 @@ namespace ScnnoiseInterface {
         // Translation rxn
         str_ = "translation";
         rxns_[str_].reactants_stoichio["mature mRNA"] = 1;
-        rxns_[str_].products_stoichio["mature   mRNA"] = 1;
+        rxns_[str_].products_stoichio["mature mRNA"] = 1;
         rxns_[str_].products_stoichio["protein"] = 1;
         // protein decay
         str_ = "protein decay";
@@ -1274,8 +1303,19 @@ namespace ScnnoiseInterface {
                 double copy_number = gene_copy_number[gene_selected];
                 stoichio_factor_struct &stoichio_factor_gene =
                     stoichio_factors[gene_selected];
-                stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
-                    double (gene_burst_sizes[gene_selected] * copy_number);
+                // stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
+                //     double (gene_burst_sizes[gene_selected] * copy_number);
+                std::map<std::string, double> map_tmp =
+                    stoichio_factor_gene.rxns["transcription"].products_factors;
+                if (map_tmp.find("mRNA") != map_tmp.end()) {
+                    stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
+                        double (gene_burst_sizes[gene_selected] * copy_number);
+                } else {
+                    if (map_tmp.find("nascent mRNA") != map_tmp.end()) {
+                        stoichio_factor_gene.rxns["transcription"].products_factors["nascent mRNA"] =
+                            double (gene_burst_sizes[gene_selected] * copy_number);
+                    }
+                }
             }
         }
     }
@@ -1351,10 +1391,11 @@ namespace ScnnoiseInterface {
     void scNNoiSE::find_random_times_to_save (RNG &generator,
         double burn_in, double max_time) {
         random_times_to_save.resize(num_points_to_collect, 0);
-        thread_local std::uniform_real_distribution<double> distribution_(burn_in + burn_in/10000,
+        std::uniform_real_distribution<double> distribution_(burn_in + 1e-4,
             max_time);
         for (auto &time_ : random_times_to_save) {
             time_ = distribution_(generator);
+            // std::cout << time_ << std::endl;
         }
         std::sort (random_times_to_save.begin(), random_times_to_save.end());
         random_times_to_save.erase( unique( random_times_to_save.begin(),

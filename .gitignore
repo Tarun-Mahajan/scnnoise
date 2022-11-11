@@ -150,3 +150,6 @@ python/
 # CLion files
 cmake-build-debug/
 .idea/
+
+# ignore results directory
+results/

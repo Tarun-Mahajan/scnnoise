@@ -1287,7 +1287,7 @@ namespace ScnnoiseInterface {
                 stoichio_factor_struct &stoichio_factor_gene =
                     stoichio_factors[gene_selected];
                 stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
-                    double (gene_burst_sizes[gene_selected] * copy_number);
+                    double (gene_burst_sizes[gene_selected]);
             }else{
             }
         }

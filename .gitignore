@@ -144,6 +144,9 @@ data/
 # Exclude build files
 tests/bin
 
+#Exclude vscode files
+.vscode
+
 # exclude directory python
 python/
 

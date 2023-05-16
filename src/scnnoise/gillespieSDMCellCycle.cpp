@@ -102,7 +102,8 @@ namespace ScnnoiseInterface {
                     // double &stoichio_ =
                     //     stoichio_factors[gene].rxns["transcription"].products_factors["mRNA"];
                     // stoichio_ *= 2;
-                    gene_copy_number[gene] *= 2;
+                    // gene_copy_number[gene] *= 2;
+                    reactions[gene].rxn_rates["transcription"] *= 2;
                 }else{
                     search_string = "constitutive";
                     found = gene_type.find(search_string);
@@ -151,7 +152,8 @@ namespace ScnnoiseInterface {
                     // double &stoichio_ =
                     //     stoichio_factors[gene].rxns["transcription"].products_factors["mRNA"];
                     // stoichio_ /= 2;
-                    gene_copy_number[gene] /= 2;
+                    // gene_copy_number[gene] /= 2;
+                    reactions[gene].rxn_rates["transcription"] /= 2;
                 }else{
                     search_string = "constitutive";
                     found = gene_type.find(search_string);

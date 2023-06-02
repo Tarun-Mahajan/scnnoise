@@ -303,7 +303,7 @@ namespace ScnnoiseInterface {
                 outfile << rxn_order[next_rxn].rxn_name << ",";
                 outfile << cur_cell_cycle_phase << ',';
                 outfile << time_next << ',';
-                outfile << "time_since_last_division" << time_since_last_division;
+                outfile << time_since_last_division << ",";
                 for (int gene = 0; gene < num_genes; ++gene) {
                     for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
                         if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
@@ -342,8 +342,7 @@ namespace ScnnoiseInterface {
                         outfile << "reaction" << ",";
                         outfile << "phase" << ",";
                         outfile << "time" << ",";
-                        outfile << "time_since_last_division" << 
-                            time_since_last_division;
+                        outfile << "time_since_last_division" << ",";
                         for (int gene = 0; gene < num_genes; ++gene) {
                           for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
                               std::string gene_type = reactions[gene].gene_type;
@@ -367,6 +366,7 @@ namespace ScnnoiseInterface {
                     outfile << cell_cycle_phase_history[id_time] << ",";
                     // outfile << time_history[(num_save_loop - 1)*num_timepoints_save + id_time] << ',';
                     outfile << time_history[id_time] << ',';
+                    outfile << time_since_last_division << ',';
                     for (int gene = 0; gene < num_genes; ++gene) {
                         for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
                             if (species == reactions[gene].molecule_count_cur.size() - 1 && gene == num_genes - 1) {
@@ -1156,7 +1156,8 @@ namespace ScnnoiseInterface {
         }
         if (!save_at_time_interval && !save_at_random_times) {
             update_molecule_count_history(num_history, num_save_loop,
-                simulation_ended, next_time_step, "transcription");
+                simulation_ended, next_time_step, "transcription", 
+                time_since_last_division);
         }
     }
 }

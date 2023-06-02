@@ -43,7 +43,8 @@ namespace ScnnoiseInterface {
 
         // Simulate.
         void simulate (bool compute_statistics = false,
-            std::string statistics_file = "dummy", bool verbose = true) override;
+            std::string statistics_file = "dummy", bool verbose = true, 
+            bool cell_cycle_sim_frozen=true) override;
 
         virtual void sort_reaction (int &rxn_selected) = 0;
 
@@ -70,7 +71,8 @@ namespace ScnnoiseInterface {
 
         // Update molecule count history
         void update_molecule_count_history (int &num_history, int &num_save_loop,
-            bool simulation_ended, double cur_time, std::string cur_rxn);
+            bool simulation_ended, double cur_time, std::string cur_rxn, 
+            double time_since_last_division);
 
         void save_molecule_count_at_interval (double time_prev, double time_next,
             double &points_collected_prev);
@@ -88,7 +90,8 @@ namespace ScnnoiseInterface {
         void write_statistics_to_file (std::string statistics_file);
 
         void save_molecule_count_at_random_times (double time_prev, double time_next,
-            unsigned int &which_random_time_saved, int next_rxn);
+            unsigned int &which_random_time_saved, int next_rxn, 
+            double time_since_last_division);
 
         void upate_running_probs (double total_time_, double next_time_step,
             unsigned int &history_num, bool &if_first_write);

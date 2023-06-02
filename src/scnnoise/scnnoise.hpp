@@ -643,7 +643,8 @@ namespace ScnnoiseInterface {
         expression. Needs to be overridden in any derived class.
         ***********************************************/
         virtual void simulate (bool compute_statistics = false,
-            std::string statistics_file = "dummy", bool verbose = true) = 0;
+            std::string statistics_file = "dummy", bool verbose = true, 
+            bool cell_cycle_sim_frozen=true) = 0;
 
         void set_simulation_params (double max_time = 10000,
             bool save_timeseries = false);

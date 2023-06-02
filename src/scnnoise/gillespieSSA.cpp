@@ -261,12 +261,14 @@ namespace ScnnoiseInterface {
     }
 
     void GillespieSSA::save_molecule_count_at_interval (double time_prev, double time_next,
-        double &points_collected_prev) {
+        double &points_collected_prev, std::string next_rxn_name) {
         if (time_next > burn_in) {
             if (((time_next - burn_in) >= (points_collected_prev + 1) * time_interval_to_save) &&
                 ((time_prev - burn_in) < (points_collected_prev + 1) * time_interval_to_save)) {
                 std::ofstream outfile;
                 outfile.open(count_save_file, std::ios_base::app);
+                outfile << next_rxn_name << ",";
+                outfile << get_cur_cell_cycle_state() << ",";
                 outfile << time_next << ',';
                 for (int gene = 0; gene < num_genes; ++gene) {
                     for (int species = 0; species < reactions[gene].molecule_count_cur.size(); ++species) {
@@ -1099,7 +1101,7 @@ namespace ScnnoiseInterface {
                 if (save_at_time_interval || save_at_random_times) {
                     if (save_at_time_interval) {
                         save_molecule_count_at_interval(cur_time, total_time,
-                            points_collected_prev);
+                            points_collected_prev, next_rxn_name);
                     }else{
                         if (save_at_random_times && is_steady_state_reached) {
                             save_molecule_count_at_random_times(cur_time, total_time,

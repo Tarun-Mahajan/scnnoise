@@ -14,11 +14,14 @@
 
 
 namespace ScnnoiseInterface {
-  /********************************************//**
-   \brief Struct to store information for each reaction in
-          the reaction order list.
-   ***********************************************/
+    /**
+    * A struct for reaction order.
+    *
+    */
     struct rxn_order_struct {
+        /**
+        * numeric ID of gene
+        */
         int gene_id;
         std::string rxn_name;
         double propensity_val;

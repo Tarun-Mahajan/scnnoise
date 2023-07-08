@@ -835,6 +835,7 @@ namespace ScnnoiseInterface {
         gene_info.gene_rxn_dependency[0].add_edge(1, 1);
         gene_info.gene_rxn_dependency[0].add_edge(1, 2);
         gene_info.gene_rxn_dependency[0].add_edge(2, 3);
+        gene_info.gene_rxn_dependency[0].add_edge(3, 3);
         gene_info.gene_rxn_dependency[0].add_edge(3, 4);
         gene_info.gene_rxn_dependency[0].add_edge(3, 5);
         gene_info.gene_rxn_dependency[0].add_edge(4, 4);

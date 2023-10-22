@@ -325,6 +325,10 @@ namespace ScnnoiseInterface {
                 while (cell_cycle_length <= 0) {
                     cell_cycle_length = distribution(generator);
                 }
+            } else if (cell_cycle_params.distribution_ == "fixed") {
+                double alpha_ = cell_cycle_params.distribution_params["alpha"];
+                double beta_ = cell_cycle_params.distribution_params["beta"];
+                cell_cycle_length = alpha_ * beta_;
             }
         }
     }

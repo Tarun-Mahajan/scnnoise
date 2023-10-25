@@ -323,12 +323,14 @@ namespace ScnnoiseInterface {
                 thread_local std::gamma_distribution<double> distribution(alpha_,
                     beta_);
                 while (cell_cycle_length <= 0) {
-                    cell_cycle_length = distribution(generator);
+                    cell_cycle_length = distribution(generator) * 
+                        cell_cycle_params.distribution_params["multiplicative_factor"];
                 }
             } else if (cell_cycle_params.distribution_ == "fixed") {
                 double alpha_ = cell_cycle_params.distribution_params["alpha"];
                 double beta_ = cell_cycle_params.distribution_params["beta"];
-                cell_cycle_length = alpha_ * beta_;
+                cell_cycle_length = alpha_ * beta_ * 
+                    cell_cycle_params.distribution_params["multiplicative_factor"];
             }
         }
     }

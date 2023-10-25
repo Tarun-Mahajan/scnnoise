@@ -16,7 +16,7 @@ namespace ScnnoiseInterface {
     };
 
     const std::map<std::string, double> distribution_params_init =
-        {{"alpha", 12.0}, {"beta", 1.0/0.0083}};
+        {{"alpha", 12.0}, {"beta", 1.0/0.0083}, {"multiplicative_factor", 1.0}};
     /********************************************//**
     \brief A class for Gillespie's stochastic simulation algorithm.
 

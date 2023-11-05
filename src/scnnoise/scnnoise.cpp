@@ -1285,9 +1285,9 @@ namespace ScnnoiseInterface {
             if (burst_size_distribution[gene_selected] == "geometric") {
                 std::geometric_distribution<int> distribution_(double(1.0/(1.0 + burst_size)));
                 gene_burst_sizes[gene_selected] = distribution_(generator);
-                stoichio_factor_struct &stoichio_factor_gene =
-                    stoichio_factors[gene_selected];
-                stoichio_factor_gene.rxns["transcription"].products_factors["mRNA"] =
+                // stoichio_factor_struct &stoichio_factor_gene =
+                //     stoichio_factors[gene_selected];
+                stoichio_factors[gene_selected].rxns["transcription"].products_factors["mRNA"] =
                     double (gene_burst_sizes[gene_selected]);
             }else{
             }

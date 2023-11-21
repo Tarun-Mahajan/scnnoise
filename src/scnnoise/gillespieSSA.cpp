@@ -927,7 +927,7 @@ namespace ScnnoiseInterface {
     }
 
     void GillespieSSA::simulate (bool compute_statistics, std::string statistics_file_full,
-        bool verbose, bool cell_cycle_sim_frozen) {
+        bool verbose, bool cell_cycle_sim_frozen, bool init_dosage_comp_adj) {
         // start_molecule_count_history_file();
         double count_rxns_num = 0;
         double statistics_start_time = 0;
@@ -957,7 +957,7 @@ namespace ScnnoiseInterface {
         init_rxn_order();
         std::string tmp = get_cur_cell_cycle_state();
         // std::cout << "cur phase = " << reactions[0].rxn_rates["gene on"] << std::endl;
-        init_cell_cycle_state (generator[0], 0);
+        init_cell_cycle_state (generator[0], 0, init_dosage_comp_adj);
         std::string cur_cell_cycle_phase = get_cur_cell_cycle_state();
         // std::cout << "cur phase2 = " << reactions[0].rxn_rates["gene on"] << std::endl;
         compute_total_propensity();

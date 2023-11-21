@@ -647,7 +647,8 @@ namespace ScnnoiseInterface {
         ***********************************************/
         virtual void simulate (bool compute_statistics = false,
             std::string statistics_file = "dummy", bool verbose = true, 
-            bool cell_cycle_sim_frozen=true) = 0;
+            bool cell_cycle_sim_frozen=true, 
+            bool init_dosage_comp_adj=true) = 0;
 
         void set_simulation_params (double max_time = 10000,
             bool save_timeseries = false);

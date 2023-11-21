@@ -44,7 +44,8 @@ namespace ScnnoiseInterface {
         // Simulate.
         void simulate (bool compute_statistics = false,
             std::string statistics_file = "dummy", bool verbose = true, 
-            bool cell_cycle_sim_frozen=true) override;
+            bool cell_cycle_sim_frozen=true, 
+            bool init_dosage_comp_adj=true) override;
 
         virtual void sort_reaction (int &rxn_selected) = 0;
 
@@ -53,7 +54,8 @@ namespace ScnnoiseInterface {
 
         virtual std::string get_cur_cell_cycle_state () = 0;
 
-        virtual void init_cell_cycle_state (RNG &generator, double cur_time) = 0;
+        virtual void init_cell_cycle_state (RNG &generator, double cur_time, 
+            bool init_dosage_comp_adj=true) = 0;
 
         // Update molecule count for reactants belonging to the fired reaction
         // channel

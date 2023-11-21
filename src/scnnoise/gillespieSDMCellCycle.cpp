@@ -343,30 +343,35 @@ namespace ScnnoiseInterface {
         this->cell_cycle_start_time = this->cur_time;
     }
 
-    void gillespieSDMCellCycle::move_to_G1 (RNG &generator) {
+    void gillespieSDMCellCycle::move_to_G1 (RNG &generator, 
+        bool init_dosage_comp_adj) {
         cell_division(generator);
-        remove_dosage_compensation();
+        if (init_dosage_comp_adj) {
+            remove_dosage_compensation();
+        }
         update_propensity_cell_division();
         compute_total_propensity();
         current_cell_cycle_state = "G1";
     }
 
-    void gillespieSDMCellCycle::move_to_G2 () {
+    void gillespieSDMCellCycle::move_to_G2 (bool init_dosage_comp_adj) {
         replicate_genes();
-        perform_dosage_compensation();
+        if (init_dosage_comp_adj) {
+            perform_dosage_compensation();
+        }
         update_propensity_cell_division();
         compute_total_propensity();
         current_cell_cycle_state = "G2";
     }
 
     void gillespieSDMCellCycle::init_cell_cycle_state (RNG &generator,
-        double cur_time) {
+        double cur_time, bool init_dosage_comp_adj) {
         if (!is_frozen_cell_cycle) {
             if (current_cell_cycle_state.empty()) {
                 current_cell_cycle_state = "G1";
             }else{
                 if (current_cell_cycle_state == "G2") {
-                    move_to_G1(generator);
+                    move_to_G1(generator, init_dosage_comp_adj);
                 }
             }
         }else{
@@ -374,7 +379,7 @@ namespace ScnnoiseInterface {
                 if (frozen_state == "G1") {
                     current_cell_cycle_state = "G1";
                 }else{
-                    move_to_G2();
+                    move_to_G2(init_dosage_comp_adj);
                 }
             }else{
                 if (current_cell_cycle_state == "G1") {

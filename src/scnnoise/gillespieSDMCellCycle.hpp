@@ -62,7 +62,8 @@ namespace ScnnoiseInterface {
         void set_dosage_compensation (
             std::vector<double> dosage_compensation);
 
-        void init_cell_cycle_state (RNG &generator, double cur_time) override;
+        void init_cell_cycle_state (RNG &generator, double cur_time, 
+            bool init_dosage_comp_adj=true) override;
         void cell_division (RNG& generator);
         void remove_dosage_compensation ();
         void update_propensity_cell_cycle ();
@@ -77,8 +78,8 @@ namespace ScnnoiseInterface {
         void swap_rxn_order (rxn_order_struct &A, rxn_order_struct &B);
         void set_cell_cycle_frozen_state (bool is_frozen_cell_cycle = false,
             std::string frozen_state = "G2");
-        void move_to_G1 (RNG &generator);
-        void move_to_G2 ();
+        void move_to_G1 (RNG &generator, bool init_dosage_comp_adj=true);
+        void move_to_G2 (bool init_dosage_comp_adj=true);
         std::string get_cur_cell_cycle_state () override;
     };
 }

@@ -1054,8 +1054,31 @@ namespace ScnnoiseInterface {
                 //     total_propensity << std::endl;
                 // }
                 prev_cell_cycle_state = cur_cell_cycle_phase;
+                double g_off = reactions[0].molecule_count_cur[0];
+                double g_on = reactions[0].molecule_count_cur[1];
                 update_cell_cycle_state(total_time, cur_time, generator[0]);
                 cur_cell_cycle_phase = get_cur_cell_cycle_state();
+                double g_off_new = reactions[0].molecule_count_cur[0];
+                double g_on_new = reactions[0].molecule_count_cur[1];
+                // if ((cur_cell_cycle_phase == "G1") && 
+                //     (g_off_new + g_on_new <= 1) && (g_off + g_on == 2)) {
+                //     std::cout << "error found G1 phase " << g_off_new << " " <<
+                //         g_on_new << " prev phase = " << 
+                //         prev_cell_cycle_state << " total time " <<
+                //         total_time << " cur time = " << cur_time <<
+                //         "time_since_last_division " << time_since_last_division << std::endl;
+                //     }
+                // if ((prev_cell_cycle_state == "G2") && \
+                //     cur_cell_cycle_phase == "G1") {
+                //     std::cout << "state change to G1, time = " << 
+                //         total_time << std::endl;
+                //     std::cout << "gene off " << 
+                //         reactions[0].molecule_count_cur[0] << std::endl;
+                //     std::cout << "gene on " << 
+                //         reactions[0].molecule_count_cur[1] << std::endl;
+                //     std::cout << "g_on = " << g_on << std::endl;
+                //     std::cout << "g_off = " << g_off << std::endl;
+                // }
                 if (!cell_cycle_sim_frozen) {
                     if ((prev_cell_cycle_state == "G1") && 
                         (cur_cell_cycle_phase == "G1")) {

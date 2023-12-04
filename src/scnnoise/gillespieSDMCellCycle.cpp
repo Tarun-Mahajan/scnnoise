@@ -263,10 +263,16 @@ namespace ScnnoiseInterface {
     }
 
     void gillespieSDMCellCycle::check_if_replication () {
-        if (cur_time < cell_cycle_start_time +
-            cell_cycle_length * cell_cycle_params.replication_time_factor &&
-            next_time > cell_cycle_start_time +
-            cell_cycle_length * cell_cycle_params.replication_time_factor) {
+        // if (cur_time < cell_cycle_start_time +
+        //     cell_cycle_length * cell_cycle_params.replication_time_factor &&
+        //     next_time >= cell_cycle_start_time +
+        //     cell_cycle_length * cell_cycle_params.replication_time_factor)
+        int cycle_num = cur_time / cell_cycle_length;
+        if ((cur_time < cell_cycle_length * double(cycle_num) +
+            cell_cycle_length * cell_cycle_params.replication_time_factor ) &&
+            (next_time >= cell_cycle_length * double(cycle_num) +
+            cell_cycle_length * cell_cycle_params.replication_time_factor) && 
+            (next_time < cell_cycle_length * double(cycle_num + 1))) {
                 replicate_genes();
                 perform_dosage_compensation();
                 update_propensity_cell_division();
@@ -276,9 +282,17 @@ namespace ScnnoiseInterface {
     }
 
     void gillespieSDMCellCycle::check_if_division (RNG& generator) {
-        if (cur_time < cell_cycle_start_time + cell_cycle_length &&
-            next_time > cell_cycle_start_time + cell_cycle_length) {
-                cell_division(generator);
+        // if (cur_time < cell_cycle_start_time + cell_cycle_length &&
+        //     next_time > cell_cycle_start_time + cell_cycle_length)
+        int cycle_num = cur_time / cell_cycle_length;
+        if (cur_time < cell_cycle_length * double(cycle_num + 1) &&
+            next_time >= cell_cycle_length * double(cycle_num + 1)) {
+                if ((cur_time > cell_cycle_length * double(cycle_num) + 
+                    cell_cycle_length * cell_cycle_params.replication_time_factor) && 
+                    (next_time < cell_cycle_length * double(cycle_num + 1) + 
+                    cell_cycle_length * cell_cycle_params.replication_time_factor)) {
+                        cell_division(generator);
+                    }
                 remove_dosage_compensation();
                 update_propensity_cell_division();
                 // compute_total_propensity();
@@ -384,11 +398,11 @@ namespace ScnnoiseInterface {
             }else{
                 if (current_cell_cycle_state == "G1") {
                     if (frozen_state == "G2") {
-                        move_to_G2();
+                        move_to_G2(init_dosage_comp_adj);
                     }
                 }else{
                     if (frozen_state == "G1") {
-                        move_to_G1(generator);
+                        move_to_G1(generator, init_dosage_comp_adj);
                     }
                 }
             }

@@ -1073,6 +1073,45 @@ namespace ScnnoiseInterface {
         return gene_info;
     }
 
+    gene_type_struct scNNoiSE::create_two_state_reduced_nascent_mRNA_type () {
+        gene_type_struct gene_info;
+        // Species are 0:nascent mRNA, 1:mature mRNA, 2:protein
+        gene_info.species_rev_map["nascent mRNA"] = 0;
+        gene_info.species_rev_map["mature mRNA"] = 1;
+        for (auto const &it : gene_info.species_rev_map) {
+            gene_info.species_map[it.second] = it.first;
+        }
+        gene_info.num_species = gene_info.species_map.size();
+        // Reactions are 0:gene on, 1:gene off 2:transcription, 3:mRNA decay,
+        // 4:translation, 5:protein decay
+        gene_info.rxn_map[0] = "transcription";
+        gene_info.rxn_map[1] = "maturation";
+        gene_info.rxn_map[2] = "mRNA decay";
+        for (auto const &it : gene_info.rxn_map) {
+            gene_info.rxn_rev_map[it.second] = it.first;
+        }
+        gene_info.num_rxns = gene_info.rxn_map.size();
+        std::map<std::string, rxn_struct> rxns_;
+        // Transcription
+        std::string str_ = "transcription";
+        rxns_[str_].products_stoichio["nascent mRNA"] = 1;
+        // mRNA maturation
+        str_ = "maturation";
+        rxns_[str_].reactants_stoichio["nascent mRNA"] = 1;
+        rxns_[str_].products_stoichio["mature mRNA"] = 1;
+        // mRNA decay
+        str_ = "mRNA decay";
+        rxns_[str_].reactants_stoichio["mature mRNA"] = 1;
+        gene_info.rxns = rxns_;
+        gene_info.gene_rxn_dependency.push_back(
+            GraphSpace::GraphDependency(gene_info.num_rxns));
+        gene_info.gene_rxn_dependency[0].add_edge(0, 1);
+        gene_info.gene_rxn_dependency[0].add_edge(1, 1);
+        gene_info.gene_rxn_dependency[0].add_edge(1, 2);
+        gene_info.gene_rxn_dependency[0].add_edge(2, 2);
+        return gene_info;
+    }
+
     void scNNoiSE::create_init_gene_type_info () {
         gene_type_info["constitutive"] = create_constitutive_type();
         gene_type_info["constitutive nascent"] = create_constitutive_nascent_type();
@@ -1082,6 +1121,8 @@ namespace ScnnoiseInterface {
         gene_type_info["two-state reduced nascent"] =
             create_two_state_reduced_nascent_type();
         gene_type_info["two-state reduced mRNA"] = create_two_state_reduced_mRNA_type();
+        gene_type_info["two-state reduced nascent mRNA"] = 
+            create_two_state_reduced_nascent_mRNA_type();
         gene_type_info["two-state mRNA"] = create_two_state_mRNA_type();
         gene_type_info["two-state two-gene cascade"] =
             create_two_state_two_gene_cascade_activation_type();

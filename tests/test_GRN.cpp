@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "test_utils.hpp"
+#include "utils.hpp"
 #include "test_GRN_global_variables.hpp"
 // #include "../src/scnnoise/graph_derived.hpp"
 

@@ -3,7 +3,7 @@
 #include <catch2/catch_all.hpp>
 #include <catch2/internal/catch_clara.hpp>
 #include <string>
-#include "test_utils.hpp"
+// #include "test_utils.hpp"
 #include "test_GRN_global_variables.hpp"
 
 std::string GRN_filepath = "temp";

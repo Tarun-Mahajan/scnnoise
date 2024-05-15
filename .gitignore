@@ -139,10 +139,18 @@ _generate/
 data/testing_temp/
 data/output/
 data/
+data/output/
+data/
 
 
 # Exclude build files
 tests/bin
+
+#Exclude vscode files
+.vscode
+
+# exclude directory python
+python/
 
 # CLion files
 cmake-build-debug/
@@ -153,3 +161,6 @@ cmake-build-debug/
 
 # ignore directory named python
 python/
+
+# ignore results directory
+results/

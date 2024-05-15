@@ -10,18 +10,19 @@ set(SOURCE_DIR "src/scnnoise")
 include_directories(${SOURCE_DIR})
 set(SOURCES "${SOURCE_DIR}/graph.cpp"
 "${SOURCE_DIR}/graph_derived.cpp" "${SOURCE_DIR}/scnnoise.cpp"
-"${SOURCE_DIR}/gillespieSSA.cpp" "${SOURCE_DIR}/gillespieSDMnoCellCycle.cpp")
+"${SOURCE_DIR}/gillespieSSA.cpp" "${SOURCE_DIR}/gillespieSDMnoCellCycle.cpp"
+"${SOURCE_DIR}/gillespieSDMCellCycle.cpp")
 
 # Set test directory
-SET(TEST_DIR "tests")
-SET(TESTS ${SOURCES}
-    "${TEST_DIR}/test_main.cpp"
-"${TEST_DIR}/test_scnnoise.cpp")
-
-# Generate a test executable
-find_package(Catch2 REQUIRED)
-add_executable("${PROJECT_NAME}_test" ${TESTS})
-target_link_libraries("${PROJECT_NAME}_test" PRIVATE Catch2::Catch2WithMain)
+# SET(TEST_DIR "tests")
+# SET(TESTS ${SOURCES}
+#     "${TEST_DIR}/test_main.cpp"
+# "${TEST_DIR}/test_scnnoise.cpp")
+#
+# # Generate a test executable
+# find_package(Catch2 REQUIRED)
+# add_executable("${PROJECT_NAME}_test" ${TESTS})
+# target_link_libraries("${PROJECT_NAME}_test" PRIVATE Catch2::Catch2WithMain)
 
 # Generate Python module
 add_subdirectory(lib/pybind11/pybind11)

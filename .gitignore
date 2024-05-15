@@ -147,3 +147,9 @@ tests/bin
 # CLion files
 cmake-build-debug/
 .idea/
+
+# ignore .vscode
+.vscode/
+
+# ignore directory named python
+python/

@@ -13,20 +13,37 @@
 
 
 
+/**
+ * \file scnnoise.hpp
+ * \brief Contains the definition of various structs and classes used in the scNNoiSE library.
+ */
+
+
 namespace ScnnoiseInterface {
+
     /**
-    * A struct for reaction order.
-    *
-    */
+     * \struct rxn_order_struct
+     * \brief A struct for reaction order.
+     *
+     * This struct represents the order of a reaction and contains the following members:
+     * - gene_id: Numeric ID of the gene.
+     * - rxn_name: Name of the reaction.
+     * - propensity_val: Propensity value of the reaction.
+     */
     struct rxn_order_struct {
-        /**
-        * numeric ID of gene
-        */
         int gene_id;
         std::string rxn_name;
         double propensity_val;
     };
 
+    /**
+     * \struct rxn_struct
+     * \brief A struct for a chemical reaction.
+     *
+     * This struct represents a chemical reaction and contains the following members:
+     * - reactants_stoichio: A map of reactant species and their stoichiometric coefficients.
+     * - products_stoichio: A map of product species and their stoichiometric coefficients.
+     */
     struct rxn_struct {
         // std::vector<int> reactants;
         // std::vector<int> products;
@@ -36,6 +53,20 @@ namespace ScnnoiseInterface {
         // double propensity_val;
     };
 
+    /**
+     * \struct gene_type_struct
+     * \brief A struct representing a gene type.
+     *
+     * This struct represents a gene type and contains the following members:
+     * - num_rxns: Number of reactions associated with the gene type.
+     * - num_species: Number of species associated with the gene type.
+     * - species_rev_map: A map of species names to their integer IDs.
+     * - species_map: A map of integer IDs to species names.
+     * - rxn_rev_map: A map of reaction names to their integer IDs.
+     * - rxn_map: A map of integer IDs to reaction names.
+     * - rxns: A map of reaction names to their corresponding rxn_struct.
+     * - gene_rxn_dependency: A vector of GraphSpace::GraphDependency representing the dependency graph of gene reactions.
+     */
     struct gene_type_struct {
         unsigned int num_rxns;
         unsigned int num_species;
@@ -47,6 +78,14 @@ namespace ScnnoiseInterface {
         std::vector<GraphSpace::GraphDependency> gene_rxn_dependency;
     };
 
+    /**
+     * \struct stoichio_factor_species_struct
+     * \brief A struct representing stoichiometric factors for a species in a reaction.
+     *
+     * This struct represents the stoichiometric factors for a species in a reaction and contains the following members:
+     * - reactants_factors: A map of reactant species and their stoichiometric factors.
+     * - products_factors: A map of product species and their stoichiometric factors.
+     */
     struct stoichio_factor_species_struct {
         // std::vector<int> reactants;
         // std::vector<int> products;
@@ -56,6 +95,13 @@ namespace ScnnoiseInterface {
         // double propensity_val;
     };
 
+    /**
+     * \struct stoichio_factor_struct
+     * \brief A struct representing stoichiometric factors for reactions.
+     *
+     * This struct represents the stoichiometric factors for reactions and contains the following members:
+     * - rxns: A map of reaction names to their corresponding stoichio_factor_species_struct.
+     */
     struct stoichio_factor_struct {
         // std::vector<int> reactants;
         // std::vector<int> products;
@@ -64,162 +110,19 @@ namespace ScnnoiseInterface {
         // double propensity_val;
     };
 
-  /********************************************//**
-   \brief Struct to store information for all reaction
-          channels for a gene.
-
-   The data members of the struct are:
-
-   1. gene_type -- An integer to identify whether the node is a
-   gene or an miRNA. Further, it also identifies
-   whether the gene is producing only mRNA or both
-   nascent and mature mRNA. The node is labeled by
-   an integer representing a unique string.
-   The potential string labels and their corresponding integer labels
-   are as follows:
-   0 : 'GMP' : gene transcribes mRNA which translates into
-   protein. 4 and 6 species and reactions in the chemical reaction
-   network, respectively.
-   1 : 'GNMP' : gene transcribes nascent mRNA which processes
-   into mature mRNA. Mature mRNA is translated into
-   protein. For \f$n\f$ alternatively spliced mature mRNA,
-   there are \f$2 + 2n\f$ and \f$2 + 4n\f$ chemical species and reactions in the
-   chemical reaction network, respectively.
-   2 : 'Mi' : gene transcribes nascent miRNA, which is processed
-   into mature miRNA.  4 and 5 species and reactions in the chemical
-   reaction network, respectively.
-   3 : 'GNMP-Mihost' : gene transcribes nascent mRNA which processes
-   into mature mRNA and nascent miRNA. Mature mRNA is translated into
-   protein. Nascent miRNA is processed into mature miRNA.
-   For \f$n\f$ alternatively spliced mature mRNA,
-   there are \f$4 + 2n\f$ and \f$4 + 4n\f$ chemical species and reactions in the
-   chemical reaction network, respectively.
-
-   2. num_splice_variants -- number of alternatively spliced (AS) mature mRNA
-   species.
-
-   3. GRN_rxn_IN -- vector of integer IDs for chemical reactions for which reaction
-   rate is affected by the GRN GRN_species_OUT
-
-   4. GRN_species_OUT -- vector of integer IDs for chemical species which cause
-   regulation in the GRN
-
-   5. rxn_type -- a vector to identify reaction type for all the reaction
-   channels for the gene. Each integer in the vector
-   corresponds to a single reaction channel.
-   For 'GMP'--
-   0 : promoter activation-- promoter switches from the off to the on
-                           state
-   1 : promoter inactivation -- promoter switches from the on to the off
-                              state
-   2 : transcription of mRNA
-   3 : mRNA degradation
-   4 : protein translation from mRNA
-   5 : protein degradation
-
-   In the following, \f$n\f$ is the number of alternatively spliced (AS)
-   mRNAs
-   For 'GNMP' --
-   0 : promoter activation-- promoter switches from the off to the on
-       state
-   1 : promoter inactivation -- promoter switches from the on to the off
-       state
-   2 : transcription of nascent mRNA
-   3 : maturation of nascent mRNA into ASed mature mRNA 1
-   ...
-   2 + n : maturation of nascent mRNA into ASed mature mRNA n
-   3 + n : degradation ASed mature mRNA 1
-   ...
-   2 + 2n : degradation ASed mature mRNA n
-   3 + 2n : protein translation from ASed mature mRNA 1
-   ...
-   2 + 3n : protein translation from ASed mature mRNA n
-   3 + 3n : protein degradation from ASed protein 1
-   ...
-   2 + 4n : protein degradation from ASed protein n
-
-   For 'Mi' --
-   0 : promoter activation-- promoter switches from the off to the on
-       state
-   1 : promoter inactivation -- promoter switches from the on to the off
-       state
-   2 : transcription of nascent miRNA
-   3 : maturation of nascent miRNA to mature miRNA
-   4 : mature miRNA degradation
-
-   In the following, \f$n\f$ is the number of alternatively spliced (AS)
-   mRNAs
-   For 'GNMP-Mihost' --
-   0 : promoter activation-- promoter switches from the off to the on
-       state
-   1 : promoter inactivation -- promoter switches from the on to the off
-       state
-   2 : transcription of nascent mRNA
-   3 : maturation of nascent mRNA into ASed mature mRNA 1 and nascent
-       miRNA-host
-   ...
-   2 + n : maturation of nascent mRNA into ASed mature mRNA n  and
-           nascent miRNA-host
-   3 + n : degradation ASed mature mRNA 1
-   ...
-   2 + 2n : degradation ASed mature mRNA n
-   3 + 2n : protein translation from ASed mature mRNA 1
-   ...
-   2 + 3n : protein translation from ASed mature mRNA n
-   3 + 3n : protein degradation from ASed protein 1
-   ...
-   2 + 4n : protein degradation from ASed protein n
-   3 + 4n : maturation of nascent miRNA-host into mature miRNA-host
-   4 + 4n : degradation of mature miRNA-host
-
-   6. rxns a vector of structs which store stoichiometry and rate
-   information for all the reaction channels for the gene. Each struct
-   in the vector corresponds to a single reaction channel.
-
-   7. molecule_count_cur vector of current molecule count for chemical
-   species related to the gene. The order of the chemical species in
-   vector, depedning on the gene type, is as follows:
-   For 'GMP'--
-   0 : promoter active state
-   1 : promoter inactive state
-   2 : mRNA
-   3 : protein
-
-   In the following, \f$n\f$ is the number of alternatively spliced (AS)
-   mRNAs
-   For 'GNMP' --
-   0 : promoter active state
-   1 : promoter inactive state
-   2 : nascent mRNA
-   3 : ASed mature mRNA 1
-   ...
-   2 + n : ASed mature mRNA n
-   3 + n : protein from ASed mature mRNA 1
-   ...
-   2 + 2n : protein from ASed mature mRNA n
-
-   For 'Mi' --
-   0 : promoter active state
-   1 : promoter inactive state
-   2 : nascent miRNA
-   3 : mature miRNA
-
-   In the following, \f$n\f$ is the number of alternatively spliced (AS)
-   mRNAs
-   For 'GNMP-Mihost' --
-   0 : promoter active state
-   1 : promoter inactive state
-   2 : nascent mRNA
-   3 : ASed mature mRNA 1
-   ...
-   2 + n : ASed mature mRNA n
-   3 + n : protein from ASed mature mRNA 1
-   ...
-   2 + 2n : protein from ASed mature mRNA n
-   3 + 2n : nascent miRNA-host
-   4 + 2n : mature miRNA-host
-
-   ***********************************************/
+    /**
+     * \struct gene_rxn_channel_struct
+     * \brief A struct representing information for all reaction channels for a gene.
+     *
+     * This struct represents information for all reaction channels for a gene and contains the following members:
+     * - gene_name: Name of the gene.
+     * - gene_type: Type of the gene.
+     * - GRN_rxn_IN: A vector of reaction names for which reaction rate is affected by the GRN.
+     * - GRN_species_OUT: A vector of species names which cause regulation in the GRN.
+     * - rxn_rates: A map of reaction names to their corresponding rates.
+     * - molecule_count_cur: A vector of current molecule counts for chemical species related to the gene.
+     * - propensity_vals: A map of reaction names to their corresponding propensity values.
+     */
     struct gene_rxn_channel_struct {
         std::string gene_name;
         std::string gene_type;
@@ -232,38 +135,26 @@ namespace ScnnoiseInterface {
         std::map<std::string, double> propensity_vals;
     };
 
+    /**
+     * \struct molecule_history_struct
+     * \brief A struct representing the history of molecule counts.
+     *
+     * This struct represents the history of molecule counts and contains the following members:
+     * - molecule_count: A vector of vectors representing the molecule counts at different time points.
+     */
     struct molecule_history_struct {
         std::vector<std::vector<int>> molecule_count;
     };
 
     class scNNoiSE {
     public:
-        typedef std::mt19937 RNG;
-    /* data */
-        std::vector<RNG> generator;
-        /********************************************//**
-        \brief Number of chemical reaction channels.
-
-        This is the total number of unique chemical
-        reaction channels that are present in the  user
-        provided chemical reaction network.
-         ***********************************************/
-        int num_rxns;
-
-        /********************************************//**
-        \brief Number of nodes in GRN.
-
-        This is the total number of unique chemical
-        species that are present in the user
-        provided GRN.
-         ***********************************************/
-        int num_genes;
-
-        std::map<std::string, gene_type_struct> gene_type_info;
-
-        std::map<int, std::string> gene_map;
-
-        std::map<std::string, int> gene_rev_map;
+        typedef std::mt19937 RNG; // Mersenne Twister 19937 generator
+        std::vector<RNG> generator; // random number generator
+        int num_rxns; // number of reactions
+        int num_genes; // number of genes
+        std::map<std::string, gene_type_struct> gene_type_info; // gene type information
+        std::map<int, std::string> gene_map; // gene map
+        std::map<std::string, int> gene_rev_map; // gene reverse map
 
         /********************************************//**
          \brief Dependency graph for reaction channels for
@@ -307,79 +198,7 @@ namespace ScnnoiseInterface {
         std::vector<GraphSpace::GRN> network;
 
         bool keep_GRN;
-
-        /********************************************//**
-        \brief Map to store all the reaction channels
-
-        A map of maps that stores information about the reaction
-        channels. For each reaction channel, the different
-        keys are--'Gene', 'reaction', 'reactants', 'products', 'reactant stoichiometry',
-        'product stoichiometry', 'dependent'. For the 'reaction' key, the different reaction types
-        are encoded with the following types along with their integer keys:
-
-        For 'GMP'--
-        0 : promoter activation-- promoter switches from the off to the on
-                             state
-        1 : promoter inactivation -- promoter switches from the on to the off
-                                state
-        2 : transcription of mRNA
-        3 : mRNA degradation
-        4 : protein translation from mRNA
-        5 : protein degradation
-
-        In the following, \f$n\f$ is the number of alternatively spliced (AS) mRNAs
-        For 'GNMP' --
-        0 : promoter activation-- promoter switches from the off to the on
-                             state
-        1 : promoter inactivation -- promoter switches from the on to the off
-                                state
-        2 : transcription of nascent mRNA
-        3 : maturation of nascent mRNA into ASed mature mRNA 1
-        ...
-        2 + n : maturation of nascent mRNA into ASed mature mRNA n
-        3 + n : degradation ASed mature mRNA 1
-        ...
-        2 + 2n : degradation ASed mature mRNA n
-        3 + 2n : protein translation from ASed mature mRNA 1
-        ...
-        2 + 3n : protein translation from ASed mature mRNA n
-        3 + 3n : protein degradation from ASed protein 1
-        ...
-        2 + 4n : protein degradation from ASed protein n
-
-        For 'Mi' --
-        0 : promoter activation-- promoter switches from the off to the on
-                             state
-        1 : promoter inactivation -- promoter switches from the on to the off
-                                state
-        2 : transcription of nascent miRNA
-        3 : maturation of nascent miRNA to mature miRNA
-        4 : mature miRNA degradation
-
-        In the following, \f$n\f$ is the number of alternatively spliced (AS) mRNAs
-        For 'GNMP-Mihost' --
-        0 : promoter activation-- promoter switches from the off to the on
-                             state
-        1 : promoter inactivation -- promoter switches from the on to the off
-                                state
-        2 : transcription of nascent mRNA
-        3 : maturation of nascent mRNA into ASed mature mRNA 1 and nascent miRNA-host
-        ...
-        2 + n : maturation of nascent mRNA into ASed mature mRNA n  and nascent miRNA-host
-        3 + n : degradation ASed mature mRNA 1
-        ...
-        2 + 2n : degradation ASed mature mRNA n
-        3 + 2n : protein translation from ASed mature mRNA 1
-        ...
-        2 + 3n : protein translation from ASed mature mRNA n
-        3 + 3n : protein degradation from ASed protein 1
-        ...
-        2 + 4n : protein degradation from ASed protein n
-        3 + 4n : maturation of nascent miRNA-host into mature miRNA-host
-        4 + 4n : degradation of mature miRNA-host
-        ***********************************************/
-        // std::map<int, std::map<std:string, std::vector<int>>> reactions;
-        // std::vector<std::map<int, std::map<std:string, std::vector<int>>>> reactions;
+        
         std::vector<gene_rxn_channel_struct> reactions;
 
         std::vector<stoichio_factor_struct> stoichio_factors;

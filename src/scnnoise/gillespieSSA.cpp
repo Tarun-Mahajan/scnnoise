@@ -128,7 +128,7 @@ namespace ScnnoiseInterface {
   //     }
   //   }
 
-    std::vector<std::string> GillespieSSA::update_fired_reaction (int rxn_selected) {
+    std::vector<std::string> GillespieSSA::update_fired_reaction (int rxn_selected, RNG &generator) {
         /*
         Find the gene and reaction type for the selected reaction channel. Extract the reactants,
         products and their stoichiometric coefficients for the selected reaction channel.
@@ -189,9 +189,33 @@ namespace ScnnoiseInterface {
         for (auto const &products_ : gene_info.rxns[rxn_name].products_stoichio) {
             double product_factor =
                 stoichio_factors[gene_selected].rxns[rxn_name].products_factors[products_.first];
+            if (rxn_name == "transcription") {
+                int gene_selected = rxn_order[rxn_selected].gene_id;
+                // std::string rxn_name = rxn_order[rxn_selected].rxn_name;
+                std::string gene_type = reactions[gene_selected].gene_type;
+
+                std::size_t found = gene_type.find("reduced");
+                if (found != std::string::npos) {
+                    double burst_size = burst_sizes_mean[gene_selected];
+                    double copy_number = gene_copy_number[gene_selected];
+                    // std::cout << "mean bursting = " << burst_size << std::endl;
+                    if (burst_size_distribution[gene_selected] == "geometric") {
+                        std::geometric_distribution<int> distribution_(double(1.0/(1.0 + burst_size)));
+                        int burst_size_sample = distribution_(generator);
+                        // stoichio_factor_struct &stoichio_factor_gene =
+                        //     stoichio_factors[gene_selected];
+                        product_factor = double(burst_size_sample);
+                    }else{
+                    }
+                }
+            }
+
             int product_id = gene_info.species_rev_map[products_.first];
             auto it = gene_info.rxns[rxn_name].reactants_stoichio.find(products_.first);
             if (it == gene_info.rxns[rxn_name].reactants_stoichio.end()) {
+                // if (rxn_name == "transcription") {
+                //     std::cout << "bursting = " << product_factor << std::endl;
+                // }
                 reactions[gene_selected].molecule_count_cur[product_id] +=
                     int (products_.second * product_factor);
                 if (keep_GRN) {
@@ -1117,12 +1141,12 @@ namespace ScnnoiseInterface {
                 next_rxn_name =
                     std::to_string(rxn_order[next_rxn].gene_id) +
                     connector_ + rxn_order[next_rxn].rxn_name;
-                update_burst_size (generator[0], next_rxn);
+                // update_burst_size (generator[0], next_rxn);
                 reached_burn_in_rxn =
                     update_rxn_count (next_rxn, stop_sim, reached_rxn_count,
                         compute_statistics, burn_in_rxn_count);
                 // std::cout << "reached here 2 = " << std::endl;
-                GRN_out_changed = update_fired_reaction(next_rxn);
+                GRN_out_changed = update_fired_reaction(next_rxn, generator[0]);
                 update_dependent_count_propensity(next_rxn, GRN_out_changed);
                 // if (reactions[0].molecule_count_cur[0] == 0 && reactions[0].propensity_vals["mRNA decay"] > 0) {
                 //     std::cout << "error found3 " <<

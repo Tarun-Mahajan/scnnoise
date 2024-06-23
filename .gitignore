@@ -136,11 +136,11 @@ _generate/
 
 
 # Exclude certain data folders
-data/testing_temp/
-data/output/
+# data/testing_temp/
+# data/output/
 data/
-data/output/
-data/
+# data/output/
+# data/
 
 
 # Exclude build files
